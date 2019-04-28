@@ -25,7 +25,7 @@ public class AgendaAdapter extends RecyclerView.Adapter<AgendaAdapter.Agendament
     public void onBindViewHolder(@NonNull AgendamentoHolder agendamentoHolder, int i) {
         Agendamento agendamento = agenda.get(i);
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
-        agendamentoHolder.textViewDuracao.setText(agendamento.getDuracaoEmMinutos() +" mins");
+        agendamentoHolder.textViewDuracao.setText(agendamento.getDuracaoEmMinutos() +" min");
         agendamentoHolder.textViewNomeCliente.setText(agendamento.getCliente());
         agendamentoHolder.textViewDataMarcada.setText(sdf.format(agendamento.getHorarioInicio()));
     }

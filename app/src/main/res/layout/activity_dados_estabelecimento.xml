@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".DadosEstabelecimentoActivity">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center"
+        >
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Nome estabelecimento"
+            android:textAlignment="center"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
+            android:layout_marginTop="22dp"/>
+        <TextView
+            android:id="@+id/text_view_nome_estabelecimento"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Nome estabelecimento"
+            android:textAlignment="center"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+            android:layout_marginTop="8dp"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Nome do proprietário"
+            android:textAlignment="center"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
+            android:layout_marginTop="22dp"/>
+        <TextView
+            android:id="@+id/text_view_nome_proprietario"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Nome proprietario"
+            android:textAlignment="center"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+            android:layout_marginTop="8dp"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Horario de funcionamento"
+            android:textAlignment="center"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
+            android:layout_marginTop="22dp"/>
+        <TextView
+            android:id="@+id/text_view_horario_funcionamento"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Horario de funcionamento"
+            android:textAlignment="center"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+            android:layout_marginTop="8dp"/>
+    </LinearLayout>
+
+</android.support.constraint.ConstraintLayout>

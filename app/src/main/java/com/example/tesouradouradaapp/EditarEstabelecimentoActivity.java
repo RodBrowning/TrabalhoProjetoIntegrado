@@ -3,11 +3,9 @@ package com.example.tesouradouradaapp;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
-import android.nfc.Tag;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -29,6 +27,9 @@ public class EditarEstabelecimentoActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_editar_estabelecimento);
+        if(!MainActivity.APP_TITLE.isEmpty()){
+            setTitle("Editar Dados");
+        }
 
         editTextNomeEstabelecimento = findViewById(R.id.edit_text_nome_estabelecimento);
         editTextNomeProprietario = findViewById(R.id.edit_text_nome_prorietario);
@@ -44,7 +45,7 @@ public class EditarEstabelecimentoActivity extends AppCompatActivity {
         horaDeAbertura.setMaxValue(23);
         horaDeFechamento.setMinValue(0);
         horaDeFechamento.setMaxValue(23);
-        final String[] minutos = {"0", "30"};
+        final String[] minutos = {"00", "30"};
         minutosDeAbertura.setMinValue(0);
         minutosDeAbertura.setMaxValue(minutos.length - 1);
         minutosDeFechamento.setMinValue(0);
@@ -88,7 +89,7 @@ public class EditarEstabelecimentoActivity extends AppCompatActivity {
                     Toast.makeText(EditarEstabelecimentoActivity.this, "Horario de abertura deve ser inferior ao horario de fechamento", Toast.LENGTH_SHORT).show();
                     return;
                 } else if (nomeEstabelecimento.isEmpty() || nomeProprietario.isEmpty()){
-                    Toast.makeText(EditarEstabelecimentoActivity.this, "Os Campos nome do estabelecimento e proprietario são obrigatórios", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(EditarEstabelecimentoActivity.this, "O nome do estabelecimento e proprietário são obrigatórios", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
@@ -113,7 +114,7 @@ public class EditarEstabelecimentoActivity extends AppCompatActivity {
                         fechamento);
                 estabelecimentoParaAtualizar.setIdEstabelecimento(estabelecimentoObj.getIdEstabelecimento());
                 estabelecimentoViewModel.update(estabelecimentoParaAtualizar);
-                Intent intent = new Intent(EditarEstabelecimentoActivity.this, MainActivity.class);
+                Intent intent = new Intent(EditarEstabelecimentoActivity.this, DadosEstabelecimentoActivity.class);
                 startActivity(intent);
 
                 Toast.makeText(EditarEstabelecimentoActivity.this, "Dados cadastrais atualizados", Toast.LENGTH_SHORT).show();

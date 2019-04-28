@@ -20,6 +20,7 @@ public class MainActivity extends AppCompatActivity {
     private AgendaViewModel agendaViewModel;
     private EstabelecimentoViewModel estabelecimentoViewModel;
     private Estabelecimento estabelecimentoObj;
+    public static String APP_TITLE;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,7 +32,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onChanged(@Nullable Estabelecimento estabelecimento) {
                 estabelecimentoObj = estabelecimento;
-                setTitle(estabelecimentoObj.getNomeEstabelecimento());
+                APP_TITLE = estabelecimentoObj.getNomeEstabelecimento();
+                setTitle(APP_TITLE);
             }
         });
 
@@ -55,8 +57,12 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void irParaEditarDadosActivity(){
-        Intent intent = new Intent(MainActivity.this, EditarEstabelecimentoActivity.class);
+    private void irParaDadosEstabelecimentoActivity() {
+        Intent intent = new Intent(MainActivity.this, DadosEstabelecimentoActivity.class);
+        startActivity(intent);
+    }
+    private void irParaServicosActivity(){
+        Intent intent = new Intent(MainActivity.this, ServicosActivity.class);
         startActivity(intent);
     }
 
@@ -70,8 +76,11 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.menu_edit_dados:
-                irParaEditarDadosActivity();
+            case R.id.menu_estabelecimento:
+                irParaDadosEstabelecimentoActivity();
+                return true;
+            case R.id.menu_servicos:
+                irParaServicosActivity();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
