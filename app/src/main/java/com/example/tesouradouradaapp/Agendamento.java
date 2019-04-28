@@ -1,6 +1,7 @@
 package com.example.tesouradouradaapp;
 
 import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 
 @Entity(tableName = "agenda")
@@ -14,6 +15,8 @@ public class Agendamento {
     private long horarioFim;
     private String servicos;
     private long criadoEm;
+    @Ignore
+    private long duracao;
 
     public Agendamento(String cliente, long horarioInicio, long horarioFim, String servicos, long criadoEm) {
         this.cliente = cliente;
@@ -21,6 +24,7 @@ public class Agendamento {
         this.horarioFim = horarioFim;
         this.servicos = servicos;
         this.criadoEm = criadoEm;
+        this.duracao = horarioFim - horarioInicio;
     }
 
     public void setId_agendamento(int id_agendamento) {
@@ -51,6 +55,10 @@ public class Agendamento {
         return criadoEm;
     }
 
+
+    public long getDuracaoEmMinutos() {
+        return ((horarioFim - horarioInicio) / 1000)/60;
+    }
 
 }
 

@@ -10,6 +10,7 @@ import android.support.annotation.NonNull;
 
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 
 @Database(entities = {Estabelecimento.class, Servico.class, Agendamento.class}, version = 1)
@@ -68,24 +69,47 @@ public abstract class CabelereiroDataBase extends RoomDatabase {
             listaServicos.add(1);
             listaServicos.add(2);
             listaServicos.add(3);
+            Calendar calendar = Calendar.getInstance();
+            calendar.set(Calendar.YEAR, 2019);
+            calendar.set(Calendar.MONTH, 5);
+            calendar.set(Calendar.DAY_OF_MONTH, 10);
+            calendar.set(Calendar.HOUR_OF_DAY, 14);
+            calendar.set(Calendar.MINUTE, 30);
+            Date horarioInicio = calendar.getTime();
             agendaDao.insertAgendamento(new Agendamento("Claudio",
-                    new Date(2019, 6, 12,14,30,0).getTime(),
-                    new Date(2019, 6, 12,15,30,0).getTime(),
+                    horarioInicio.getTime(),
+                    horarioInicio.getTime()+30*60*1000,
                     String.valueOf(listaServicos),
                     new Date().getTime()
             ));
+
             listaServicos.add(4);
+            Calendar calendar2 = Calendar.getInstance();
+            calendar2.set(Calendar.YEAR, 2019);
+            calendar2.set(Calendar.MONTH, 5);
+            calendar2.set(Calendar.DAY_OF_MONTH, 10);
+            calendar2.set(Calendar.HOUR_OF_DAY, 15);
+            calendar2.set(Calendar.MINUTE, 00);
+            Date horarioInicio2 = calendar2.getTime();
             agendaDao.insertAgendamento(new Agendamento("Roberto",
-                    new Date(2019, 6, 12,15,30,0).getTime(),
-                    new Date(2019, 6, 12,16,00,0).getTime(),
+                    horarioInicio2.getTime(),
+                    horarioInicio2.getTime()+70*60*1000,
                     String.valueOf(listaServicos),
                     new Date().getTime()
             ));
+
             listaServicos.remove(2);
             listaServicos.remove(0);
+            Calendar calendar3 = Calendar.getInstance();
+            calendar3.set(Calendar.YEAR, 2019);
+            calendar3.set(Calendar.MONTH, 5);
+            calendar3.set(Calendar.DAY_OF_MONTH, 10);
+            calendar3.set(Calendar.HOUR_OF_DAY, 16);
+            calendar3.set(Calendar.MINUTE, 30);
+            Date horarioInicio3 = calendar3.getTime();
             agendaDao.insertAgendamento(new Agendamento("Fernando",
-                    new Date(2019, 6, 12,16,30,0).getTime(),
-                    new Date(2019, 6, 12,17,00,0).getTime(),
+                    horarioInicio3.getTime(),
+                    horarioInicio3.getTime()+20*60*1000,
                     String.valueOf(listaServicos),
                     new Date().getTime()
             ));

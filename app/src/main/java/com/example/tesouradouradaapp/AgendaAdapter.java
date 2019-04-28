@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,10 +24,10 @@ public class AgendaAdapter extends RecyclerView.Adapter<AgendaAdapter.Agendament
     @Override
     public void onBindViewHolder(@NonNull AgendamentoHolder agendamentoHolder, int i) {
         Agendamento agendamento = agenda.get(i);
-        long tempoDeAtendimento = ((agendamento.getHorarioFim() - agendamento.getHorarioInicio())/1000)/60;
-        agendamentoHolder.textViewTempoAtendimento.setText(tempoDeAtendimento +" min");
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+        agendamentoHolder.textViewDuracao.setText(agendamento.getDuracaoEmMinutos() +" mins");
         agendamentoHolder.textViewNomeCliente.setText(agendamento.getCliente());
-        agendamentoHolder.textViewDataMarcada.setText(String.valueOf(agendamento.getHorarioInicio()));
+        agendamentoHolder.textViewDataMarcada.setText(sdf.format(agendamento.getHorarioInicio()));
     }
 
     @Override
@@ -43,13 +44,13 @@ public class AgendaAdapter extends RecyclerView.Adapter<AgendaAdapter.Agendament
 
     class AgendamentoHolder extends RecyclerView.ViewHolder{
         private TextView textViewNomeCliente;
-        private TextView textViewTempoAtendimento;
+        private TextView textViewDuracao;
         private TextView textViewDataMarcada;
 
 
         public AgendamentoHolder(@NonNull View itemView) {
             super(itemView);
-            textViewTempoAtendimento = itemView.findViewById(R.id.tempo_atendimento);
+            textViewDuracao = itemView.findViewById(R.id.duracao_atendimento);
             textViewNomeCliente = itemView.findViewById(R.id.nome_cliente);
             textViewDataMarcada = itemView.findViewById(R.id.data_marcada);
         }
