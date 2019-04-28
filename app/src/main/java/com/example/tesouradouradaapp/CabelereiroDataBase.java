@@ -55,7 +55,7 @@ public abstract class CabelereiroDataBase extends RoomDatabase {
         @Override
         protected Void doInBackground(Void... voids) {
             // Dados iniciais
-            estabelecimentoDao.insertEstabelecimento(new Estabelecimento("Tesoura Dourada", "Marcos Mendonca", "07:00","18:00"));
+            estabelecimentoDao.insertEstabelecimento(new Estabelecimento("Tesoura Dourada", "Marcos Mendonca", "07:30","18:00"));
 
             // Servicos
             servicoDao.insertServico(new Servico("Corte masculino", 25, 30));

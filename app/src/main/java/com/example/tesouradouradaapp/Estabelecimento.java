@@ -12,16 +12,16 @@ public class Estabelecimento {
 
     @ColumnInfo(name = "estabelecimento")
     private String nomeEstabelecimento;
-    @ColumnInfo(name = "dono")
-    private String nomeDono;
+    @ColumnInfo(name = "proprietario")
+    private String nomeProprietario;
     @ColumnInfo(name = "hr_abertura")
     private String horarioAbertura;
     @ColumnInfo(name = "hr_fechamento")
     private String horarioFechamento;
 
-    public Estabelecimento(String nomeEstabelecimento, String nomeDono, String horarioAbertura, String horarioFechamento) {
+    public Estabelecimento(String nomeEstabelecimento, String nomeProprietario, String horarioAbertura, String horarioFechamento) {
         this.nomeEstabelecimento = nomeEstabelecimento;
-        this.nomeDono = nomeDono;
+        this.nomeProprietario = nomeProprietario;
         this.horarioAbertura = horarioAbertura;
         this.horarioFechamento = horarioFechamento;
     }
@@ -38,8 +38,8 @@ public class Estabelecimento {
         return nomeEstabelecimento;
     }
 
-    public String getNomeDono() {
-        return nomeDono;
+    public String getNomeProprietario() {
+        return nomeProprietario;
     }
 
     public String getHorarioAbertura() {
