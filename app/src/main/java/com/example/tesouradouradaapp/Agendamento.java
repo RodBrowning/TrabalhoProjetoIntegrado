@@ -10,12 +10,12 @@ public class Agendamento {
     private int id_agendamento;
 
     private String cliente;
-    private String horarioInicio;
-    private String horarioFim;
+    private long horarioInicio;
+    private long horarioFim;
     private String servicos;
-    private String criadoEm;
+    private long criadoEm;
 
-    public Agendamento(String cliente, String horarioInicio, String horarioFim, String servicos, String criadoEm) {
+    public Agendamento(String cliente, long horarioInicio, long horarioFim, String servicos, long criadoEm) {
         this.cliente = cliente;
         this.horarioInicio = horarioInicio;
         this.horarioFim = horarioFim;
@@ -35,11 +35,11 @@ public class Agendamento {
         return cliente;
     }
 
-    public String getHorarioInicio() {
+    public long getHorarioInicio() {
         return horarioInicio;
     }
 
-    public String getHorarioFim() {
+    public long getHorarioFim() {
         return horarioFim;
     }
 
@@ -47,7 +47,7 @@ public class Agendamento {
         return servicos;
     }
 
-    public String getCriadoEm() {
+    public long getCriadoEm() {
         return criadoEm;
     }
 

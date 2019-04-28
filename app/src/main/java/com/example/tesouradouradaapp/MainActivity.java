@@ -5,6 +5,8 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.widget.Toast;
 
 import java.util.List;
@@ -16,11 +18,18 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        RecyclerView recyclerView = findViewById(R.id.recycler_view_agenda);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setHasFixedSize(true);
+
+        final AgendaAdapter adapter = new AgendaAdapter();
+        recyclerView.setAdapter(adapter);
+
         agendaViewModel = ViewModelProviders.of(this).get(AgendaViewModel.class);
         agendaViewModel.getAgenda().observe(this, new Observer<List<Agendamento>>() {
             @Override
             public void onChanged(@Nullable List<Agendamento> agendamentos) {
-                Toast.makeText(MainActivity.this, "onChanged", Toast.LENGTH_SHORT).show();
+                adapter.setAgenda(agendamentos);
             }
         });
     }

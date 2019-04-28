@@ -9,7 +9,6 @@ import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 
 
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -70,25 +69,25 @@ public abstract class CabelereiroDataBase extends RoomDatabase {
             listaServicos.add(2);
             listaServicos.add(3);
             agendaDao.insertAgendamento(new Agendamento("Claudio",
-                    String.valueOf(new Timestamp(2019, 6, 12,14,30,00,0)),
-                    String.valueOf(new Timestamp(2019, 6, 12,15,30,00,0)),
+                    new Date(2019, 6, 12,14,30,0).getTime(),
+                    new Date(2019, 6, 12,15,30,0).getTime(),
                     String.valueOf(listaServicos),
-                    String.valueOf(new Timestamp(new Date().getTime()))
+                    new Date().getTime()
             ));
             listaServicos.add(4);
             agendaDao.insertAgendamento(new Agendamento("Roberto",
-                    String.valueOf(new Timestamp(2019, 6, 12,15,30,00,0)),
-                    String.valueOf(new Timestamp(2019, 6, 12,16,00,00,0)),
+                    new Date(2019, 6, 12,15,30,0).getTime(),
+                    new Date(2019, 6, 12,16,00,0).getTime(),
                     String.valueOf(listaServicos),
-                    String.valueOf(new Timestamp(new Date().getTime()))
+                    new Date().getTime()
             ));
             listaServicos.remove(2);
             listaServicos.remove(0);
             agendaDao.insertAgendamento(new Agendamento("Fernando",
-                    String.valueOf(new Timestamp(2019, 6, 12,16,30,00,0)),
-                    String.valueOf(new Timestamp(2019, 6, 12,17,00,00,0)),
+                    new Date(2019, 6, 12,16,30,0).getTime(),
+                    new Date(2019, 6, 12,17,00,0).getTime(),
                     String.valueOf(listaServicos),
-                    String.valueOf(new Timestamp(new Date().getTime()))
+                    new Date().getTime()
             ));
             return null;
         }
