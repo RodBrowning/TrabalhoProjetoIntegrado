@@ -52,6 +52,7 @@ public class EditarEstabelecimentoActivity extends AppCompatActivity {
         minutosDeAbertura.setDisplayedValues(minutos);
         minutosDeFechamento.setDisplayedValues(minutos);
 
+        // Preenche os campos
         estabelecimentoViewModel = ViewModelProviders.of(this).get(EstabelecimentoViewModel.class);
         estabelecimentoViewModel.getEstabelecimento().observe(this, new Observer<Estabelecimento>() {
             @Override
@@ -60,13 +61,13 @@ public class EditarEstabelecimentoActivity extends AppCompatActivity {
                 editTextNomeEstabelecimento.setText(estabelecimento.getNomeEstabelecimento());
                 editTextNomeProprietario.setText(estabelecimento.getNomeProprietario());
 
-                String[] horarioInicio = estabelecimento.getHorarioAbertura().split(":");
+                String[] horarioInicio = estabelecimentoObj.getHorarioAbertura().split(":");
                 int horasAbertura = Integer.parseInt(horarioInicio[0]);
                 horaDeAbertura.setValue(horasAbertura);
                 int minutosAbertura = Integer.parseInt(horarioInicio[1]);
                 minutosDeAbertura.setValue(minutosAbertura == 0 ? 0 : 1);
 
-                String[] horarioFinal = estabelecimento.getHorarioFechamento().split(":");
+                String[] horarioFinal = estabelecimentoObj.getHorarioFechamento().split(":");
                 int horasFechamento = Integer.parseInt(horarioFinal[0]);
                 horaDeFechamento.setValue(horasFechamento);
                 int minutosFechamento = Integer.parseInt(horarioFinal[1]);
@@ -79,28 +80,33 @@ public class EditarEstabelecimentoActivity extends AppCompatActivity {
             public void onClick(View view) {
                 String nomeEstabelecimento = String.valueOf(editTextNomeEstabelecimento.getText());
                 String nomeProprietario = String.valueOf(editTextNomeProprietario.getText());
-                String abertura;
-                if (
-                        !((horaDeAbertura.getValue() == horaDeFechamento.getValue()) && (minutosDeAbertura.getValue() < minutosDeFechamento.getValue()))
-                                ||
-                                !(horaDeAbertura.getValue() < horaDeFechamento.getValue())
-                ) {
-                    Toast.makeText(EditarEstabelecimentoActivity.this, "O horario de abertura deve ser anterior ao de fechamento.", Toast.LENGTH_SHORT).show();
+                String abertura, fechamento;;
+
+                // Validação dos campos
+                int diferencaEntreAberturaFechamento =(horaDeFechamento.getValue() +  minutosDeFechamento.getValue()) - (horaDeAbertura.getValue() +  minutosDeAbertura.getValue());
+                if(diferencaEntreAberturaFechamento <= 0){
+                    Toast.makeText(EditarEstabelecimentoActivity.this, "Horario de abertura deve ser inferior ao horario de fechamento", Toast.LENGTH_SHORT).show();
+                    return;
+                } else if (nomeEstabelecimento.isEmpty() || nomeProprietario.isEmpty()){
+                    Toast.makeText(EditarEstabelecimentoActivity.this, "Os Campos nome do estabelecimento e proprietario são obrigatórios", Toast.LENGTH_SHORT).show();
                     return;
                 }
+
+                // Define string de horario de abertura e fechamento
                 if (minutosDeAbertura.getValue() == 0) {
                     abertura = String.format("%s:00", String.valueOf(horaDeAbertura.getValue()));
                 } else {
                     abertura = String.format("%s:30", String.valueOf(horaDeAbertura.getValue()));
                 }
 
-                String fechamento;
+
                 if (minutosDeFechamento.getValue() == 0) {
                     fechamento = String.format("%s:00", String.valueOf(horaDeFechamento.getValue()));
                 } else {
                     fechamento = String.format("%s:30", String.valueOf(horaDeFechamento.getValue()));
                 }
 
+                // Atualiza registro no banco de dados
                 Estabelecimento estabelecimentoParaAtualizar = new Estabelecimento(nomeEstabelecimento,
                         nomeProprietario,
                         abertura,
@@ -109,8 +115,8 @@ public class EditarEstabelecimentoActivity extends AppCompatActivity {
                 estabelecimentoViewModel.update(estabelecimentoParaAtualizar);
                 Intent intent = new Intent(EditarEstabelecimentoActivity.this, MainActivity.class);
                 startActivity(intent);
-                Toast.makeText(EditarEstabelecimentoActivity.this, "Dados cadastrais atualizados", Toast.LENGTH_SHORT).show();
 
+                Toast.makeText(EditarEstabelecimentoActivity.this, "Dados cadastrais atualizados", Toast.LENGTH_SHORT).show();
             }
         });
 

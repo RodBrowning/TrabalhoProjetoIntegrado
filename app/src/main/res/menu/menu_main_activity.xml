@@ -5,4 +5,8 @@
         android:id="@+id/menu_edit_dados"
         android:title="Editar dados"
         app:showAsAction="never"/>
+    <item
+        android:id="@+id/menu_servicos"
+        android:title="Serviços"
+        app:showAsAction="never"/>
 </menu>
