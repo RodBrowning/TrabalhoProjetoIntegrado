@@ -3,8 +3,6 @@ package com.example.tesouradouradaapp;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
 
-import java.util.ArrayList;
-
 @Entity(tableName = "agenda")
 public class Agendamento {
 
@@ -13,14 +11,16 @@ public class Agendamento {
 
     private String cliente;
     private String horarioInicio;
-    private String getHorarioFim;
-    private ArrayList<Integer> servicos;
+    private String horarioFim;
+    private String servicos;
+    private String criadoEm;
 
-    public Agendamento(String cliente, String horarioInicio, String getHorarioFim, ArrayList<Integer> servicos) {
+    public Agendamento(String cliente, String horarioInicio, String horarioFim, String servicos, String criadoEm) {
         this.cliente = cliente;
         this.horarioInicio = horarioInicio;
-        this.getHorarioFim = getHorarioFim;
+        this.horarioFim = horarioFim;
         this.servicos = servicos;
+        this.criadoEm = criadoEm;
     }
 
     public void setId_agendamento(int id_agendamento) {
@@ -39,12 +39,18 @@ public class Agendamento {
         return horarioInicio;
     }
 
-    public String getGetHorarioFim() {
-        return getHorarioFim;
+    public String getHorarioFim() {
+        return horarioFim;
     }
 
-    public ArrayList<Integer> getServicos() {
+    public String getServicos() {
         return servicos;
     }
+
+    public String getCriadoEm() {
+        return criadoEm;
+    }
+
+
 }
 

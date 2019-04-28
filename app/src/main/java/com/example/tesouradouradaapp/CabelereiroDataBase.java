@@ -8,9 +8,10 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 
-import java.sql.Date;
+
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Date;
 
 @Database(entities = {Estabelecimento.class, Servico.class, Agendamento.class}, version = 1)
 public abstract class CabelereiroDataBase extends RoomDatabase {
@@ -71,20 +72,47 @@ public abstract class CabelereiroDataBase extends RoomDatabase {
             agendaDao.insertAgendamento(new Agendamento("Claudio",
                     String.valueOf(new Timestamp(2019, 6, 12,14,30,00,0)),
                     String.valueOf(new Timestamp(2019, 6, 12,15,30,00,0)),
-                    listaServicos));
+                    String.valueOf(listaServicos),
+                    String.valueOf(new Timestamp(new Date().getTime()))
+            ));
             listaServicos.add(4);
             agendaDao.insertAgendamento(new Agendamento("Roberto",
                     String.valueOf(new Timestamp(2019, 6, 12,15,30,00,0)),
                     String.valueOf(new Timestamp(2019, 6, 12,16,00,00,0)),
-                    listaServicos));
+                    String.valueOf(listaServicos),
+                    String.valueOf(new Timestamp(new Date().getTime()))
+            ));
             listaServicos.remove(2);
             listaServicos.remove(0);
             agendaDao.insertAgendamento(new Agendamento("Fernando",
                     String.valueOf(new Timestamp(2019, 6, 12,16,30,00,0)),
                     String.valueOf(new Timestamp(2019, 6, 12,17,00,00,0)),
-                    listaServicos));
+                    String.valueOf(listaServicos),
+                    String.valueOf(new Timestamp(new Date().getTime()))
+            ));
             return null;
         }
     }
 }
 
+/*agendaDao.insertAgendamento(new Agendamento("Claudio",
+                    String.valueOf(new Timestamp(2019, 6, 12,14,30,00,0)),
+                    String.valueOf(new Timestamp(2019, 6, 12,15,30,00,0)),
+                    String.valueOf(listaServicos),
+                    String.valueOf(new Timestamp(new Date().getTime()))
+                    ));
+            listaServicos.add(4);
+            agendaDao.insertAgendamento(new Agendamento("Roberto",
+                    String.valueOf(new Timestamp(2019, 6, 12,15,30,00,0)),
+                    String.valueOf(new Timestamp(2019, 6, 12,16,00,00,0)),
+                    String.valueOf(listaServicos),
+                    String.valueOf(new Timestamp(new Date().getTime()))
+                    ));
+            listaServicos.remove(2);
+            listaServicos.remove(0);
+            agendaDao.insertAgendamento(new Agendamento("Fernando",
+                    String.valueOf(new Timestamp(2019, 6, 12,16,30,00,0)),
+                    String.valueOf(new Timestamp(2019, 6, 12,17,00,00,0)),
+                    String.valueOf(listaServicos),
+                    String.valueOf(new Timestamp(new Date().getTime()))
+                    ));*/
