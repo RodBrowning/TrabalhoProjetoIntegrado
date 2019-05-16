@@ -27,8 +27,11 @@
         <activity
             android:name=".ServicosActivity"
             android:parentActivityName=".MainActivity" />
-        <activity android:name=".AdicionarEditarServicoActivity"
-            android:parentActivityName=".ServicosActivity"/>
+        <activity
+            android:name=".AdicionarEditarServicoActivity"
+            android:parentActivityName=".ServicosActivity" />
+        <activity android:name=".AdicionarEditarAgendamentoActivity"
+            android:parentActivityName=".MainActivity"/>
     </application>
 
 </manifest>
