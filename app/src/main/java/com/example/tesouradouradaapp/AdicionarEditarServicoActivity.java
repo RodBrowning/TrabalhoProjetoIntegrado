@@ -32,34 +32,34 @@ public class AdicionarEditarServicoActivity extends AppCompatActivity {
         servicoViewModel = ViewModelProviders.of(AdicionarEditarServicoActivity.this).get(ServicoViewModel.class);
 
         if (getIntent().hasExtra(ServicosAdapter.EXTRA_ID)){
-            setTitle("Editar Serviço "+ servicoObj.getNomeServico());
             idParaAtualizar = getIntent().getIntExtra(ServicosAdapter.EXTRA_ID, -1);
             try {
                 servicoObj = servicoViewModel.getServico(idParaAtualizar);
+                setTitle("Editar Serviço "+ servicoObj.getNomeServico());
+                editTextNomeServico.setText(servicoObj.getNomeServico());
+                editTextValorServico.setText(String.valueOf(servicoObj.getValor()));
+                editTextDuracaoServico.setText(String.valueOf(servicoObj.getTempo()));
             } catch (ExecutionException e) {
                 e.printStackTrace();
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            setTitle("Editar Serviço "+ servicoObj.getNomeServico());
-            editTextNomeServico.setText(servicoObj.getNomeServico());
-            editTextValorServico.setText(String.valueOf(servicoObj.getValor()));
-            editTextDuracaoServico.setText(String.valueOf(servicoObj.getTempo()));
         } else {
             setTitle("Adicionar Serviço");
         }
     }
 
     private void sarvarAtualizarServico() {
-        String nomeServico = editTextNomeServico.getText().toString().trim();
-        float valorServico = Float.parseFloat(editTextValorServico.getText().toString().trim());
-        int duracaoServico = Integer.parseInt(editTextDuracaoServico.getText().toString().trim());
 
-        if (nomeServico.isEmpty() || valorServico < 0 || duracaoServico < 0) {
+        String nomeServico = editTextNomeServico.getText().toString().trim();
+        String valorServico = editTextValorServico.getText().toString().trim();
+        String duracaoServico = editTextDuracaoServico.getText().toString().trim();
+        if (nomeServico.isEmpty() || valorServico.isEmpty() || duracaoServico.isEmpty()) {
             Toast.makeText(this, "Todos os campos são obrigatórios", Toast.LENGTH_SHORT).show();
             return;
         }
-        Servico servico = new Servico(nomeServico, valorServico, duracaoServico);
+
+        Servico servico = new Servico(nomeServico, Float.parseFloat(valorServico), Integer.parseInt(duracaoServico));
 
         if(getIntent().hasExtra(ServicosAdapter.EXTRA_ID)){
             servico.setIdServico(idParaAtualizar);

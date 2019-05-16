@@ -23,8 +23,8 @@ import java.util.Locale;
 
 public class ServicosAdapter extends RecyclerView.Adapter<ServicosAdapter.ServicosHolder> {
     public static final String EXTRA_ID = "com.example.tesouradouradaapp.EXTRA_ID";
-    private List<Servico> servicos = new ArrayList<>();
     private Context mContext;
+    private List<Servico> servicos = new ArrayList<>();
     private Application application;
     private ServicosRepository servicosRepository = new ServicosRepository(application);
 

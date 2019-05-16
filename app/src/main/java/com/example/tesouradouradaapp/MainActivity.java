@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
         floatingActionButtonAdicionarAgendamento.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, AdicionarEditarAgendamentoActivity.class);
+                Intent intent = new Intent(MainActivity.this, ListaOpcoesServicoAdicionarEditarAgendamento.class);
                 startActivity(intent);
             }
         });
