@@ -29,7 +29,7 @@ public class ServicosActivity extends AppCompatActivity {
         floatingActionButtonAdicionarServico.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(ServicosActivity.this, AdicionarServicoActivity.class);
+                Intent intent = new Intent(ServicosActivity.this, AdicionarEditarServicoActivity.class);
                 startActivity(intent);
             }
         });

@@ -58,15 +58,14 @@ public class ServicosAdapter extends RecyclerView.Adapter<ServicosAdapter.Servic
                     public boolean onMenuItemClick(MenuItem menuItem) {
                         switch (menuItem.getItemId()) {
                             case R.id.menu_editar_servico:
-                                Intent intent = new Intent(mContext ,AdicionarEditarServicoActivity.class);
-                                intent.putExtra(EXTRA_ID, servico.getIdServico());
+                                Intent intent = new Intent(mContext, AdicionarEditarServicoActivity.class);
+                                intent.putExtra(ServicosAdapter.EXTRA_ID, servico.getIdServico());
                                 mContext.startActivity(intent);
-                                Toast.makeText(mContext, "Editar Serviço " + servico.getNomeServico(), Toast.LENGTH_SHORT).show();
                                 return true;
                             case R.id.menu_excluir_servico:
                                 new AlertDialog.Builder(mContext)
                                         .setTitle("Excluir")
-                                        .setMessage("Excluir "+servico.getNomeServico()+"?")
+                                        .setMessage("Excluir " + servico.getNomeServico() + "?")
                                         .setIcon(R.drawable.ic_alert_excluir)
                                         .setPositiveButton("Sim", new DialogInterface.OnClickListener() {
                                             @Override
@@ -75,8 +74,7 @@ public class ServicosAdapter extends RecyclerView.Adapter<ServicosAdapter.Servic
                                                 Toast.makeText(mContext, "Serviço " + servico.getNomeServico() + " excluido", Toast.LENGTH_SHORT).show();
                                             }
                                         })
-                                        .setNegativeButton("Não",null).show();
-
+                                        .setNegativeButton("Não", null).show();
                                 return true;
                             default:
                                 break;
@@ -102,8 +100,6 @@ public class ServicosAdapter extends RecyclerView.Adapter<ServicosAdapter.Servic
     public void setApplication(Application application) {
         this.application = application;
     }
-
-    ;
 
     class ServicosHolder extends RecyclerView.ViewHolder {
         private TextView textViewNomeServico;

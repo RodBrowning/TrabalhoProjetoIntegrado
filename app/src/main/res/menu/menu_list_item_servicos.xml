@@ -7,6 +7,6 @@
         app:showAsAction="never" />
     <item
         android:id="@+id/menu_excluir_servico"
-        android:title="Excliur"
+        android:title="Excluir"
         app:showAsAction="never" />
 </menu>

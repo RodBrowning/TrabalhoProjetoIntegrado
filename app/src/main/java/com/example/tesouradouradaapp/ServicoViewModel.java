@@ -6,6 +6,7 @@ import android.arch.lifecycle.LiveData;
 import android.support.annotation.NonNull;
 
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 public class ServicoViewModel extends AndroidViewModel {
     private ServicosRepository servicosRepository;
@@ -29,4 +30,5 @@ public class ServicoViewModel extends AndroidViewModel {
     public LiveData<List<Servico>> getAllServicos(){
         return servicos;
     }
+    public Servico getServico(int id) throws ExecutionException, InterruptedException {return servicosRepository.getServico(id);}
 }

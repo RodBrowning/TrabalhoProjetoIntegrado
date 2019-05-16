@@ -24,4 +24,6 @@ public interface ServicoDao {
     @Query("SELECT * FROM servico ORDER BY nomeServico ASC")
     LiveData<List<Servico>> getAllServices();
 
+    @Query("SELECT * FROM servico WHERE idServico = :id")
+    Servico getServico(int id);
 }
