@@ -46,7 +46,7 @@ public class ServicosAdapter extends RecyclerView.Adapter<ServicosAdapter.Servic
         Locale brasil = new Locale("pt", "BR");
         NumberFormat numberFormat = NumberFormat.getCurrencyInstance(brasil);
         servicosHolder.textViewNomeServico.setText(servico.getNomeServico());
-        servicosHolder.textViewDuracaoAtendimento.setText(String.valueOf(servico.getTempo() + " min"));
+        servicosHolder.textViewDuracaoAtendimento.setText(String.valueOf(servico.getTempo() + "min"));
         servicosHolder.textViewValorAtendimento.setText(numberFormat.format(servico.getValor()));
         servicosHolder.relativeLayout.setOnClickListener(new View.OnClickListener() {
             @Override

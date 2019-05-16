@@ -3,7 +3,6 @@ package com.example.tesouradouradaapp;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,12 +17,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-public class OpcoesServicosAdapter extends RecyclerView.Adapter<OpcoesServicosAdapter.OpcoesServicosHolder> {
+public class ListaOpcoesServicosAdapter extends RecyclerView.Adapter<ListaOpcoesServicosAdapter.OpcoesServicosHolder> {
     private Context mContext;
     private List<Servico> servicos = new ArrayList<>();
-    private ArrayList<Servico> servicosSelecionados = new ArrayList<>();
+    public ArrayList<Servico> servicosSelecionados = new ArrayList<>();
 
-    public OpcoesServicosAdapter(Context context) {
+    public ListaOpcoesServicosAdapter(Context context) {
         this.mContext = context;
     }
 
@@ -43,7 +42,7 @@ public class OpcoesServicosAdapter extends RecyclerView.Adapter<OpcoesServicosAd
 
         opcoesServicosHolder.checkBoxNomeServico.setText(servico.getNomeServico());
         opcoesServicosHolder.textViewDuracaoAtendimento.setText(String.valueOf(servico.getTempo()) + " min");
-        opcoesServicosHolder.textViewValorAtendimento.setText(numberFormat.format(servico.getTempo()));
+        opcoesServicosHolder.textViewValorAtendimento.setText(numberFormat.format(servico.getValor()));
         opcoesServicosHolder.checkBoxNomeServico.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {

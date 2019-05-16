@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ListaOpcoesServicoAdicionarEditarAgendamento">
+    tools:context=".ListaOpcoesServicoAdicionarEditarAgendamentoActivity">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -14,7 +14,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            android:layout_above="@+id/bottom_seguir_para_data">
+            android:layout_above="@+id/bottom_seguir_para_adicionar_editar_agendamento">
 
             <ScrollView
                 android:layout_width="match_parent"
@@ -31,7 +31,7 @@
         </LinearLayout>
 
         <Button
-            android:id="@+id/bottom_seguir_para_data"
+            android:id="@+id/bottom_seguir_para_adicionar_editar_agendamento"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"

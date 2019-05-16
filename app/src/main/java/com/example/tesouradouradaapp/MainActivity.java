@@ -1,6 +1,5 @@
 package com.example.tesouradouradaapp;
 
-import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
@@ -14,7 +13,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
 import java.util.List;
 
@@ -34,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
         floatingActionButtonAdicionarAgendamento.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, ListaOpcoesServicoAdicionarEditarAgendamento.class);
+                Intent intent = new Intent(MainActivity.this, ListaOpcoesServicoAdicionarEditarAgendamentoActivity.class);
                 startActivity(intent);
             }
         });
