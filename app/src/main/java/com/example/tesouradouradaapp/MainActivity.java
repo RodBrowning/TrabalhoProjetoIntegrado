@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
             public void onChanged(@Nullable Estabelecimento estabelecimento) {
                 estabelecimentoObj = estabelecimento;
                 APP_TITLE = estabelecimentoObj.getNomeEstabelecimento();
-                setTitle(APP_TITLE);
+                setTitle("Agenda "+APP_TITLE);
             }
         });
 

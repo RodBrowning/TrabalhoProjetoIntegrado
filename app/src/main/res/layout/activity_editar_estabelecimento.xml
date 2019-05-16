@@ -33,9 +33,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Nome do Estabelecimento"
-                    android:text="Reggae Charm"
+                    android:inputType="text"
                     android:maxLines="1"
-                    android:inputType="text"/>
+                    android:text="Reggae Charm" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -48,9 +48,9 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:hint="Nome do Dono"
-                    android:text="Marcelo Lima"
+                    android:inputType="text"
                     android:maxLines="1"
-                    android:inputType="text"/>
+                    android:text="Marcelo Lima" />
 
                 <TextView
                     android:layout_width="match_parent"

@@ -1,12 +1,13 @@
 package com.example.tesouradouradaapp;
 
+import android.app.AlertDialog;
+import android.app.Application;
 import android.content.Context;
-import android.nfc.Tag;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,12 +22,16 @@ import java.util.List;
 import java.util.Locale;
 
 public class ServicosAdapter extends RecyclerView.Adapter<ServicosAdapter.ServicosHolder> {
+    public static final String EXTRA_ID = "com.example.tesouradouradaapp.EXTRA_ID";
     private List<Servico> servicos = new ArrayList<>();
     private Context mContext;
+    private Application application;
+    private ServicosRepository servicosRepository = new ServicosRepository(application);
 
-    public ServicosAdapter(Context context){
+    public ServicosAdapter(Context context) {
         this.mContext = context;
     }
+
     @NonNull
     @Override
     public ServicosHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
@@ -41,7 +46,7 @@ public class ServicosAdapter extends RecyclerView.Adapter<ServicosAdapter.Servic
         Locale brasil = new Locale("pt", "BR");
         NumberFormat numberFormat = NumberFormat.getCurrencyInstance(brasil);
         servicosHolder.textViewNomeServico.setText(servico.getNomeServico());
-        servicosHolder.textViewDuracaoAtendimento.setText(String.valueOf(servico.getTempo()+" min"));
+        servicosHolder.textViewDuracaoAtendimento.setText(String.valueOf(servico.getTempo() + " min"));
         servicosHolder.textViewValorAtendimento.setText(numberFormat.format(servico.getValor()));
         servicosHolder.relativeLayout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -51,15 +56,30 @@ public class ServicosAdapter extends RecyclerView.Adapter<ServicosAdapter.Servic
                 popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     @Override
                     public boolean onMenuItemClick(MenuItem menuItem) {
-                        switch (menuItem.getItemId()){
+                        switch (menuItem.getItemId()) {
                             case R.id.menu_editar_servico:
+                                Intent intent = new Intent(mContext ,AdicionarEditarServicoActivity.class);
+                                intent.putExtra(EXTRA_ID, servico.getIdServico());
+                                mContext.startActivity(intent);
                                 Toast.makeText(mContext, "Editar Serviço " + servico.getNomeServico(), Toast.LENGTH_SHORT).show();
                                 return true;
                             case R.id.menu_excluir_servico:
-                                Toast.makeText(mContext, "Excluir Serviço "+ servico.getNomeServico(), Toast.LENGTH_SHORT).show();
+                                new AlertDialog.Builder(mContext)
+                                        .setTitle("Excluir")
+                                        .setMessage("Excluir "+servico.getNomeServico()+"?")
+                                        .setIcon(R.drawable.ic_alert_excluir)
+                                        .setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialogInterface, int i) {
+                                                servicosRepository.delete(servico);
+                                                Toast.makeText(mContext, "Serviço " + servico.getNomeServico() + " excluido", Toast.LENGTH_SHORT).show();
+                                            }
+                                        })
+                                        .setNegativeButton("Não",null).show();
+
                                 return true;
-                                default:
-                                    break;
+                            default:
+                                break;
                         }
                         return false;
                     }
@@ -79,11 +99,18 @@ public class ServicosAdapter extends RecyclerView.Adapter<ServicosAdapter.Servic
         notifyDataSetChanged();
     }
 
-    class ServicosHolder extends RecyclerView.ViewHolder{
+    public void setApplication(Application application) {
+        this.application = application;
+    }
+
+    ;
+
+    class ServicosHolder extends RecyclerView.ViewHolder {
         private TextView textViewNomeServico;
         private TextView textViewDuracaoAtendimento;
         private TextView textViewValorAtendimento;
         private RelativeLayout relativeLayout;
+
         public ServicosHolder(@NonNull View itemView) {
             super(itemView);
             textViewNomeServico = itemView.findViewById(R.id.text_view_servico);
