@@ -44,7 +44,7 @@ public class ListaOpcoesServicoAdicionarEditarAgendamentoActivity extends AppCom
             @Override
             public void onClick(View view) {
                 if (adapter.servicosSelecionados.size()>0){
-                    Intent intent = new Intent(ListaOpcoesServicoAdicionarEditarAgendamentoActivity.this, AdicionarEditarAgendamentoActivity.class);
+                    Intent intent = new Intent(ListaOpcoesServicoAdicionarEditarAgendamentoActivity.this, SelecionarDataHorarioActivity.class);
                     intent.putExtra(SERVICOS_ESCOLHIDOS, adapter.servicosSelecionados);
                     startActivity(intent);
                 } else {

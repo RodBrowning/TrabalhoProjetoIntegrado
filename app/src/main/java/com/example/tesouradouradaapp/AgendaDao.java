@@ -24,4 +24,7 @@ public interface AgendaDao {
     @Query("SELECT * FROM agenda ORDER BY horarioInicio ASC")
     LiveData<List<Agendamento>> getAllAgendamentos();
 
+    @Query("SELECT * FROM agenda WHERE horarioInicio >= :horarioDeAbertuta AND horarioFim <= :horarioFechamento ORDER BY horarioInicio ASC")
+    List<Agendamento> getAgendamentosMarcadosParaData(long horarioDeAbertuta, long horarioFechamento);
+
 }

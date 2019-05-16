@@ -22,7 +22,7 @@ public class DadosEstabelecimentoActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dados_estabelecimento);
-        setTitle("Dados "+MainActivity.APP_TITLE);
+        setTitle("Dados "+ MainActivity.APP_TITLE);
         textViewNomeEstamelecimento = findViewById(R.id.text_view_nome_estabelecimento);
         textViewNomeProprietario = findViewById(R.id.text_view_nome_proprietario);
         textViewHorarioFuncionamento = findViewById(R.id.text_view_horario_funcionamento);

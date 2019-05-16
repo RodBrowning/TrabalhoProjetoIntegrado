@@ -19,7 +19,6 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
     private AgendaViewModel agendaViewModel;
     private EstabelecimentoViewModel estabelecimentoViewModel;
-    private Estabelecimento estabelecimentoObj;
     private FloatingActionButton floatingActionButtonAdicionarAgendamento;
     public static String APP_TITLE;
 
@@ -41,9 +40,13 @@ public class MainActivity extends AppCompatActivity {
         estabelecimentoViewModel.getEstabelecimento().observe(this, new Observer<Estabelecimento>() {
             @Override
             public void onChanged(@Nullable Estabelecimento estabelecimento) {
-                estabelecimentoObj = estabelecimento;
-                APP_TITLE = estabelecimentoObj.getNomeEstabelecimento();
-                setTitle("Agenda "+APP_TITLE);
+                if(estabelecimento != null){
+                    APP_TITLE = estabelecimento.getNomeEstabelecimento();
+                    setTitle("Agenda "+APP_TITLE);
+                } else {
+                    APP_TITLE = "Bem vindo";
+                    setTitle(APP_TITLE);
+                }
             }
         });
 
@@ -63,6 +66,7 @@ public class MainActivity extends AppCompatActivity {
                 adapter.setAgenda(agendamentos);
             }
         });
+
     }
 
     private void irParaDadosEstabelecimentoActivity() {

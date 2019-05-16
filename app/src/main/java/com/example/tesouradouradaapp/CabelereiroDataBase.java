@@ -71,12 +71,13 @@ public abstract class CabelereiroDataBase extends RoomDatabase {
             listaServicos.add(3);
             Calendar calendar = Calendar.getInstance();
             calendar.set(Calendar.YEAR, 2019);
-            calendar.set(Calendar.MONTH, 5);
-            calendar.set(Calendar.DAY_OF_MONTH, 10);
+            calendar.set(Calendar.MONTH, 4);
+            calendar.set(Calendar.DAY_OF_MONTH, 21);
             calendar.set(Calendar.HOUR_OF_DAY, 14);
             calendar.set(Calendar.MINUTE, 30);
+            calendar.set(Calendar.SECOND, 00);
             Date horarioInicio = calendar.getTime();
-            agendaDao.insertAgendamento(new Agendamento("Claudio",
+            agendaDao.insertAgendamento(new Agendamento("Claudio Hugo",
                     horarioInicio.getTime(),
                     horarioInicio.getTime()+30*60*1000,
                     String.valueOf(listaServicos),
@@ -86,10 +87,11 @@ public abstract class CabelereiroDataBase extends RoomDatabase {
             listaServicos.add(4);
             Calendar calendar2 = Calendar.getInstance();
             calendar2.set(Calendar.YEAR, 2019);
-            calendar2.set(Calendar.MONTH, 5);
-            calendar2.set(Calendar.DAY_OF_MONTH, 10);
+            calendar2.set(Calendar.MONTH, 4);
+            calendar2.set(Calendar.DAY_OF_MONTH, 21);
             calendar2.set(Calendar.HOUR_OF_DAY, 15);
             calendar2.set(Calendar.MINUTE, 00);
+            calendar2.set(Calendar.SECOND, 00);
             Date horarioInicio2 = calendar2.getTime();
             agendaDao.insertAgendamento(new Agendamento("Roberto",
                     horarioInicio2.getTime(),
@@ -102,10 +104,11 @@ public abstract class CabelereiroDataBase extends RoomDatabase {
             listaServicos.remove(0);
             Calendar calendar3 = Calendar.getInstance();
             calendar3.set(Calendar.YEAR, 2019);
-            calendar3.set(Calendar.MONTH, 5);
-            calendar3.set(Calendar.DAY_OF_MONTH, 10);
+            calendar3.set(Calendar.MONTH, 4);
+            calendar3.set(Calendar.DAY_OF_MONTH, 21);
             calendar3.set(Calendar.HOUR_OF_DAY, 16);
             calendar3.set(Calendar.MINUTE, 30);
+            calendar3.set(Calendar.SECOND, 00);
             Date horarioInicio3 = calendar3.getTime();
             agendaDao.insertAgendamento(new Agendamento("Fernando",
                     horarioInicio3.getTime(),

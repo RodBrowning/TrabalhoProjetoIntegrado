@@ -23,12 +23,15 @@ import java.util.List;
 public class AgendaAdapter extends RecyclerView.Adapter<AgendaAdapter.AgendamentoHolder> {
     private List<Agendamento> agenda = new ArrayList<>();
     private Context mContext;
-    private Application application;
-    private AgendamentoRepository agendamentoRepository = new AgendamentoRepository(application);
+    private AgendamentoRepository agendamentoRepository;
+
 
     public AgendaAdapter(Context context) {
         this.mContext = context;
+        this.agendamentoRepository = new AgendamentoRepository(mContext);
     }
+
+
 
     @NonNull
     @Override
@@ -93,9 +96,6 @@ public class AgendaAdapter extends RecyclerView.Adapter<AgendaAdapter.Agendament
 
     }
 
-    public void setApplication(Application application) {
-        this.application = application;
-    }
 
     class AgendamentoHolder extends RecyclerView.ViewHolder {
         private TextView textViewNomeCliente;

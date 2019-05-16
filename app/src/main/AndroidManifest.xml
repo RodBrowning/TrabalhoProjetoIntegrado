@@ -32,10 +32,13 @@
             android:parentActivityName=".ServicosActivity" />
         <activity
             android:name=".ListaOpcoesServicoAdicionarEditarAgendamentoActivity"
+            android:parentActivityName=".MainActivity" />
+        <activity
+            android:name=".SelecionarDataHorarioActivity"
             android:parentActivityName=".MainActivity"/>
         <activity
             android:name=".AdicionarEditarAgendamentoActivity"
-            android:parentActivityName=".ListaOpcoesServicoAdicionarEditarAgendamentoActivity" />
+            android:parentActivityName=".MainActivity" />
     </application>
 
 </manifest>
