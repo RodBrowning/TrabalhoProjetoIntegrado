@@ -18,17 +18,23 @@ public class ServicoViewModel extends AndroidViewModel {
         servicos = servicosRepository.getAllServicos();
     }
 
-    public void insert(Servico servico){
+    public void insert(Servico servico) {
         servicosRepository.insert(servico);
     }
-    public void update(Servico servico){
+
+    public void update(Servico servico) {
         servicosRepository.update(servico);
     }
-    public void delete(Servico servico){
+
+    public void delete(Servico servico) {
         servicosRepository.delete(servico);
     }
-    public LiveData<List<Servico>> getAllServicos(){
+
+    public LiveData<List<Servico>> getAllServicos() {
         return servicos;
     }
-    public Servico getServico(int id) throws ExecutionException, InterruptedException {return servicosRepository.getServico(id);}
+
+    public Servico getServico(int id) throws ExecutionException, InterruptedException {
+        return servicosRepository.getServico(id);
+    }
 }

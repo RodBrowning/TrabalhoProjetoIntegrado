@@ -8,11 +8,13 @@ import android.arch.persistence.room.Index;
 import android.arch.persistence.room.PrimaryKey;
 
 @Entity(tableName = "agenda_servicos_join",
-    indices = {@Index(value = {"id_agendamento_join", "id_servico_join"})},
-    foreignKeys = {@ForeignKey(entity = Servico.class, parentColumns = "id_servico", childColumns = "id_servico_join"),
-     @ForeignKey(entity = Agendamento.class, parentColumns = "id_agendamento", childColumns = "id_agendamento_join")
+        indices = {
+                @Index(value = {"id_agendamento_join", "id_servico_join"})},
+        foreignKeys = {
+                @ForeignKey(entity = Servico.class, parentColumns = "id_servico", childColumns = "id_servico_join"),
+                @ForeignKey(entity = Agendamento.class, parentColumns = "id_agendamento", childColumns = "id_agendamento_join")
 
-    })
+        })
 public class AgendaServicosJoin {
 
     @PrimaryKey(autoGenerate = true)

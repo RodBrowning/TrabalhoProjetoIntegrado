@@ -32,7 +32,6 @@ public class AgendaAdapter extends RecyclerView.Adapter<AgendaAdapter.Agendament
     }
 
 
-
     @NonNull
     @Override
     public AgendamentoHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
@@ -58,7 +57,7 @@ public class AgendaAdapter extends RecyclerView.Adapter<AgendaAdapter.Agendament
                     public boolean onMenuItemClick(MenuItem menuItem) {
                         switch (menuItem.getItemId()) {
                             case R.id.menu_editar_agendamento:
-                                Toast.makeText(mContext, "Editar Agendamento com "+ agendamento.getCliente(), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(mContext, "Editar Agendamento com " + agendamento.getCliente(), Toast.LENGTH_SHORT).show();
                                 return true;
                             case R.id.menu_excluir_agendamento:
                                 new AlertDialog.Builder(mContext)

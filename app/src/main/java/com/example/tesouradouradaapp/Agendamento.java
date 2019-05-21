@@ -49,14 +49,12 @@ public class Agendamento {
         return horarioFim;
     }
 
-
     public long getCriadoEm() {
         return criadoEm;
     }
 
-
     public long getDuracaoEmMinutos() {
-        return ((horarioFim - horarioInicio) / 1000)/60;
+        return ((horarioFim - horarioInicio) / 1000) / 60;
     }
 
 }

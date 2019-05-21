@@ -27,7 +27,7 @@ public class EditarEstabelecimentoActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_editar_estabelecimento);
-        if(!MainActivity.APP_TITLE.isEmpty()){
+        if (!MainActivity.APP_TITLE.isEmpty()) {
             setTitle("Editar Dados");
         }
 
@@ -81,14 +81,14 @@ public class EditarEstabelecimentoActivity extends AppCompatActivity {
             public void onClick(View view) {
                 String nomeEstabelecimento = editTextNomeEstabelecimento.getText().toString().trim();
                 String nomeProprietario = editTextNomeProprietario.getText().toString().trim();
-                String abertura, fechamento;;
+                String abertura, fechamento;
 
                 // Validação dos campos
-                int diferencaEntreAberturaFechamento =(horaDeFechamento.getValue() +  minutosDeFechamento.getValue()) - (horaDeAbertura.getValue() +  minutosDeAbertura.getValue());
-                if (nomeEstabelecimento.isEmpty() || nomeProprietario.isEmpty()){
+                int diferencaEntreAberturaFechamento = (horaDeFechamento.getValue() + minutosDeFechamento.getValue()) - (horaDeAbertura.getValue() + minutosDeAbertura.getValue());
+                if (nomeEstabelecimento.isEmpty() || nomeProprietario.isEmpty()) {
                     Toast.makeText(EditarEstabelecimentoActivity.this, "O nome do estabelecimento e proprietário são obrigatórios", Toast.LENGTH_SHORT).show();
                     return;
-                } else if(diferencaEntreAberturaFechamento <= 0){
+                } else if (diferencaEntreAberturaFechamento <= 0) {
                     Toast.makeText(EditarEstabelecimentoActivity.this, "Horario de abertura deve ser inferior ao horario de fechamento", Toast.LENGTH_SHORT).show();
                     return;
                 }

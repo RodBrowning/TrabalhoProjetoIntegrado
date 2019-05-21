@@ -31,14 +31,14 @@ public class AdicionarEditarServicoActivity extends AppCompatActivity {
         editTextDuracaoServico = findViewById(R.id.edit_text_duracao_servico);
         servicoViewModel = ViewModelProviders.of(AdicionarEditarServicoActivity.this).get(ServicoViewModel.class);
 
-        if (getIntent().hasExtra(ServicosAdapter.EXTRA_ID)){
+        if (getIntent().hasExtra(ServicosAdapter.EXTRA_ID)) {
             idParaAtualizar = getIntent().getIntExtra(ServicosAdapter.EXTRA_ID, -1);
             try {
                 servicoObj = servicoViewModel.getServico(idParaAtualizar);
-                setTitle("Editar Serviço "+ servicoObj.getNomeServico());
+                setTitle("Editar Serviço " + servicoObj.getNomeServico());
                 editTextNomeServico.setText(servicoObj.getNomeServico());
                 editTextValorServico.setText(String.valueOf(servicoObj.getValor()));
-                editTextDuracaoServico.setText(String.valueOf(servicoObj.getTempo()));
+                editTextDuracaoServico.setText(String.valueOf(converterMilisegundosParaMinutos(servicoObj.getTempo())));
             } catch (ExecutionException e) {
                 e.printStackTrace();
             } catch (InterruptedException e) {
@@ -59,9 +59,9 @@ public class AdicionarEditarServicoActivity extends AppCompatActivity {
             return;
         }
 
-        Servico servico = new Servico(nomeServico, Float.parseFloat(valorServico), Integer.parseInt(duracaoServico));
+        Servico servico = new Servico(nomeServico, Float.parseFloat(valorServico), converterMinutosParaMilisegundos(Integer.parseInt(duracaoServico)));
 
-        if(getIntent().hasExtra(ServicosAdapter.EXTRA_ID)){
+        if (getIntent().hasExtra(ServicosAdapter.EXTRA_ID)) {
             servico.setId_servico(idParaAtualizar);
             servicoViewModel.update(servico);
             Toast.makeText(this, "Serviço editado", Toast.LENGTH_SHORT).show();
@@ -72,6 +72,17 @@ public class AdicionarEditarServicoActivity extends AppCompatActivity {
 
         Intent intentParaServicos = new Intent(AdicionarEditarServicoActivity.this, ServicosActivity.class);
         startActivity(intentParaServicos);
+    }
+
+    private long converterMinutosParaMilisegundos(int minutos) {
+        long mins = new Long((minutos * 60) * 1000);
+        return mins;
+    }
+
+    private int converterMilisegundosParaMinutos(long minutos) {
+        Long longMinutos = new Long(minutos);
+        int mins = (longMinutos.intValue() / 1000) / 60;
+        return mins;
     }
 
     @Override

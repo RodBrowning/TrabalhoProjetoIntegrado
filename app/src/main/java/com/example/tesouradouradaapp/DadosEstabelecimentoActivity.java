@@ -22,7 +22,7 @@ public class DadosEstabelecimentoActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dados_estabelecimento);
-        setTitle("Dados "+ MainActivity.APP_TITLE);
+        setTitle("Dados " + MainActivity.APP_TITLE);
         textViewNomeEstamelecimento = findViewById(R.id.text_view_nome_estabelecimento);
         textViewNomeProprietario = findViewById(R.id.text_view_nome_proprietario);
         textViewHorarioFuncionamento = findViewById(R.id.text_view_horario_funcionamento);
@@ -44,11 +44,13 @@ public class DadosEstabelecimentoActivity extends AppCompatActivity {
         });
     }
 
-    private void irParaEditarEstabelecimentoActivity(){
+    private void irParaEditarEstabelecimentoActivity() {
         Intent intent = new Intent(DadosEstabelecimentoActivity.this, EditarEstabelecimentoActivity.class);
         startActivity(intent);
 
-    };
+    }
+
+    ;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

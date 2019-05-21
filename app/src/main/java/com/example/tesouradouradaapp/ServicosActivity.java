@@ -24,7 +24,7 @@ public class ServicosActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_servicos);
-        setTitle("Serviços "+MainActivity.APP_TITLE);
+        setTitle("Serviços " + MainActivity.APP_TITLE);
 
         floatingActionButtonAdicionarServico = findViewById(R.id.button_add_servico);
         floatingActionButtonAdicionarServico.setOnClickListener(new View.OnClickListener() {

@@ -82,7 +82,7 @@ public class ServicosRepository {
         }
     }
 
-    private  static class GetServicoAsyncTask extends AsyncTask<Integer, Void, Servico>{
+    private static class GetServicoAsyncTask extends AsyncTask<Integer, Void, Servico> {
         private ServicoDao servicoDao;
         private Servico servico;
 

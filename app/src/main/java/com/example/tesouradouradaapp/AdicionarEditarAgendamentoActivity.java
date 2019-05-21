@@ -20,6 +20,7 @@ public class AdicionarEditarAgendamentoActivity extends AppCompatActivity {
 
     private List<Servico> servicosSelecionados;
     private TextView textViewDuracaoTotal, textViewValorTotal;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,7 +45,7 @@ public class AdicionarEditarAgendamentoActivity extends AppCompatActivity {
 
     }
 
-    private void salvarEditarAgendamento(){
+    private void salvarEditarAgendamento() {
         Intent intent = new Intent(AdicionarEditarAgendamentoActivity.this, MainActivity.class);
         startActivity(intent);
         Toast.makeText(this, "Worked from insert update agendamento", Toast.LENGTH_SHORT).show();
@@ -70,24 +71,25 @@ public class AdicionarEditarAgendamentoActivity extends AppCompatActivity {
     }
 
     // Calcula duracao
-    private String duracaoTotalParaApresentacao(List<Servico> servicos){
+    private String duracaoTotalParaApresentacao(List<Servico> servicos) {
         int duracaoTotal = 0;
-        for (Servico servico : servicos){
+        for (Servico servico : servicos) {
             duracaoTotal += servico.getTempo();
         }
 
         int duracaohoras = duracaoTotal / 60;
         int duracaoMinutos = duracaoTotal % 60;
 
-        if (duracaohoras > 0){
+        if (duracaohoras > 0) {
             return String.format("%d hrs %02d min", duracaohoras, duracaoMinutos);
         } else {
             return String.format("%d min", duracaoMinutos);
         }
 
     }
+
     // Calcula valor total
-    private String valorTotalParaApresentacao(List<Servico> servicos){
+    private String valorTotalParaApresentacao(List<Servico> servicos) {
         Float valorTotal = new Float(0);
         Locale brasil = new Locale("pt", "BR");
         NumberFormat numberFormat = NumberFormat.getCurrencyInstance(brasil);

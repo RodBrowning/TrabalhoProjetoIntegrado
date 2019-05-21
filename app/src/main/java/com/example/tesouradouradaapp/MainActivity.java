@@ -40,9 +40,9 @@ public class MainActivity extends AppCompatActivity {
         estabelecimentoViewModel.getEstabelecimento().observe(this, new Observer<Estabelecimento>() {
             @Override
             public void onChanged(@Nullable Estabelecimento estabelecimento) {
-                if(estabelecimento != null){
+                if (estabelecimento != null) {
                     APP_TITLE = estabelecimento.getNomeEstabelecimento();
-                    setTitle("Agenda "+APP_TITLE);
+                    setTitle("Agenda " + APP_TITLE);
                 } else {
                     APP_TITLE = "Bem vindo";
                     setTitle(APP_TITLE);
@@ -73,7 +73,8 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(MainActivity.this, DadosEstabelecimentoActivity.class);
         startActivity(intent);
     }
-    private void irParaServicosActivity(){
+
+    private void irParaServicosActivity() {
         Intent intent = new Intent(MainActivity.this, ServicosActivity.class);
         startActivity(intent);
     }

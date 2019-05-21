@@ -6,6 +6,7 @@ import android.arch.lifecycle.LiveData;
 import android.support.annotation.NonNull;
 
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 public class EstabelecimentoViewModel extends AndroidViewModel {
     private EstabelecimentoRepository estabelecimentoRepository;
@@ -17,13 +18,19 @@ public class EstabelecimentoViewModel extends AndroidViewModel {
         estabelecimento = estabelecimentoRepository.getEstabelecimento();
     }
 
-    public void insert(Estabelecimento estabelecimento){
+    public void insert(Estabelecimento estabelecimento) {
         estabelecimentoRepository.insert(estabelecimento);
     }
-    public void update(Estabelecimento estabelecimento){
+
+    public void update(Estabelecimento estabelecimento) {
         estabelecimentoRepository.update(estabelecimento);
     }
-    public LiveData<Estabelecimento> getEstabelecimento(){
+
+    public LiveData<Estabelecimento> getEstabelecimento() {
         return estabelecimento;
+    }
+
+    public Estabelecimento getEstab() throws ExecutionException, InterruptedException, ExecutionException {
+        return estabelecimentoRepository.getEstab();
     }
 }

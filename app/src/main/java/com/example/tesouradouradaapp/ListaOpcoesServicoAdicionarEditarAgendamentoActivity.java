@@ -12,12 +12,14 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ListaOpcoesServicoAdicionarEditarAgendamentoActivity extends AppCompatActivity {
     public static final String SERVICOS_ESCOLHIDOS = "package com.example.tesouradouradaapp.SERVICOS_ESCOLHIDOS";
     private ServicoViewModel servicoViewModel;
     private Button buttonSeguir;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,9 +45,9 @@ public class ListaOpcoesServicoAdicionarEditarAgendamentoActivity extends AppCom
         buttonSeguir.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (adapter.servicosSelecionados.size()>0){
+                if (adapter.servicosSelecionados.size() > 0) {
                     Intent intent = new Intent(ListaOpcoesServicoAdicionarEditarAgendamentoActivity.this, SelecionarDataHorarioActivity.class);
-                    intent.putExtra(SERVICOS_ESCOLHIDOS, adapter.servicosSelecionados);
+                    intent.putParcelableArrayListExtra(SERVICOS_ESCOLHIDOS, adapter.servicosSelecionados);
                     startActivity(intent);
                 } else {
                     Toast.makeText(ListaOpcoesServicoAdicionarEditarAgendamentoActivity.this, "Selecione algum serviço", Toast.LENGTH_SHORT).show();

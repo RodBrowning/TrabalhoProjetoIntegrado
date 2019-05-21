@@ -1,12 +1,13 @@
 package com.example.tesouradouradaapp;
 
 import android.app.DatePickerDialog;
-import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
-import android.support.annotation.Nullable;
+import android.content.Intent;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -24,12 +25,13 @@ public class SelecionarDataHorarioActivity extends AppCompatActivity implements 
     private Button buttonSelecionarData;
     private TextView textViewHorarioSelecionado;
     private Calendar calendar;
-    private EstabelecimentoViewModel estabelecimentoViewModel;
-    private AgendaViewModel agendaViewModel;
-    private List<Agendamento> agendaParaDia;
-    private long horarioAbertura, horarioFechamento;
+    private long horarioAbertura = new Long(0);
+    private long horarioFechamento = new Long(0);
     private List<Long> horariosAgendadosParaDia = new ArrayList<>();
-    private List<String> horariosLivres = new ArrayList<>();
+    private List<Long> horariosLivresParaDiaLong = new ArrayList<>();
+    private List<List<Long>> horariosLivresParaDiaParaServicosSelecionados = new ArrayList<>();
+    private List<List<Long>> listaDeParDeHorariosLivresParaDiaLong;
+    private ArrayList<Servico> servicosSelecionados = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,16 +43,43 @@ public class SelecionarDataHorarioActivity extends AppCompatActivity implements 
         int dia = gregorianCalendar.get(Calendar.DAY_OF_MONTH);
         int mes = gregorianCalendar.get(Calendar.MONTH);
         int ano = gregorianCalendar.get(Calendar.YEAR);
-        calendar = inicioExpediente(dia, mes, ano);
+        calendar = inicioExpediente(ano, mes, dia);
 
         Date inicioExpediente = calendar.getTime();
         editarTextoDoBotaoCalendario(inicioExpediente);
 
         // Gerar horarios livres
 
-        setHorariosAgendadosPadaDia(calendar);
-        horariosLivres = getHorariosLivresParaDia(horariosAgendadosParaDia, horarioAbertura, horarioFechamento);
+        try {
+            horarioAbertura = getHorarioAbertura(calendar);
+            horarioFechamento = getHorarioFechamento(calendar);
+            horariosAgendadosParaDia = getHorariosAgendadosPadaDia(horarioAbertura, horarioFechamento);
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
+        horariosLivresParaDiaLong = getHorariosLivresParaDiaLong(horariosAgendadosParaDia, horarioAbertura, horarioFechamento);
+        listaDeParDeHorariosLivresParaDiaLong = getParDeHorariosLivresLong(horariosLivresParaDiaLong);
+
+        //Para passar para o proximo activity
+        Intent intent = getIntent();
+        servicosSelecionados = intent.getParcelableArrayListExtra(ListaOpcoesServicoAdicionarEditarAgendamentoActivity.SERVICOS_ESCOLHIDOS);
+        horariosLivresParaDiaParaServicosSelecionados = getHorariosLivresParaDiaParaServicosSelecionados(horariosAgendadosParaDia, listaDeParDeHorariosLivresParaDiaLong, servicosSelecionados);
+
+        // Popular horarios livres
+
+
+        RecyclerView recyclerView = findViewById(R.id.recycler_view_horarios_disponiveis);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setHasFixedSize(true);
+
+        final SelecionarDataHorarioAdapter adapter = new SelecionarDataHorarioAdapter(horariosLivresParaDiaParaServicosSelecionados);
+        recyclerView.setAdapter(adapter);
+
+
+        // Mostrar datepicker
         buttonSelecionarData.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -61,7 +90,7 @@ public class SelecionarDataHorarioActivity extends AppCompatActivity implements 
 
     }
 
-    private Calendar inicioExpediente(int dia, int mes, int ano) {
+    private Calendar inicioExpediente(int ano, int mes, int dia) {
         Calendar calendar = Calendar.getInstance();
         calendar.set(calendar.DAY_OF_MONTH, dia);
         calendar.set(calendar.MONTH, mes);
@@ -80,62 +109,101 @@ public class SelecionarDataHorarioActivity extends AppCompatActivity implements 
         return horas + minutos;
     }
 
-    private void setHorariosAgendadosPadaDia(final Calendar calendar) {
-        agendaViewModel = ViewModelProviders.of(this).get(AgendaViewModel.class);
-        estabelecimentoViewModel = ViewModelProviders.of(this).get(EstabelecimentoViewModel.class);
-        estabelecimentoViewModel.getEstabelecimento().observe(this, new Observer<Estabelecimento>() {
-            @Override
-            public void onChanged(@Nullable Estabelecimento estabelecimento) {
-                String[] horarioAberturaArray = estabelecimento.getHorarioAbertura().split(":");
-                String[] horarioFechamentoArray = estabelecimento.getHorarioFechamento().split(":");
+    private long getHorarioAbertura(Calendar calendar) throws ExecutionException, InterruptedException {
+        EstabelecimentoViewModel estabelecimentoViewModel = ViewModelProviders.of(this).get(EstabelecimentoViewModel.class);
+        Estabelecimento estabelecimento = estabelecimentoViewModel.getEstab();
 
-                int horasAbertura = Integer.parseInt(horarioAberturaArray[0]);
-                int minutosAbertura = Integer.parseInt(horarioAberturaArray[1]);
-                int horasFechamento = Integer.parseInt(horarioFechamentoArray[0]);
-                int minutosFechamento = Integer.parseInt(horarioFechamentoArray[1]);
+        String[] horarioAberturaArray = estabelecimento.getHorarioAbertura().split(":");
 
-                horarioAbertura = calendar.getTime().getTime() + converterHorasMinutosParaMilisegundos(horasAbertura, minutosAbertura);
-                horarioFechamento = calendar.getTime().getTime() + converterHorasMinutosParaMilisegundos(horasFechamento, minutosFechamento);
+        int horasAbertura = Integer.parseInt(horarioAberturaArray[0]);
+        int minutosAbertura = Integer.parseInt(horarioAberturaArray[1]);
 
-                try {
-                    List<Long> horariosAgendados = new ArrayList<>();
-                    agendaParaDia = agendaViewModel.getAgendamentosMarcadosParaData(horarioAbertura, horarioFechamento);
-                    for (Agendamento agendamento : agendaParaDia) {
-                        horariosAgendados.add(agendamento.getHorarioInicio());
-                        horariosAgendados.add(agendamento.getHorarioFim());
-                    }
-                    horariosAgendadosParaDia = horariosAgendados;
-                } catch (ExecutionException e) {
-                    e.printStackTrace();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
+        long horarioAbertura = calendar.getTime().getTime() + converterHorasMinutosParaMilisegundos(horasAbertura, minutosAbertura);
+        return horarioAbertura;
     }
 
-    private List<String> getHorariosLivresParaDia(List<Long> horariosAgendados, long horarioAbertura, long horarioFechamento) {
-        List<String> horariosLivresString = new ArrayList<>();
+    private long getHorarioFechamento(Calendar calendar) throws ExecutionException, InterruptedException {
+        EstabelecimentoViewModel estabelecimentoViewModel = ViewModelProviders.of(this).get(EstabelecimentoViewModel.class);
+        Estabelecimento estabelecimento;
+        estabelecimento = estabelecimentoViewModel.getEstab();
+
+        String[] horarioFechamentoArray = estabelecimento.getHorarioFechamento().split(":");
+
+        int horasFechamento = Integer.parseInt(horarioFechamentoArray[0]);
+        int minutosFechamento = Integer.parseInt(horarioFechamentoArray[1]);
+
+        long horarioFechamento = calendar.getTime().getTime() + converterHorasMinutosParaMilisegundos(horasFechamento, minutosFechamento);
+        return horarioFechamento;
+    }
+
+    private List<Long> getHorariosAgendadosPadaDia(long horarioAbertura, long horarioFechamento) {
+        AgendaViewModel agendaViewModel = ViewModelProviders.of(this).get(AgendaViewModel.class);
+
+        List<Agendamento> agendaParaDia = new ArrayList<>();
+        List<Long> horariosAgendadosParaDia = new ArrayList<>();
+        try {
+            agendaParaDia = agendaViewModel.getAgendamentosMarcadosParaData(horarioAbertura, horarioFechamento);
+
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } finally {
+            for (int i = 0; i < agendaParaDia.size(); i++) {
+                horariosAgendadosParaDia.add(agendaParaDia.get(i).getHorarioInicio());
+                horariosAgendadosParaDia.add(agendaParaDia.get(i).getHorarioFim());
+            }
+
+        }
+        return horariosAgendadosParaDia;
+    }
+
+    private List<Long> getHorariosLivresParaDiaLong(List<Long> horariosAgendados, long horarioAbertura, long horarioFechamento) {
         List<Long> horariosLivresLong = new ArrayList<>();
-        SimpleDateFormat simpleDateFormatTime = new SimpleDateFormat("HH:mm");
 
         horariosLivresLong.add(horarioAbertura);
         for (Long horariosAgendado : horariosAgendados) {
             horariosLivresLong.add(horariosAgendado);
         }
         horariosLivresLong.add(horarioFechamento);
+        return horariosLivresLong;
+    }
 
-        for (int i = 0; i < horariosLivresLong.size(); i++) {
-            StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.append("Das ");
-            stringBuilder.append(simpleDateFormatTime.format(horariosLivresLong.get(i)));
-            i++;
-            stringBuilder.append(" às ");
-            stringBuilder.append(simpleDateFormatTime.format(horariosLivresLong.get(i)));
-            horariosLivresString.add(stringBuilder.toString());
+    private List<List<Long>> getParDeHorariosLivresLong(List<Long> horariosLivresParaDiaLong) {
+        List<List<Long>> listaDeParDeHorariosLivresLong = new ArrayList<>();
+        for (int i = 0; i < horariosLivresParaDiaLong.size(); i++) {
+            if (horariosLivresParaDiaLong.get(i).equals(horariosLivresParaDiaLong.get(i + 1))) {
+                i++;
+                continue;
+            } else {
+                List<Long> parDeHorariosLivresLong = new ArrayList<>();
+                parDeHorariosLivresLong.add(horariosLivresParaDiaLong.get(i));
+                i++;
+                parDeHorariosLivresLong.add(horariosLivresParaDiaLong.get(i));
+                listaDeParDeHorariosLivresLong.add(parDeHorariosLivresLong);
+            }
         }
 
-        return horariosLivresString;
+        return listaDeParDeHorariosLivresLong;
+    }
+
+    private List<List<Long>> getHorariosLivresParaDiaParaServicosSelecionados(List<Long> horariosAgendadosParaDia, List<List<Long>> listaDeParDeHorariosLivresLong, ArrayList<Servico> servicosSelecionados) {
+        List<Long> horariosLivresParaDiaParaServicosSelecionados = new ArrayList<>();
+        long sumDuracaoServidosSelecionados = new Long(0);
+        for (int i = 0; i < servicosSelecionados.size(); i++) {
+            sumDuracaoServidosSelecionados += servicosSelecionados.get(i).getTempo();
+        }
+        for (int i = 0; i < listaDeParDeHorariosLivresLong.size(); i++) {
+            listaDeParDeHorariosLivresLong.get(i)
+                    .set(1, listaDeParDeHorariosLivresLong.get(i).get(1) - sumDuracaoServidosSelecionados);
+        }
+        for (int i = 0; i < listaDeParDeHorariosLivresLong.size(); i++) {
+            if (listaDeParDeHorariosLivresLong.get(i).get(1).longValue() < listaDeParDeHorariosLivresLong.get(i).get(0).longValue()) {
+                listaDeParDeHorariosLivresLong.remove(i);
+                i--;
+            }
+        }
+        return listaDeParDeHorariosLivresLong;
     }
 
     private void editarTextoDoBotaoCalendario(Date dataSelecionada) {
@@ -150,10 +218,34 @@ public class SelecionarDataHorarioActivity extends AppCompatActivity implements 
 
     @Override
     public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
-        calendar.set(Calendar.YEAR, i);
-        calendar.set(Calendar.MONTH, i1);
-        calendar.set(Calendar.DAY_OF_MONTH, i2);
+        calendar = inicioExpediente(i, i1, i2);
         editarTextoDoBotaoCalendario(calendar.getTime());
-        setHorariosAgendadosPadaDia(calendar);
+        // Gerar horarios livres
+        try {
+            horarioAbertura = getHorarioAbertura(calendar);
+            horarioFechamento = getHorarioFechamento(calendar);
+            horariosAgendadosParaDia = getHorariosAgendadosPadaDia(horarioAbertura, horarioFechamento);
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        horariosLivresParaDiaLong = getHorariosLivresParaDiaLong(horariosAgendadosParaDia, horarioAbertura, horarioFechamento);
+        listaDeParDeHorariosLivresParaDiaLong = getParDeHorariosLivresLong(horariosLivresParaDiaLong);
+
+        //Para passar para o proximo activity
+        Intent intent = getIntent();
+        servicosSelecionados = intent.getParcelableArrayListExtra(ListaOpcoesServicoAdicionarEditarAgendamentoActivity.SERVICOS_ESCOLHIDOS);
+        horariosLivresParaDiaParaServicosSelecionados = getHorariosLivresParaDiaParaServicosSelecionados(horariosAgendadosParaDia, listaDeParDeHorariosLivresParaDiaLong, servicosSelecionados);
+
+        // Popular horarios livres
+
+        RecyclerView recyclerView = findViewById(R.id.recycler_view_horarios_disponiveis);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setHasFixedSize(true);
+
+        final SelecionarDataHorarioAdapter adapter = new SelecionarDataHorarioAdapter(horariosLivresParaDiaParaServicosSelecionados);
+        recyclerView.setAdapter(adapter);
     }
 }

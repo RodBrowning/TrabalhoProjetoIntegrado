@@ -17,4 +17,8 @@ public interface EstabelecimentoDao {
 
     @Query("SELECT * FROM estabelecimento ORDER BY idEstabelecimento LIMIT 1")
     LiveData<Estabelecimento> getEstabelecimento();
+
+    @Query("SELECT * FROM estabelecimento ORDER BY idEstabelecimento LIMIT 1")
+    Estabelecimento getEstab();
+
 }

@@ -60,25 +60,27 @@ public abstract class CabelereiroDataBase extends RoomDatabase {
 
         @Override
         protected Void doInBackground(Void... voids) {
+
             // Dados iniciais
             estabelecimentoDao.insertEstabelecimento(new Estabelecimento("Tesoura Dourada", "Marcos Mendonca", "07:30", "18:00"));
 
             // Servicos
-            servicoDao.insertServico(new Servico("Corte masculino", 25, 30));
-            servicoDao.insertServico(new Servico("Corte infantil", 15, 30));
-            servicoDao.insertServico(new Servico("Barba", 15, 20));
-            servicoDao.insertServico(new Servico("Pezinho", 5, 15));
-            servicoDao.insertServico(new Servico("Luzes", 50, 60));
+            servicoDao.insertServico(new Servico("Corte masculino", 25, (30 * 60) * 1000));
+            servicoDao.insertServico(new Servico("Corte infantil", 15, (30 * 60) * 1000));
+            servicoDao.insertServico(new Servico("Barba", 15, (20 * 60) * 1000));
+            servicoDao.insertServico(new Servico("Pezinho", 5, (15 * 60) * 1000));
+            servicoDao.insertServico(new Servico("Luzes", 50, (60 * 60) * 1000));
 
             // Agendamentos
 
             Calendar calendar = Calendar.getInstance();
             calendar.set(Calendar.YEAR, 2019);
             calendar.set(Calendar.MONTH, 4);
-            calendar.set(Calendar.DAY_OF_MONTH, 22);
+            calendar.set(Calendar.DAY_OF_MONTH, 24);
             calendar.set(Calendar.HOUR_OF_DAY, 14);
             calendar.set(Calendar.MINUTE, 30);
             calendar.set(Calendar.SECOND, 00);
+            calendar.set(Calendar.MILLISECOND, 00);
             Date horarioInicio = calendar.getTime();
             Agendamento agendamento1 = new Agendamento(
                     "Claudio Hugo",
@@ -95,10 +97,11 @@ public abstract class CabelereiroDataBase extends RoomDatabase {
             Calendar calendar2 = Calendar.getInstance();
             calendar2.set(Calendar.YEAR, 2019);
             calendar2.set(Calendar.MONTH, 4);
-            calendar2.set(Calendar.DAY_OF_MONTH, 22);
+            calendar2.set(Calendar.DAY_OF_MONTH, 24);
             calendar2.set(Calendar.HOUR_OF_DAY, 15);
             calendar2.set(Calendar.MINUTE, 00);
             calendar2.set(Calendar.SECOND, 00);
+            calendar2.set(Calendar.MILLISECOND, 00);
             Date horarioInicio2 = calendar2.getTime();
             Agendamento agendamento2 = new Agendamento(
                     "Roberto",
@@ -115,10 +118,11 @@ public abstract class CabelereiroDataBase extends RoomDatabase {
             Calendar calendar3 = Calendar.getInstance();
             calendar3.set(Calendar.YEAR, 2019);
             calendar3.set(Calendar.MONTH, 4);
-            calendar3.set(Calendar.DAY_OF_MONTH, 22);
+            calendar3.set(Calendar.DAY_OF_MONTH, 24);
             calendar3.set(Calendar.HOUR_OF_DAY, 16);
             calendar3.set(Calendar.MINUTE, 30);
             calendar3.set(Calendar.SECOND, 00);
+            calendar3.set(Calendar.MILLISECOND, 00);
             Date horarioInicio3 = calendar3.getTime();
             Agendamento agendamento3 = new Agendamento("Fernando",
                     horarioInicio3.getTime(),
@@ -134,26 +138,5 @@ public abstract class CabelereiroDataBase extends RoomDatabase {
             return null;
         }
     }
-}
 
-/*agendaDao.insertAgendamento(new Agendamento("Claudio",
-                    String.valueOf(new Timestamp(2019, 6, 12,14,30,00,0)),
-                    String.valueOf(new Timestamp(2019, 6, 12,15,30,00,0)),
-                    String.valueOf(listaServicos),
-                    String.valueOf(new Timestamp(new Date().getTime()))
-                    ));
-            listaServicos.add(4);
-            agendaDao.insertAgendamento(new Agendamento("Roberto",
-                    String.valueOf(new Timestamp(2019, 6, 12,15,30,00,0)),
-                    String.valueOf(new Timestamp(2019, 6, 12,16,00,00,0)),
-                    String.valueOf(listaServicos),
-                    String.valueOf(new Timestamp(new Date().getTime()))
-                    ));
-            listaServicos.remove(2);
-            listaServicos.remove(0);
-            agendaDao.insertAgendamento(new Agendamento("Fernando",
-                    String.valueOf(new Timestamp(2019, 6, 12,16,30,00,0)),
-                    String.valueOf(new Timestamp(2019, 6, 12,17,00,00,0)),
-                    String.valueOf(listaServicos),
-                    String.valueOf(new Timestamp(new Date().getTime()))
-                    ));*/
+}

@@ -16,9 +16,9 @@ public class Servico implements Parcelable {
 
     private String nomeServico;
     private float valor;
-    private int tempo;
+    private long tempo;
 
-    public Servico(String nomeServico, float valor, int tempo) {
+    public Servico(String nomeServico, float valor, long tempo) {
         this.nomeServico = nomeServico;
         this.valor = valor;
         this.tempo = tempo;
@@ -28,8 +28,9 @@ public class Servico implements Parcelable {
         id_servico = in.readInt();
         nomeServico = in.readString();
         valor = in.readFloat();
-        tempo = in.readInt();
+        tempo = in.readLong();
     }
+
 
     public static final Creator<Servico> CREATOR = new Creator<Servico>() {
         @Override
@@ -59,9 +60,10 @@ public class Servico implements Parcelable {
         return valor;
     }
 
-    public int getTempo() {
+    public long getTempo() {
         return tempo;
     }
+
 
     @Override
     public int describeContents() {
@@ -73,6 +75,6 @@ public class Servico implements Parcelable {
         parcel.writeInt(id_servico);
         parcel.writeString(nomeServico);
         parcel.writeFloat(valor);
-        parcel.writeInt(tempo);
+        parcel.writeLong(tempo);
     }
 }

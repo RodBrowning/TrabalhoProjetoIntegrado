@@ -41,7 +41,7 @@ public class ListaOpcoesServicosAdapter extends RecyclerView.Adapter<ListaOpcoes
         NumberFormat numberFormat = NumberFormat.getCurrencyInstance(brasil);
 
         opcoesServicosHolder.checkBoxNomeServico.setText(servico.getNomeServico());
-        opcoesServicosHolder.textViewDuracaoAtendimento.setText(String.valueOf(servico.getTempo()) + " min");
+        opcoesServicosHolder.textViewDuracaoAtendimento.setText(String.valueOf(converterMilisegundosParaMinutos(servico.getTempo())) + " min");
         opcoesServicosHolder.textViewValorAtendimento.setText(numberFormat.format(servico.getValor()));
         opcoesServicosHolder.checkBoxNomeServico.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -75,6 +75,12 @@ public class ListaOpcoesServicosAdapter extends RecyclerView.Adapter<ListaOpcoes
     public void setServicos(List<Servico> servicos) {
         this.servicos = servicos;
         notifyDataSetChanged();
+    }
+
+    public int converterMilisegundosParaMinutos(long minutos) {
+        Long longMinutos = new Long(minutos);
+        int mins = (longMinutos.intValue() / 1000) / 60;
+        return mins;
     }
 
     class OpcoesServicosHolder extends RecyclerView.ViewHolder {

@@ -14,6 +14,7 @@ import java.util.Locale;
 public class AdicionarEditarAgendamentoAdapter extends RecyclerView.Adapter<AdicionarEditarAgendamentoAdapter.AdicionarEditarAgendamentoHolder> {
 
     private List<Servico> servicosSelecionados;
+
     @NonNull
     @Override
     public AdicionarEditarAgendamentoHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
@@ -29,7 +30,7 @@ public class AdicionarEditarAgendamentoAdapter extends RecyclerView.Adapter<Adic
         NumberFormat numberFormat = NumberFormat.getCurrencyInstance(brasil);
 
         adicionarEditarAgendamentoHolder.textViewNomeServico.setText(servico.getNomeServico());
-        adicionarEditarAgendamentoHolder.textViewDuracaoAtendimento.setText(String.valueOf(servico.getTempo()+" min"));
+        adicionarEditarAgendamentoHolder.textViewDuracaoAtendimento.setText(String.valueOf(servico.getTempo() + " min"));
         adicionarEditarAgendamentoHolder.textViewValorAtendimento.setText(numberFormat.format(servico.getValor()));
     }
 
