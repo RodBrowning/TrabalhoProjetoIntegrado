@@ -13,6 +13,7 @@ import android.widget.DatePicker;
 import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -27,6 +28,8 @@ public class SelecionarDataHorarioActivity extends AppCompatActivity implements 
     private AgendaViewModel agendaViewModel;
     private List<Agendamento> agendaParaDia;
     private long horarioAbertura, horarioFechamento;
+    private List<Long> horariosAgendadosParaDia = new ArrayList<>();
+    private List<String> horariosLivres = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,11 +44,12 @@ public class SelecionarDataHorarioActivity extends AppCompatActivity implements 
         calendar = inicioExpediente(dia, mes, ano);
 
         Date inicioExpediente = calendar.getTime();
-        editarTextoDoBotao(inicioExpediente);
+        editarTextoDoBotaoCalendario(inicioExpediente);
 
         // Gerar horarios livres
 
-        getHorariosAgendados(calendar);
+        setHorariosAgendadosPadaDia(calendar);
+        horariosLivres = getHorariosLivresParaDia(horariosAgendadosParaDia, horarioAbertura, horarioFechamento);
 
         buttonSelecionarData.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -76,7 +80,7 @@ public class SelecionarDataHorarioActivity extends AppCompatActivity implements 
         return horas + minutos;
     }
 
-    private List<Agendamento> getHorariosAgendados(final Calendar calendar) {
+    private void setHorariosAgendadosPadaDia(final Calendar calendar) {
         agendaViewModel = ViewModelProviders.of(this).get(AgendaViewModel.class);
         estabelecimentoViewModel = ViewModelProviders.of(this).get(EstabelecimentoViewModel.class);
         estabelecimentoViewModel.getEstabelecimento().observe(this, new Observer<Estabelecimento>() {
@@ -94,7 +98,13 @@ public class SelecionarDataHorarioActivity extends AppCompatActivity implements 
                 horarioFechamento = calendar.getTime().getTime() + converterHorasMinutosParaMilisegundos(horasFechamento, minutosFechamento);
 
                 try {
+                    List<Long> horariosAgendados = new ArrayList<>();
                     agendaParaDia = agendaViewModel.getAgendamentosMarcadosParaData(horarioAbertura, horarioFechamento);
+                    for (Agendamento agendamento : agendaParaDia) {
+                        horariosAgendados.add(agendamento.getHorarioInicio());
+                        horariosAgendados.add(agendamento.getHorarioFim());
+                    }
+                    horariosAgendadosParaDia = horariosAgendados;
                 } catch (ExecutionException e) {
                     e.printStackTrace();
                 } catch (InterruptedException e) {
@@ -102,13 +112,33 @@ public class SelecionarDataHorarioActivity extends AppCompatActivity implements 
                 }
             }
         });
-        return agendaParaDia;
-    }
-    private void getHorariosLivres(List<Agendamento> agendamentos, long horarioAbertura, long horarioFechamento){
-
     }
 
-    private void editarTextoDoBotao(Date dataSelecionada) {
+    private List<String> getHorariosLivresParaDia(List<Long> horariosAgendados, long horarioAbertura, long horarioFechamento) {
+        List<String> horariosLivresString = new ArrayList<>();
+        List<Long> horariosLivresLong = new ArrayList<>();
+        SimpleDateFormat simpleDateFormatTime = new SimpleDateFormat("HH:mm");
+
+        horariosLivresLong.add(horarioAbertura);
+        for (Long horariosAgendado : horariosAgendados) {
+            horariosLivresLong.add(horariosAgendado);
+        }
+        horariosLivresLong.add(horarioFechamento);
+
+        for (int i = 0; i < horariosLivresLong.size(); i++) {
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.append("Das ");
+            stringBuilder.append(simpleDateFormatTime.format(horariosLivresLong.get(i)));
+            i++;
+            stringBuilder.append(" às ");
+            stringBuilder.append(simpleDateFormatTime.format(horariosLivresLong.get(i)));
+            horariosLivresString.add(stringBuilder.toString());
+        }
+
+        return horariosLivresString;
+    }
+
+    private void editarTextoDoBotaoCalendario(Date dataSelecionada) {
         SimpleDateFormat simpleDateFormatDate = new SimpleDateFormat("EEEE - dd/MM/yyyy");
         SimpleDateFormat simpleDateFormatTime = new SimpleDateFormat("HH:mm");
 
@@ -123,7 +153,7 @@ public class SelecionarDataHorarioActivity extends AppCompatActivity implements 
         calendar.set(Calendar.YEAR, i);
         calendar.set(Calendar.MONTH, i1);
         calendar.set(Calendar.DAY_OF_MONTH, i2);
-        editarTextoDoBotao(calendar.getTime());
-        getHorariosAgendados(calendar);
+        editarTextoDoBotaoCalendario(calendar.getTime());
+        setHorariosAgendadosPadaDia(calendar);
     }
 }

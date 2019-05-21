@@ -59,7 +59,7 @@ public class ServicosAdapter extends RecyclerView.Adapter<ServicosAdapter.Servic
                         switch (menuItem.getItemId()) {
                             case R.id.menu_editar_servico:
                                 Intent intent = new Intent(mContext, AdicionarEditarServicoActivity.class);
-                                intent.putExtra(ServicosAdapter.EXTRA_ID, servico.getIdServico());
+                                intent.putExtra(ServicosAdapter.EXTRA_ID, servico.getId_servico());
                                 mContext.startActivity(intent);
                                 return true;
                             case R.id.menu_excluir_servico:

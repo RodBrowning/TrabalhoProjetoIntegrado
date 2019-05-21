@@ -1,14 +1,17 @@
 package com.example.tesouradouradaapp;
 
+import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Index;
 import android.arch.persistence.room.PrimaryKey;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-@Entity(tableName = "servicos")
+@Entity(tableName = "servicos", indices = {@Index("id_servico")})
 public class Servico implements Parcelable {
 
     @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name = "id_servico")
     private int id_servico;
 
     private String nomeServico;
@@ -40,11 +43,11 @@ public class Servico implements Parcelable {
         }
     };
 
-    public void setIdServico(int idServico) {
-        this.id_servico = idServico;
+    public void setId_servico(int id_servico) {
+        this.id_servico = id_servico;
     }
 
-    public int getIdServico() {
+    public int getId_servico() {
         return id_servico;
     }
 

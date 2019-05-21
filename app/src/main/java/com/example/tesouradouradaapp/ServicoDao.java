@@ -21,9 +21,9 @@ public interface ServicoDao {
     @Delete
     void deleteServico(Servico servico);
 
-    @Query("SELECT * FROM servico ORDER BY nomeServico ASC")
+    @Query("SELECT * FROM servicos ORDER BY nomeServico ASC")
     LiveData<List<Servico>> getAllServices();
 
-    @Query("SELECT * FROM servico WHERE idServico = :id")
+    @Query("SELECT * FROM servicos WHERE id_servico = :id")
     Servico getServico(int id);
 }

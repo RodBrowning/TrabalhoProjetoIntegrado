@@ -24,7 +24,10 @@ public interface AgendaDao {
     @Query("SELECT * FROM agenda ORDER BY horarioInicio ASC")
     LiveData<List<Agendamento>> getAllAgendamentos();
 
-    @Query("SELECT * FROM agenda WHERE horarioInicio >= :horarioDeAbertuta AND horarioFim <= :horarioFechamento ORDER BY horarioInicio ASC")
+    @Query("SELECT * FROM agenda WHERE horarioInicio >= :horarioDeAbertuta AND (" +
+            "SELECT SUM(tempo) + horarioInicio FROM servicos INNER JOIN " +
+            "agenda_servicos_join ON id_servico_join = id_servico " +
+            "WHERE id_servico = id_servico_join) <= :horarioFechamento ORDER BY horarioInicio ASC")
     List<Agendamento> getAgendamentosMarcadosParaData(long horarioDeAbertuta, long horarioFechamento);
 
 }

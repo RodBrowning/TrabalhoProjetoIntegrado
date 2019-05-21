@@ -13,16 +13,20 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
-@Database(entities = {Estabelecimento.class, Servico.class, Agendamento.class}, version = 1)
+@Database(entities = {Estabelecimento.class, Servico.class, Agendamento.class, AgendaServicosJoin.class}, version = 2)
 public abstract class CabelereiroDataBase extends RoomDatabase {
     private static CabelereiroDataBase instance;
 
     public abstract EstabelecimentoDao estabelecimentoDao();
+
     public abstract ServicoDao servicoDao();
+
     public abstract AgendaDao agendaDao();
 
-    public static synchronized CabelereiroDataBase getInstance(Context context){
-        if(instance == null){
+    public abstract AgendaServicoJoinDao agendaServicosJoinDao();
+
+    public static synchronized CabelereiroDataBase getInstance(Context context) {
+        if (instance == null) {
             instance = Room.databaseBuilder(context.getApplicationContext(),
                     CabelereiroDataBase.class,
                     "cabelereiro_database")
@@ -33,7 +37,7 @@ public abstract class CabelereiroDataBase extends RoomDatabase {
         return instance;
     }
 
-    private static RoomDatabase.Callback roomCallback = new RoomDatabase.Callback(){
+    private static RoomDatabase.Callback roomCallback = new RoomDatabase.Callback() {
         @Override
         public void onCreate(@NonNull SupportSQLiteDatabase db) {
             super.onCreate(db);
@@ -41,21 +45,23 @@ public abstract class CabelereiroDataBase extends RoomDatabase {
         }
     };
 
-    private static class PopulateDbAsyncTask extends AsyncTask<Void,Void,Void> {
+    private static class PopulateDbAsyncTask extends AsyncTask<Void, Void, Void> {
         private EstabelecimentoDao estabelecimentoDao;
         private ServicoDao servicoDao;
         private AgendaDao agendaDao;
+        private AgendaServicoJoinDao agendaServicosJoinDao;
 
         public PopulateDbAsyncTask(CabelereiroDataBase db) {
             this.estabelecimentoDao = db.estabelecimentoDao();
             this.servicoDao = db.servicoDao();
             this.agendaDao = db.agendaDao();
+            this.agendaServicosJoinDao = db.agendaServicosJoinDao();
         }
 
         @Override
         protected Void doInBackground(Void... voids) {
             // Dados iniciais
-            estabelecimentoDao.insertEstabelecimento(new Estabelecimento("Tesoura Dourada", "Marcos Mendonca", "07:30","18:00"));
+            estabelecimentoDao.insertEstabelecimento(new Estabelecimento("Tesoura Dourada", "Marcos Mendonca", "07:30", "18:00"));
 
             // Servicos
             servicoDao.insertServico(new Servico("Corte masculino", 25, 30));
@@ -65,57 +71,66 @@ public abstract class CabelereiroDataBase extends RoomDatabase {
             servicoDao.insertServico(new Servico("Luzes", 50, 60));
 
             // Agendamentos
-            ArrayList<Integer> listaServicos = new ArrayList<Integer>();
-            listaServicos.add(1);
-            listaServicos.add(2);
-            listaServicos.add(3);
+
             Calendar calendar = Calendar.getInstance();
             calendar.set(Calendar.YEAR, 2019);
             calendar.set(Calendar.MONTH, 4);
-            calendar.set(Calendar.DAY_OF_MONTH, 21);
+            calendar.set(Calendar.DAY_OF_MONTH, 22);
             calendar.set(Calendar.HOUR_OF_DAY, 14);
             calendar.set(Calendar.MINUTE, 30);
             calendar.set(Calendar.SECOND, 00);
             Date horarioInicio = calendar.getTime();
-            agendaDao.insertAgendamento(new Agendamento("Claudio Hugo",
+            Agendamento agendamento1 = new Agendamento(
+                    "Claudio Hugo",
                     horarioInicio.getTime(),
-                    horarioInicio.getTime()+30*60*1000,
-                    String.valueOf(listaServicos),
+                    horarioInicio.getTime() + 30 * 60 * 1000,
                     new Date().getTime()
-            ));
+            );
+            agendaDao.insertAgendamento(agendamento1);
 
-            listaServicos.add(4);
+            agendaServicosJoinDao.insert(new AgendaServicosJoin(1, 1));
+            agendaServicosJoinDao.insert(new AgendaServicosJoin(1, 2));
+            agendaServicosJoinDao.insert(new AgendaServicosJoin(1, 3));
+
             Calendar calendar2 = Calendar.getInstance();
             calendar2.set(Calendar.YEAR, 2019);
             calendar2.set(Calendar.MONTH, 4);
-            calendar2.set(Calendar.DAY_OF_MONTH, 21);
+            calendar2.set(Calendar.DAY_OF_MONTH, 22);
             calendar2.set(Calendar.HOUR_OF_DAY, 15);
             calendar2.set(Calendar.MINUTE, 00);
             calendar2.set(Calendar.SECOND, 00);
             Date horarioInicio2 = calendar2.getTime();
-            agendaDao.insertAgendamento(new Agendamento("Roberto",
+            Agendamento agendamento2 = new Agendamento(
+                    "Roberto",
                     horarioInicio2.getTime(),
-                    horarioInicio2.getTime()+70*60*1000,
-                    String.valueOf(listaServicos),
+                    horarioInicio2.getTime() + 70 * 60 * 1000,
                     new Date().getTime()
-            ));
+            );
+            agendaDao.insertAgendamento(agendamento2);
 
-            listaServicos.remove(2);
-            listaServicos.remove(0);
+            int agendamento12 = agendamento2.getId_agendamento();
+            agendaServicosJoinDao.insert(new AgendaServicosJoin(2, 2));
+            agendaServicosJoinDao.insert(new AgendaServicosJoin(2, 3));
+
             Calendar calendar3 = Calendar.getInstance();
             calendar3.set(Calendar.YEAR, 2019);
             calendar3.set(Calendar.MONTH, 4);
-            calendar3.set(Calendar.DAY_OF_MONTH, 21);
+            calendar3.set(Calendar.DAY_OF_MONTH, 22);
             calendar3.set(Calendar.HOUR_OF_DAY, 16);
             calendar3.set(Calendar.MINUTE, 30);
             calendar3.set(Calendar.SECOND, 00);
             Date horarioInicio3 = calendar3.getTime();
-            agendaDao.insertAgendamento(new Agendamento("Fernando",
+            Agendamento agendamento3 = new Agendamento("Fernando",
                     horarioInicio3.getTime(),
-                    horarioInicio3.getTime()+20*60*1000,
-                    String.valueOf(listaServicos),
+                    horarioInicio3.getTime() + 20 * 60 * 1000,
                     new Date().getTime()
-            ));
+            );
+            agendaDao.insertAgendamento(agendamento3);
+
+
+            agendaServicosJoinDao.insert(new AgendaServicosJoin(3, 3));
+            agendaServicosJoinDao.insert(new AgendaServicosJoin(3, 4));
+
             return null;
         }
     }

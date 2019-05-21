@@ -62,7 +62,7 @@ public class AdicionarEditarServicoActivity extends AppCompatActivity {
         Servico servico = new Servico(nomeServico, Float.parseFloat(valorServico), Integer.parseInt(duracaoServico));
 
         if(getIntent().hasExtra(ServicosAdapter.EXTRA_ID)){
-            servico.setIdServico(idParaAtualizar);
+            servico.setId_servico(idParaAtualizar);
             servicoViewModel.update(servico);
             Toast.makeText(this, "Serviço editado", Toast.LENGTH_SHORT).show();
         } else {

@@ -1,28 +1,30 @@
 package com.example.tesouradouradaapp;
 
+import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.Ignore;
+import android.arch.persistence.room.Index;
 import android.arch.persistence.room.PrimaryKey;
 
-@Entity(tableName = "agenda")
+@Entity(tableName = "agenda", indices = {@Index("id_agendamento")})
 public class Agendamento {
 
     @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name = "id_agendamento")
     private int id_agendamento;
 
     private String cliente;
     private long horarioInicio;
     private long horarioFim;
-    private String servicos;
+
     private long criadoEm;
     @Ignore
     private long duracao;
 
-    public Agendamento(String cliente, long horarioInicio, long horarioFim, String servicos, long criadoEm) {
+    public Agendamento(String cliente, long horarioInicio, long horarioFim, long criadoEm) {
         this.cliente = cliente;
         this.horarioInicio = horarioInicio;
         this.horarioFim = horarioFim;
-        this.servicos = servicos;
         this.criadoEm = criadoEm;
         this.duracao = horarioFim - horarioInicio;
     }
@@ -47,9 +49,6 @@ public class Agendamento {
         return horarioFim;
     }
 
-    public String getServicos() {
-        return servicos;
-    }
 
     public long getCriadoEm() {
         return criadoEm;
