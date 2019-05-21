@@ -5,11 +5,11 @@ import android.arch.persistence.room.PrimaryKey;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-@Entity(tableName = "servico")
+@Entity(tableName = "servicos")
 public class Servico implements Parcelable {
 
     @PrimaryKey(autoGenerate = true)
-    private int idServico;
+    private int id_servico;
 
     private String nomeServico;
     private float valor;
@@ -22,7 +22,7 @@ public class Servico implements Parcelable {
     }
 
     protected Servico(Parcel in) {
-        idServico = in.readInt();
+        id_servico = in.readInt();
         nomeServico = in.readString();
         valor = in.readFloat();
         tempo = in.readInt();
@@ -41,11 +41,11 @@ public class Servico implements Parcelable {
     };
 
     public void setIdServico(int idServico) {
-        this.idServico = idServico;
+        this.id_servico = idServico;
     }
 
     public int getIdServico() {
-        return idServico;
+        return id_servico;
     }
 
     public String getNomeServico() {
@@ -67,7 +67,7 @@ public class Servico implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeInt(idServico);
+        parcel.writeInt(id_servico);
         parcel.writeString(nomeServico);
         parcel.writeFloat(valor);
         parcel.writeInt(tempo);
