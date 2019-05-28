@@ -50,8 +50,6 @@ public class DadosEstabelecimentoActivity extends AppCompatActivity {
 
     }
 
-    ;
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater menuInflater = getMenuInflater();

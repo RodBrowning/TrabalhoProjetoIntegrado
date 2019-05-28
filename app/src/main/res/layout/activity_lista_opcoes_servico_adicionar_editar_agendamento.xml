@@ -31,7 +31,7 @@
         </LinearLayout>
 
         <Button
-            android:id="@+id/bottom_seguir_para_adicionar_editar_agendamento"
+            android:id="@+id/bottom_seguir_para_selecionar_data_horario"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"

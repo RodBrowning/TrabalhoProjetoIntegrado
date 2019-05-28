@@ -5,10 +5,11 @@ import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.Index;
 import android.arch.persistence.room.PrimaryKey;
+import android.support.annotation.NonNull;
 
 @Entity(tableName = "agenda", indices = {@Index("id_agendamento")})
 public class Agendamento {
-
+    @NonNull
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id_agendamento")
     private int id_agendamento;

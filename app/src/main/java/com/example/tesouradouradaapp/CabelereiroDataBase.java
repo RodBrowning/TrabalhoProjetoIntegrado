@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
-@Database(entities = {Estabelecimento.class, Servico.class, Agendamento.class, AgendaServicosJoin.class}, version = 2)
+@Database(entities = {Estabelecimento.class, Servico.class, Agendamento.class, AgendaServicosJoin.class}, version = 1)
 public abstract class CabelereiroDataBase extends RoomDatabase {
     private static CabelereiroDataBase instance;
 

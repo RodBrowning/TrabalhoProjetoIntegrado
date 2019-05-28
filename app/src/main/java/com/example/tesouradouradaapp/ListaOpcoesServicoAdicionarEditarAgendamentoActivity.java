@@ -25,7 +25,7 @@ public class ListaOpcoesServicoAdicionarEditarAgendamentoActivity extends AppCom
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lista_opcoes_servico_adicionar_editar_agendamento);
         setTitle("Selecionar Serviços");
-        buttonSeguir = findViewById(R.id.bottom_seguir_para_adicionar_editar_agendamento);
+        buttonSeguir = findViewById(R.id.bottom_seguir_para_selecionar_data_horario);
 
         RecyclerView recyclerView = findViewById(R.id.recycler_view_opcoes_servico);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));

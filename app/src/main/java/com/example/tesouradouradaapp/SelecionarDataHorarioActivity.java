@@ -1,6 +1,7 @@
 package com.example.tesouradouradaapp;
 
 import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.support.v4.app.DialogFragment;
@@ -12,6 +13,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.TextView;
+import android.widget.TimePicker;
+import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -22,7 +25,9 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 public class SelecionarDataHorarioActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
+    public static final String HORARIO_SELECIONADO = "com.example.tesouradouradaapp.HORARIO_SELECIONADO";
     private Button buttonSelecionarData;
+    private Button buttonConfirmarAgendamento;
     private TextView textViewHorarioSelecionado;
     private Calendar calendar;
     private long horarioAbertura = new Long(0);
@@ -46,6 +51,9 @@ public class SelecionarDataHorarioActivity extends AppCompatActivity implements 
         calendar = inicioExpediente(ano, mes, dia);
 
         Date inicioExpediente = calendar.getTime();
+
+        buttonSelecionarData = findViewById(R.id.bottom_selecionar_data);
+        buttonConfirmarAgendamento = findViewById(R.id.bottom_seguir_para_adicionar_editar_agendamento);
         editarTextoDoBotaoCalendario(inicioExpediente);
 
         // Gerar horarios livres
@@ -66,7 +74,7 @@ public class SelecionarDataHorarioActivity extends AppCompatActivity implements 
         //Para passar para o proximo activity
         Intent intent = getIntent();
         servicosSelecionados = intent.getParcelableArrayListExtra(ListaOpcoesServicoAdicionarEditarAgendamentoActivity.SERVICOS_ESCOLHIDOS);
-        horariosLivresParaDiaParaServicosSelecionados = getHorariosLivresParaDiaParaServicosSelecionados(horariosAgendadosParaDia, listaDeParDeHorariosLivresParaDiaLong, servicosSelecionados);
+        horariosLivresParaDiaParaServicosSelecionados = getHorariosLivresParaDiaParaServicosSelecionados(listaDeParDeHorariosLivresParaDiaLong, servicosSelecionados);
 
         // Popular horarios livres
 
@@ -88,6 +96,20 @@ public class SelecionarDataHorarioActivity extends AppCompatActivity implements 
             }
         });
 
+        buttonConfirmarAgendamento.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(!adapter.timeSelected){
+                    Toast.makeText(SelecionarDataHorarioActivity.this, "Selecione um horario", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                addHorarioSelecionado(calendar, adapter.hourSelected, adapter.minutesSelected);
+                textViewHorarioSelecionado.setText(adapter.hourSelected+":"+adapter.minutesSelected);
+                Intent intent = getIntent();
+                intent.putExtra(HORARIO_SELECIONADO, calendar.getTimeInMillis());
+            }
+        });
+
     }
 
     private Calendar inicioExpediente(int ano, int mes, int dia) {
@@ -100,6 +122,11 @@ public class SelecionarDataHorarioActivity extends AppCompatActivity implements 
         calendar.set(calendar.MINUTE, 0);
         calendar.set(calendar.SECOND, 0);
         calendar.set(calendar.MILLISECOND, 0);
+        return calendar;
+    }
+    private Calendar addHorarioSelecionado(Calendar calendar,int hourOfDay, int minute){
+        calendar.set(calendar.HOUR_OF_DAY, hourOfDay);
+        calendar.set(calendar.MINUTE, minute);
         return calendar;
     }
 
@@ -187,7 +214,7 @@ public class SelecionarDataHorarioActivity extends AppCompatActivity implements 
         return listaDeParDeHorariosLivresLong;
     }
 
-    private List<List<Long>> getHorariosLivresParaDiaParaServicosSelecionados(List<Long> horariosAgendadosParaDia, List<List<Long>> listaDeParDeHorariosLivresLong, ArrayList<Servico> servicosSelecionados) {
+    private List<List<Long>> getHorariosLivresParaDiaParaServicosSelecionados(List<List<Long>> listaDeParDeHorariosLivresLong, ArrayList<Servico> servicosSelecionados) {
         List<Long> horariosLivresParaDiaParaServicosSelecionados = new ArrayList<>();
         long sumDuracaoServidosSelecionados = new Long(0);
         for (int i = 0; i < servicosSelecionados.size(); i++) {
@@ -210,7 +237,6 @@ public class SelecionarDataHorarioActivity extends AppCompatActivity implements 
         SimpleDateFormat simpleDateFormatDate = new SimpleDateFormat("EEEE - dd/MM/yyyy");
         SimpleDateFormat simpleDateFormatTime = new SimpleDateFormat("HH:mm");
 
-        buttonSelecionarData = findViewById(R.id.bottom_selecionar_data);
         buttonSelecionarData.setText(simpleDateFormatDate.format(dataSelecionada));
         textViewHorarioSelecionado = findViewById(R.id.text_view_horario_selecionado);
         textViewHorarioSelecionado.setText(simpleDateFormatTime.format(dataSelecionada));
@@ -237,7 +263,7 @@ public class SelecionarDataHorarioActivity extends AppCompatActivity implements 
         //Para passar para o proximo activity
         Intent intent = getIntent();
         servicosSelecionados = intent.getParcelableArrayListExtra(ListaOpcoesServicoAdicionarEditarAgendamentoActivity.SERVICOS_ESCOLHIDOS);
-        horariosLivresParaDiaParaServicosSelecionados = getHorariosLivresParaDiaParaServicosSelecionados(horariosAgendadosParaDia, listaDeParDeHorariosLivresParaDiaLong, servicosSelecionados);
+        horariosLivresParaDiaParaServicosSelecionados = getHorariosLivresParaDiaParaServicosSelecionados(listaDeParDeHorariosLivresParaDiaLong, servicosSelecionados);
 
         // Popular horarios livres
 
@@ -248,4 +274,5 @@ public class SelecionarDataHorarioActivity extends AppCompatActivity implements 
         final SelecionarDataHorarioAdapter adapter = new SelecionarDataHorarioAdapter(horariosLivresParaDiaParaServicosSelecionados);
         recyclerView.setAdapter(adapter);
     }
+
 }
