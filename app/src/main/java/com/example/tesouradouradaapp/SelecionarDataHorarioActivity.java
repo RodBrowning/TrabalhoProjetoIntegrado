@@ -106,7 +106,9 @@ public class SelecionarDataHorarioActivity extends AppCompatActivity implements 
                 addHorarioSelecionado(calendar, adapter.hourSelected, adapter.minutesSelected);
                 textViewHorarioSelecionado.setText(adapter.hourSelected+":"+adapter.minutesSelected);
                 Intent intent = getIntent();
+                intent.setClass(SelecionarDataHorarioActivity.this, AdicionarEditarAgendamentoActivity.class);
                 intent.putExtra(HORARIO_SELECIONADO, calendar.getTimeInMillis());
+                startActivity(intent);
             }
         });
 

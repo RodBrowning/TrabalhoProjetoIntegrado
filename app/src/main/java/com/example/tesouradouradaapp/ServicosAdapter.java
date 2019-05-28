@@ -101,7 +101,7 @@ public class ServicosAdapter extends RecyclerView.Adapter<ServicosAdapter.Servic
         this.application = application;
     }
 
-    int converterMilisegundosParaMinutos(long minutos) {
+    public int converterMilisegundosParaMinutos(long minutos) {
         Long longMinutos = new Long(minutos);
         int mins = (longMinutos.intValue() / 1000) / 60;
         return mins;

@@ -30,7 +30,7 @@ public class AdicionarEditarAgendamentoAdapter extends RecyclerView.Adapter<Adic
         NumberFormat numberFormat = NumberFormat.getCurrencyInstance(brasil);
 
         adicionarEditarAgendamentoHolder.textViewNomeServico.setText(servico.getNomeServico());
-        adicionarEditarAgendamentoHolder.textViewDuracaoAtendimento.setText(String.valueOf(servico.getTempo() + " min"));
+        adicionarEditarAgendamentoHolder.textViewDuracaoAtendimento.setText(String.valueOf(converterMilisegundosParaMinutos(servico.getTempo()) + " min"));
         adicionarEditarAgendamentoHolder.textViewValorAtendimento.setText(numberFormat.format(servico.getValor()));
     }
 
@@ -54,5 +54,10 @@ public class AdicionarEditarAgendamentoAdapter extends RecyclerView.Adapter<Adic
             textViewDuracaoAtendimento = itemView.findViewById(R.id.text_view_duracao_servico_selecionado);
             textViewValorAtendimento = itemView.findViewById(R.id.text_view_valor_servico_selecionado);
         }
+    }
+    public int converterMilisegundosParaMinutos(long minutos) {
+        Long longMinutos = new Long(minutos);
+        int mins = (longMinutos.intValue() / 1000) / 60;
+        return mins;
     }
 }
