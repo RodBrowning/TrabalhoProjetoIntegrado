@@ -19,6 +19,7 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
     private AgendaViewModel agendaViewModel;
     private EstabelecimentoViewModel estabelecimentoViewModel;
+    private ServicoViewModel servicoViewModel;
     private FloatingActionButton floatingActionButtonAdicionarAgendamento;
     public static String APP_TITLE;
 
@@ -56,6 +57,7 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setHasFixedSize(true);
 
         final AgendaAdapter adapter = new AgendaAdapter(MainActivity.this);
+        adapter.setApplication(getApplication());
         recyclerView.setAdapter(adapter);
 
 
@@ -66,6 +68,16 @@ public class MainActivity extends AppCompatActivity {
                 adapter.setAgenda(agendamentos);
             }
         });
+
+        servicoViewModel = ViewModelProviders.of(this).get(ServicoViewModel.class);
+        servicoViewModel.getAllServicos().observe(this, new Observer<List<Servico>>() {
+            @Override
+            public void onChanged(@Nullable List<Servico> servicos) {
+                adapter.notifyDataSetChangedServicos();
+            }
+        });
+
+
 
     }
 

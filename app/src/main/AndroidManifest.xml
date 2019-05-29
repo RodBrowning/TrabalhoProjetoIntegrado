@@ -35,10 +35,12 @@
             android:parentActivityName=".MainActivity" />
         <activity
             android:name=".SelecionarDataHorarioActivity"
-            android:parentActivityName=".MainActivity"/>
+            android:parentActivityName=".MainActivity" />
         <activity
             android:name=".AdicionarEditarAgendamentoActivity"
             android:parentActivityName=".MainActivity" />
+        <activity android:name=".VizualizarAgendamento"
+            android:parentActivityName=".MainActivity"/>
     </application>
 
 </manifest>

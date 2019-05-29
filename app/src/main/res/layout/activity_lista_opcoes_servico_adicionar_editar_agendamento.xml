@@ -26,7 +26,7 @@
                     android:id="@+id/recycler_view_opcoes_servico"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    tools:listitem="@layout/listaopcoesservicos" />
+                    tools:listitem="@layout/lista_opcoes_servicos" />
             </ScrollView>
         </LinearLayout>
 

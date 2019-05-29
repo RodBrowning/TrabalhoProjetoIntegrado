@@ -18,8 +18,8 @@ public class AgendaViewModel extends AndroidViewModel {
         agenda = agendamentoRepository.getAgenda();
     }
 
-    public void insert(Agendamento agendamento) {
-        agendamentoRepository.inserAgendamento(agendamento);
+    public Long insert(Agendamento agendamento) throws ExecutionException, InterruptedException {
+        return agendamentoRepository.insertAgendamento(agendamento);
     }
 
     public void update(Agendamento agendamento) {
@@ -28,6 +28,10 @@ public class AgendaViewModel extends AndroidViewModel {
 
     public void delete(Agendamento agendamento) {
         agendamentoRepository.deleteAgendamento(agendamento);
+    }
+
+    public Agendamento getAgendamento(int id_agendamento) throws ExecutionException, InterruptedException {
+        return agendamentoRepository.getAgendamento(id_agendamento);
     }
 
     public LiveData<List<Agendamento>> getAgenda() {

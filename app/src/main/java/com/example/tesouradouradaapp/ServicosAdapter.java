@@ -20,13 +20,16 @@ import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.ExecutionException;
 
 public class ServicosAdapter extends RecyclerView.Adapter<ServicosAdapter.ServicosHolder> {
     public static final String EXTRA_ID = "com.example.tesouradouradaapp.EXTRA_ID";
     private Context mContext;
     private List<Servico> servicos = new ArrayList<>();
     private Application application;
-    private ServicosRepository servicosRepository = new ServicosRepository(application);
+    private ServicoViewModel servicoViewModel = new ServicoViewModel(application);
+    private AgendaServicosJoinViewModel agendaServicosJoinViewModel = new AgendaServicosJoinViewModel(application);
+    private AgendaViewModel agendaViewModel = new AgendaViewModel(application);
 
     public ServicosAdapter(Context context) {
         this.mContext = context;
@@ -63,14 +66,28 @@ public class ServicosAdapter extends RecyclerView.Adapter<ServicosAdapter.Servic
                                 mContext.startActivity(intent);
                                 return true;
                             case R.id.menu_excluir_servico:
+                                final StringBuilder stringBuilder = new StringBuilder();
+                                stringBuilder.append("Excluir o servico pode desagendar algum agendamento.");
+                                stringBuilder.append(System.getProperty("line.separator"));
+                                stringBuilder.append(System.getProperty("line.separator"));
+                                stringBuilder.append("Deseja continuar?");
                                 new AlertDialog.Builder(mContext)
                                         .setTitle("Excluir")
-                                        .setMessage("Excluir " + servico.getNomeServico() + "?")
+                                        .setMessage(stringBuilder.toString())
                                         .setIcon(R.drawable.ic_alert_excluir)
                                         .setPositiveButton("Sim", new DialogInterface.OnClickListener() {
                                             @Override
                                             public void onClick(DialogInterface dialogInterface, int i) {
-                                                servicosRepository.delete(servico);
+                                                // Descobrir quem esta agendado para o servico a ser excluido
+                                                List<Integer> listaAgendadosParaServico = getListaAgendadosParaServico(agendaServicosJoinViewModel, servico);
+
+                                                servicoViewModel.delete(servico);
+
+                                                // Verificar se existe servico sem agendamento e deletar
+                                                deletarAgendamentosSemServico(listaAgendadosParaServico, agendaServicosJoinViewModel, agendaViewModel);
+                                                // Atualizar horario de fim de atendimento
+                                               // atualizarHorarioDosAgendamentosComServicoExcluido(listaAgendadosParaServico, agendaViewModel, servico);
+
                                                 Toast.makeText(mContext, "Serviço " + servico.getNomeServico() + " excluido", Toast.LENGTH_SHORT).show();
                                             }
                                         })
@@ -101,11 +118,71 @@ public class ServicosAdapter extends RecyclerView.Adapter<ServicosAdapter.Servic
         this.application = application;
     }
 
-    public int converterMilisegundosParaMinutos(long minutos) {
+    private int converterMilisegundosParaMinutos(long minutos) {
         Long longMinutos = new Long(minutos);
         int mins = (longMinutos.intValue() / 1000) / 60;
         return mins;
     }
+
+    private List<Integer> getListaAgendadosParaServico(AgendaServicosJoinViewModel agendaServicosJoinViewModel, Servico servico){
+        List<AgendaServicosJoin> agendadosParaServicoJoin;
+        List<Integer> listaAgendadosParaServico = new ArrayList<>();
+        try {
+            agendadosParaServicoJoin = agendaServicosJoinViewModel.getAgendamentosParaServico(servico.getId_servico());
+            for (AgendaServicosJoin agendaServicosJoin : agendadosParaServicoJoin) {
+                listaAgendadosParaServico.add(agendaServicosJoin.getIdAgendamentoJoin());
+            }
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        return listaAgendadosParaServico;
+    }
+    private void deletarAgendamentosSemServico(List<Integer> listaAgendadosParaServico, AgendaServicosJoinViewModel agendaServicosJoinViewModel, AgendaViewModel agendaViewModel) {
+        List<AgendaServicosJoin> listaServicosParaAgendamento;
+
+        for (Integer integer : listaAgendadosParaServico) {
+            try {
+                listaServicosParaAgendamento = agendaServicosJoinViewModel.getServicosParaAgendamento(integer);
+                if (listaServicosParaAgendamento.size() == 0) {
+                    Agendamento agendamento = agendaViewModel.getAgendamento(integer);
+                    agendaViewModel.delete(agendamento);
+                }
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+/*
+    private void atualizarHorarioDosAgendamentosComServicoExcluido(List<Integer> listaAgendadosParaServico, AgendaViewModel agendaViewModel, Servico servico){
+        Agendamento agendamento;
+
+        for (Integer integer : listaAgendadosParaServico) {
+            try {
+                agendamento = agendaViewModel.getAgendamento(integer);
+                if(agendamento != null){
+                    Agendamento agendamentoParaAtualizar = new Agendamento(
+                            agendamento.getCliente(),
+                            agendamento.getHorarioInicio(),
+                            agendamento.getHorarioFim() - servico.getTempo(),
+                            agendamento.getCriadoEm());
+                    agendamentoParaAtualizar.setId_agendamento(agendamento.getId_agendamento());
+                    agendaViewModel.update(agendamentoParaAtualizar);
+                }
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+
+    }
+
+*/
+
 
     class ServicosHolder extends RecyclerView.ViewHolder {
         private TextView textViewNomeServico;

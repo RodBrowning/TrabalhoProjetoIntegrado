@@ -30,7 +30,7 @@ public class ListaOpcoesServicosAdapter extends RecyclerView.Adapter<ListaOpcoes
     @Override
     public OpcoesServicosHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         View itemView = LayoutInflater.from(viewGroup.getContext())
-                .inflate(R.layout.listaopcoesservicos, viewGroup, false);
+                .inflate(R.layout.lista_opcoes_servicos, viewGroup, false);
         return new OpcoesServicosHolder(itemView);
     }
 

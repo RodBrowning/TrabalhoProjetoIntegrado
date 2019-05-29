@@ -99,12 +99,12 @@ public class SelecionarDataHorarioActivity extends AppCompatActivity implements 
         buttonConfirmarAgendamento.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!adapter.timeSelected){
+                if (!adapter.timeSelected) {
                     Toast.makeText(SelecionarDataHorarioActivity.this, "Selecione um horario", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 addHorarioSelecionado(calendar, adapter.hourSelected, adapter.minutesSelected);
-                textViewHorarioSelecionado.setText(adapter.hourSelected+":"+adapter.minutesSelected);
+                textViewHorarioSelecionado.setText(adapter.hourSelected + ":" + adapter.minutesSelected);
                 Intent intent = getIntent();
                 intent.setClass(SelecionarDataHorarioActivity.this, AdicionarEditarAgendamentoActivity.class);
                 intent.putExtra(HORARIO_SELECIONADO, calendar.getTimeInMillis());
@@ -126,7 +126,8 @@ public class SelecionarDataHorarioActivity extends AppCompatActivity implements 
         calendar.set(calendar.MILLISECOND, 0);
         return calendar;
     }
-    private Calendar addHorarioSelecionado(Calendar calendar,int hourOfDay, int minute){
+
+    private Calendar addHorarioSelecionado(Calendar calendar, int hourOfDay, int minute) {
         calendar.set(calendar.HOUR_OF_DAY, hourOfDay);
         calendar.set(calendar.MINUTE, minute);
         return calendar;
@@ -178,9 +179,21 @@ public class SelecionarDataHorarioActivity extends AppCompatActivity implements 
         } catch (InterruptedException e) {
             e.printStackTrace();
         } finally {
+            AgendaServicosJoinViewModel agendaServicosJoinViewModel = new AgendaServicosJoinViewModel(getApplication());
             for (int i = 0; i < agendaParaDia.size(); i++) {
+                long duracaoAgendamento = 0;
+                try {
+                    List<Servico> listServicos = agendaServicosJoinViewModel.getServicosParaAgendamentoJoinServicos(agendaParaDia.get(i).getId_agendamento());
+                    for (Servico listServico : listServicos) {
+                        duracaoAgendamento += new Long(listServico.getTempo());
+                    }
+                } catch (ExecutionException e) {
+                    e.printStackTrace();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
                 horariosAgendadosParaDia.add(agendaParaDia.get(i).getHorarioInicio());
-                horariosAgendadosParaDia.add(agendaParaDia.get(i).getHorarioFim());
+                horariosAgendadosParaDia.add(agendaParaDia.get(i).getHorarioInicio()+ duracaoAgendamento);
             }
 
         }

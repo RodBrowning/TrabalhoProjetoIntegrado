@@ -13,13 +13,16 @@ import java.util.List;
 public interface AgendaDao {
 
     @Insert
-    void insertAgendamento(Agendamento agendamento);
+    Long insertAgendamento(Agendamento agendamento);
 
     @Update
     void updateAgendamento(Agendamento agendamento);
 
     @Delete
     void deleteAgendamento(Agendamento agendamento);
+
+    @Query("SELECT * FROM agenda where id_agendamento = :id_agendamento")
+    Agendamento getAgendamento(int id_agendamento);
 
     @Query("SELECT * FROM agenda ORDER BY horarioInicio ASC")
     LiveData<List<Agendamento>> getAllAgendamentos();

@@ -1,29 +1,28 @@
 package com.example.tesouradouradaapp;
 
-import android.app.AlertDialog;
 import android.app.Application;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.media.AsyncPlayer;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.PopupMenu;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 public class AgendaAdapter extends RecyclerView.Adapter<AgendaAdapter.AgendamentoHolder> {
+    public static final String ID_AGENDAMENTO = "com.example.tesouradouradaapp.ID_AGENDAMENTO";
     private List<Agendamento> agenda = new ArrayList<>();
     private Context mContext;
+    private Application application;
     private AgendamentoRepository agendamentoRepository;
+    private AgendaServicosJoinViewModel agendaServicosJoinViewModel = new AgendaServicosJoinViewModel(application);
 
 
     public AgendaAdapter(Context context) {
@@ -43,43 +42,29 @@ public class AgendaAdapter extends RecyclerView.Adapter<AgendaAdapter.Agendament
     @Override
     public void onBindViewHolder(@NonNull final AgendamentoHolder agendamentoHolder, int i) {
         final Agendamento agendamento = agenda.get(i);
+        long duracaoAgendamento = 0;
+        try {
+            List<Servico> listaServicos = agendaServicosJoinViewModel.getServicosParaAgendamentoJoinServicos(agendamento.getId_agendamento());
+            for (Servico listServico : listaServicos) {
+                duracaoAgendamento += new Long(listServico.getTempo());
+            }
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        long duracaoTotalDoAtendimento = (agendamento.getHorarioInicio()+ duracaoAgendamento) - agendamento.getHorarioInicio();
+        int duracaoAgendamentoEmMinutos = converterMilisegundosParaMinutos(duracaoTotalDoAtendimento);
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
-        agendamentoHolder.textViewDuracao.setText(agendamento.getDuracaoEmMinutos() + " min");
+        agendamentoHolder.textViewDuracao.setText(duracaoAgendamentoEmMinutos + " min");
         agendamentoHolder.textViewNomeCliente.setText(agendamento.getCliente());
         agendamentoHolder.textViewDataMarcada.setText(sdf.format(agendamento.getHorarioInicio()));
         agendamentoHolder.relativeLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                PopupMenu popupMenu = new PopupMenu(mContext, agendamentoHolder.relativeLayout);
-                popupMenu.inflate(R.menu.menu_list_item_agenda);
-                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                    @Override
-                    public boolean onMenuItemClick(MenuItem menuItem) {
-                        switch (menuItem.getItemId()) {
-                            case R.id.menu_editar_agendamento:
-                                Toast.makeText(mContext, "Editar Agendamento com " + agendamento.getCliente(), Toast.LENGTH_SHORT).show();
-                                return true;
-                            case R.id.menu_excluir_agendamento:
-                                new AlertDialog.Builder(mContext)
-                                        .setTitle("Excluir")
-                                        .setMessage("Excluir agendamento com " + agendamento.getCliente() + "?")
-                                        .setIcon(R.drawable.ic_alert_excluir)
-                                        .setPositiveButton("Sim", new DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(DialogInterface dialogInterface, int i) {
-                                                agendamentoRepository.deleteAgendamento(agendamento);
-                                                Toast.makeText(mContext, "Agendamento com " + agendamento.getCliente() + " excluido", Toast.LENGTH_SHORT).show();
-                                            }
-                                        })
-                                        .setNegativeButton("Não", null).show();
-                                return true;
-                            default:
-                                break;
-                        }
-                        return false;
-                    }
-                });
-                popupMenu.show();
+                Intent intent = new Intent(mContext.getApplicationContext(), VizualizarAgendamento.class);
+                intent.putExtra(ID_AGENDAMENTO, agendamento.getId_agendamento());
+                mContext.startActivity(intent);
             }
         });
     }
@@ -92,9 +77,21 @@ public class AgendaAdapter extends RecyclerView.Adapter<AgendaAdapter.Agendament
     public void setAgenda(List<Agendamento> agenda) {
         this.agenda = agenda;
         notifyDataSetChanged();
-
     }
 
+    public void notifyDataSetChangedServicos() {
+        notifyDataSetChanged();
+    }
+
+    public void setApplication(Application application) {
+        this.application = application;
+    }
+
+    private int converterMilisegundosParaMinutos(long minutos) {
+        Long longMinutos = new Long(minutos);
+        int mins = (longMinutos.intValue() / 1000) / 60;
+        return mins;
+    }
 
     class AgendamentoHolder extends RecyclerView.ViewHolder {
         private TextView textViewNomeCliente;

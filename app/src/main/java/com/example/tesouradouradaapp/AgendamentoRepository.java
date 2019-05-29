@@ -1,6 +1,5 @@
 package com.example.tesouradouradaapp;
 
-import android.app.Application;
 import android.arch.lifecycle.LiveData;
 import android.content.Context;
 import android.os.AsyncTask;
@@ -19,8 +18,8 @@ public class AgendamentoRepository {
         agenda = agendaDao.getAllAgendamentos();
     }
 
-    public void inserAgendamento(Agendamento agendamento) {
-        new InsertAgendamentoAsyncTask(agendaDao).execute(agendamento);
+    public Long insertAgendamento(Agendamento agendamento) throws ExecutionException, InterruptedException {
+        return new InsertAgendamentoAsyncTask(agendaDao).execute(agendamento).get();
     }
 
     public void updateAgendamento(Agendamento agendamento) {
@@ -29,6 +28,10 @@ public class AgendamentoRepository {
 
     public void deleteAgendamento(Agendamento agendamento) {
         new DeleteAgendamentoAsyncTask(agendaDao).execute(agendamento);
+    }
+
+    public Agendamento getAgendamento(int id_agendamento) throws ExecutionException, InterruptedException {
+        return new GetAgendamentoAsyncTask(agendaDao).execute(id_agendamento).get();
     }
 
     public LiveData<List<Agendamento>> getAgenda() {
@@ -40,7 +43,7 @@ public class AgendamentoRepository {
         return agendamentosParaDia;
     }
 
-    private static class InsertAgendamentoAsyncTask extends AsyncTask<Agendamento, Void, Void> {
+    private static class InsertAgendamentoAsyncTask extends AsyncTask<Agendamento, Void, Long> {
         private AgendaDao agendaDao;
 
         private InsertAgendamentoAsyncTask(AgendaDao agendaDao) {
@@ -48,9 +51,9 @@ public class AgendamentoRepository {
         }
 
         @Override
-        protected Void doInBackground(Agendamento... agendamentos) {
-            agendaDao.insertAgendamento(agendamentos[0]);
-            return null;
+        protected Long doInBackground(Agendamento... agendamentos) {
+
+            return agendaDao.insertAgendamento(agendamentos[0]);
         }
     }
 
@@ -94,6 +97,19 @@ public class AgendamentoRepository {
         protected List<Agendamento> doInBackground(Long... longs) {
             agendamentosParaDia = agendaDao.getAgendamentosMarcadosParaData(longs[0], longs[1]);
             return agendamentosParaDia;
+        }
+    }
+
+    private static class GetAgendamentoAsyncTask extends AsyncTask<Integer, Void, Agendamento>{
+        private AgendaDao agendaDao;
+
+        public GetAgendamentoAsyncTask(AgendaDao agendaDao) {
+            this.agendaDao = agendaDao;
+        }
+
+        @Override
+        protected Agendamento doInBackground(Integer... integers) {
+            return agendaDao.getAgendamento(integers[0]);
         }
     }
 }
