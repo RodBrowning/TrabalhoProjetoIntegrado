@@ -15,6 +15,7 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -27,7 +28,7 @@ class SelecionarDataHorarioAdapter extends RecyclerView.Adapter<SelecionarDataHo
     private List<String> horariosLivresString;
     private Context mContext;
     public int hourSelected, minutesSelected;
-    public boolean timeSelected = false;
+    private boolean timeSelected;
 
     public SelecionarDataHorarioAdapter(List<List<Long>> listaDeParDeHorariosLivresLong) {
         this.listaDeParDeHorariosLivresLong = listaDeParDeHorariosLivresLong;
@@ -56,6 +57,7 @@ class SelecionarDataHorarioAdapter extends RecyclerView.Adapter<SelecionarDataHo
                 Date horarioLivreInicioDate = new Date(horarioLivreInicio);
                 Date horarioLivreFimDate = new Date(horarioLivreFim);
 
+                /// Continuar daqui
                 Calendar calendar = Calendar.getInstance();
                 calendar.setTime(horarioLivreInicioDate);
                 int hora = calendar.get(calendar.HOUR_OF_DAY);
@@ -67,8 +69,10 @@ class SelecionarDataHorarioAdapter extends RecyclerView.Adapter<SelecionarDataHo
                         TextView textViewHorarioSelecionado = view.getRootView().findViewById(R.id.text_view_horario_selecionado);
                         hourSelected = selectedHour;
                         minutesSelected = selectedMinute;
-                        timeSelected = true;
-                        textViewHorarioSelecionado.setText(hourSelected+":"+minutesSelected);
+                        setTimeSelected(true);
+                        DecimalFormat df = new DecimalFormat();
+                        df.setMinimumIntegerDigits(2);
+                        textViewHorarioSelecionado.setText(df.format(hourSelected)+":"+df.format(minutesSelected));
                     }
                 }, hora, minutos, DateFormat.is24HourFormat(view.getRootView().getContext()));
 
@@ -104,6 +108,14 @@ class SelecionarDataHorarioAdapter extends RecyclerView.Adapter<SelecionarDataHo
 
         }
         return horariosLivresString;
+    }
+
+    public void setTimeSelected(boolean timeSelected) {
+        this.timeSelected = timeSelected;
+    }
+
+    public boolean isTimeSelected() {
+        return timeSelected;
     }
 
     class SelecionarDataHorarioHolder extends RecyclerView.ViewHolder {

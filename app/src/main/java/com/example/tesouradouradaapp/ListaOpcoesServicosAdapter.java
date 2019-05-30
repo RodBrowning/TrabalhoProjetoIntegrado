@@ -1,5 +1,6 @@
 package com.example.tesouradouradaapp;
 
+import android.app.Application;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -16,11 +17,16 @@ import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.ExecutionException;
 
 public class ListaOpcoesServicosAdapter extends RecyclerView.Adapter<ListaOpcoesServicosAdapter.OpcoesServicosHolder> {
     private Context mContext;
+    private Application application;
     private List<Servico> servicos = new ArrayList<>();
     public ArrayList<Servico> servicosSelecionados = new ArrayList<>();
+    private int id_agendamento_atualizar = 0;
+    private List<Servico> listaServicosParaAtualizar = new ArrayList<>();
+    private AgendaServicosJoinViewModel agendaServicosJoinViewModel = new AgendaServicosJoinViewModel(application);
 
     public ListaOpcoesServicosAdapter(Context context) {
         this.mContext = context;
@@ -40,6 +46,21 @@ public class ListaOpcoesServicosAdapter extends RecyclerView.Adapter<ListaOpcoes
         Locale brasil = new Locale("pt", "BR");
         NumberFormat numberFormat = NumberFormat.getCurrencyInstance(brasil);
 
+        if (id_agendamento_atualizar > 0 ){
+            try {
+                listaServicosParaAtualizar = agendaServicosJoinViewModel.getServicosParaAgendamentoJoinServicos(id_agendamento_atualizar);
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            for (Servico servicoSelecionadoParaAtualizar : listaServicosParaAtualizar) {
+                if(servicoSelecionadoParaAtualizar.getNomeServico().equals(servico.getNomeServico())){
+                    opcoesServicosHolder.checkBoxNomeServico.setChecked(true);
+                    servicosSelecionados.add(servico);
+                }
+            }
+        }
         opcoesServicosHolder.checkBoxNomeServico.setText(servico.getNomeServico());
         opcoesServicosHolder.textViewDuracaoAtendimento.setText(String.valueOf(converterMilisegundosParaMinutos(servico.getTempo())) + " min");
         opcoesServicosHolder.textViewValorAtendimento.setText(numberFormat.format(servico.getValor()));
@@ -75,6 +96,14 @@ public class ListaOpcoesServicosAdapter extends RecyclerView.Adapter<ListaOpcoes
     public void setServicos(List<Servico> servicos) {
         this.servicos = servicos;
         notifyDataSetChanged();
+    }
+
+    public void setApplication(Application application) {
+        this.application = application;
+    }
+
+    public void setId_agendamento_atualizar(int id_agendamento_atualizar) {
+        this.id_agendamento_atualizar = id_agendamento_atualizar;
     }
 
     public int converterMilisegundosParaMinutos(long minutos) {

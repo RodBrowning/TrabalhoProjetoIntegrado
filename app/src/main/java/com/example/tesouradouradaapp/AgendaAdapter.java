@@ -17,17 +17,17 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 public class AgendaAdapter extends RecyclerView.Adapter<AgendaAdapter.AgendamentoHolder> {
-    public static final String ID_AGENDAMENTO = "com.example.tesouradouradaapp.ID_AGENDAMENTO";
+    public static final String ID_AGENDAMENTO_EDITAR = "com.example.tesouradouradaapp.ID_AGENDAMENTO_EDITAR";
     private List<Agendamento> agenda = new ArrayList<>();
     private Context mContext;
     private Application application;
-    private AgendamentoRepository agendamentoRepository;
+    private AgendaRepository agendaRepository;
     private AgendaServicosJoinViewModel agendaServicosJoinViewModel = new AgendaServicosJoinViewModel(application);
 
 
     public AgendaAdapter(Context context) {
         this.mContext = context;
-        this.agendamentoRepository = new AgendamentoRepository(mContext);
+        this.agendaRepository = new AgendaRepository(mContext);
     }
 
 
@@ -63,7 +63,7 @@ public class AgendaAdapter extends RecyclerView.Adapter<AgendaAdapter.Agendament
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(mContext.getApplicationContext(), VizualizarAgendamento.class);
-                intent.putExtra(ID_AGENDAMENTO, agendamento.getId_agendamento());
+                intent.putExtra(ID_AGENDAMENTO_EDITAR, agendamento.getId_agendamento());
                 mContext.startActivity(intent);
             }
         });

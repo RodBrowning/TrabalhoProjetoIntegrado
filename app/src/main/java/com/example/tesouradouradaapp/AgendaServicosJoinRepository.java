@@ -17,6 +17,10 @@ public class AgendaServicosJoinRepository {
     public void inserAgendaServicosJoin(AgendaServicosJoin agendaServicosJoin) {
         new InsertAgendaServicosJoinAsyncTask(agendaServicoJoinDao).execute(agendaServicosJoin);
     }
+
+    public void deletarServicosDoAgendamentoParaEditar(long id_agendamnto){
+        new DeletarAgendaServicosJoinAsyncTask(agendaServicoJoinDao).execute(id_agendamnto);
+    }
     public List<Servico> getServicosParaAgendamentoJoinServicos(int id_agendamento) throws ExecutionException, InterruptedException {
         return new GetServicosParaAgendamentoJoinServicosAsyncTask(agendaServicoJoinDao).execute(id_agendamento).get();
     }
@@ -42,6 +46,19 @@ public class AgendaServicosJoinRepository {
         }
     }
 
+    private static class DeletarAgendaServicosJoinAsyncTask extends AsyncTask<Long,Void,Void>{
+        private AgendaServicoJoinDao agendaServicoJoinDao;
+
+        public DeletarAgendaServicosJoinAsyncTask(AgendaServicoJoinDao agendaServicoJoinDao) {
+            this.agendaServicoJoinDao = agendaServicoJoinDao;
+        }
+
+        @Override
+        protected Void doInBackground(Long... longs) {
+            agendaServicoJoinDao.deletarServicosDoAgendamentoParaEditar(longs[0]);
+            return null;
+        }
+    }
 
     private static class GetServicosParaAgendamentoJoinServicosAsyncTask extends AsyncTask<Integer,Void,List<Servico>>{
         private AgendaServicoJoinDao agendaServicoJoinDao;

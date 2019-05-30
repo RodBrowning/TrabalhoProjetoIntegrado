@@ -9,29 +9,29 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 public class AgendaViewModel extends AndroidViewModel {
-    private AgendamentoRepository agendamentoRepository;
+    private AgendaRepository agendaRepository;
     private LiveData<List<Agendamento>> agenda;
 
     public AgendaViewModel(@NonNull Application application) {
         super(application);
-        agendamentoRepository = new AgendamentoRepository(application);
-        agenda = agendamentoRepository.getAgenda();
+        agendaRepository = new AgendaRepository(application);
+        agenda = agendaRepository.getAgenda();
     }
 
     public Long insert(Agendamento agendamento) throws ExecutionException, InterruptedException {
-        return agendamentoRepository.insertAgendamento(agendamento);
+        return agendaRepository.insertAgendamento(agendamento);
     }
 
     public void update(Agendamento agendamento) {
-        agendamentoRepository.updateAgendamento(agendamento);
+        agendaRepository.updateAgendamento(agendamento);
     }
 
     public void delete(Agendamento agendamento) {
-        agendamentoRepository.deleteAgendamento(agendamento);
+        agendaRepository.deleteAgendamento(agendamento);
     }
 
     public Agendamento getAgendamento(int id_agendamento) throws ExecutionException, InterruptedException {
-        return agendamentoRepository.getAgendamento(id_agendamento);
+        return agendaRepository.getAgendamento(id_agendamento);
     }
 
     public LiveData<List<Agendamento>> getAgenda() {
@@ -39,7 +39,11 @@ public class AgendaViewModel extends AndroidViewModel {
     }
 
     public List<Agendamento> getAgendamentosMarcadosParaData(long horarioDeAbertuta, long horarioFechamento) throws ExecutionException, InterruptedException {
-        return agendamentoRepository.getAgendamentosMarcadosParaData(horarioDeAbertuta, horarioFechamento);
+        return agendaRepository.getAgendamentosMarcadosParaData(horarioDeAbertuta, horarioFechamento);
+    }
+
+    public List<Agendamento> getAgendamentosMarcadosParaDataSemAgendamentoParaEditar(long horarioDeAbertuta, long horarioFechamento, int id_agendamento_para_atualizar) throws ExecutionException, InterruptedException {
+        return agendaRepository.getAgendamentosMarcadosParaDataSemAgendamentoParaEditar(horarioDeAbertuta, horarioFechamento, id_agendamento_para_atualizar);
     }
 
 }

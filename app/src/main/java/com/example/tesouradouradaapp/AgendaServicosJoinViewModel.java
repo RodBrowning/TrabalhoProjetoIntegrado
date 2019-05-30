@@ -18,6 +18,10 @@ public class AgendaServicosJoinViewModel extends AndroidViewModel {
         agendaServicosJoinRepository.inserAgendaServicosJoin(agendaServicosJoin);
     }
 
+    public  void deletarServicosDoAgendamentoParaEditar(long id_agendamnto){
+        agendaServicosJoinRepository.deletarServicosDoAgendamentoParaEditar(id_agendamnto);
+    }
+
     public List<Servico> getServicosParaAgendamentoJoinServicos(int id_agendamento) throws ExecutionException, InterruptedException {
         return agendaServicosJoinRepository.getServicosParaAgendamentoJoinServicos(id_agendamento);
     }

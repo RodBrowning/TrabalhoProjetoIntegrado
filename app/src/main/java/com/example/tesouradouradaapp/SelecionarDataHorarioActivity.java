@@ -1,7 +1,6 @@
 package com.example.tesouradouradaapp;
 
 import android.app.DatePickerDialog;
-import android.app.TimePickerDialog;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.support.v4.app.DialogFragment;
@@ -13,21 +12,19 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.TextView;
-import android.widget.TimePicker;
 import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 public class SelecionarDataHorarioActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
     public static final String HORARIO_SELECIONADO = "com.example.tesouradouradaapp.HORARIO_SELECIONADO";
     private Button buttonSelecionarData;
-    private Button buttonConfirmarAgendamento;
+    private Button buttonSeguirParaConfirmarAgendamento;
     private TextView textViewHorarioSelecionado;
     private Calendar calendar;
     private long horarioAbertura = new Long(0);
@@ -37,31 +34,39 @@ public class SelecionarDataHorarioActivity extends AppCompatActivity implements 
     private List<List<Long>> horariosLivresParaDiaParaServicosSelecionados = new ArrayList<>();
     private List<List<Long>> listaDeParDeHorariosLivresParaDiaLong;
     private ArrayList<Servico> servicosSelecionados = new ArrayList<>();
+    private AgendaViewModel agendaViewModel = new AgendaViewModel(getApplication());
+    private SelecionarDataHorarioAdapter selecionarDataHorarioAdapter;
+
+    private Intent intentEditar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_selecionar_data_horario);
-        setTitle("Data de agendamento");
 
-        GregorianCalendar gregorianCalendar = new GregorianCalendar();
-        int dia = gregorianCalendar.get(Calendar.DAY_OF_MONTH);
-        int mes = gregorianCalendar.get(Calendar.MONTH);
-        int ano = gregorianCalendar.get(Calendar.YEAR);
-        calendar = inicioExpediente(ano, mes, dia);
 
+        intentEditar = getIntent();
+
+        setTituloParaActivity(intentEditar, VizualizarAgendamento.EDITAR);
+        calendar = setDataParaIniciarCalendario(Calendar.getInstance(), intentEditar, VizualizarAgendamento.ID_AGEDAMENTO_EDITAR, agendaViewModel);
+
+        carregarCodigosIguaisParaOnCreateEOnDateSet();
+
+    }
+
+    // Codigo principal
+    private void carregarCodigosIguaisParaOnCreateEOnDateSet() {
         Date inicioExpediente = calendar.getTime();
-
-        buttonSelecionarData = findViewById(R.id.bottom_selecionar_data);
-        buttonConfirmarAgendamento = findViewById(R.id.bottom_seguir_para_adicionar_editar_agendamento);
         editarTextoDoBotaoCalendario(inicioExpediente);
-
         // Gerar horarios livres
-
         try {
             horarioAbertura = getHorarioAbertura(calendar);
             horarioFechamento = getHorarioFechamento(calendar);
-            horariosAgendadosParaDia = getHorariosAgendadosPadaDia(horarioAbertura, horarioFechamento);
+            if (intentEditar.hasExtra(VizualizarAgendamento.EDITAR)) {
+                horariosAgendadosParaDia = getHorariosAgendadosPadaDia(horarioAbertura, horarioFechamento, true, intentEditar.getIntExtra(VizualizarAgendamento.ID_AGEDAMENTO_EDITAR, 0));
+            } else {
+                horariosAgendadosParaDia = getHorariosAgendadosPadaDia(horarioAbertura, horarioFechamento, false, intentEditar.getIntExtra(VizualizarAgendamento.ID_AGEDAMENTO_EDITAR, 0));
+            }
         } catch (ExecutionException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {
@@ -78,13 +83,13 @@ public class SelecionarDataHorarioActivity extends AppCompatActivity implements 
 
         // Popular horarios livres
 
-
         RecyclerView recyclerView = findViewById(R.id.recycler_view_horarios_disponiveis);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setHasFixedSize(true);
 
-        final SelecionarDataHorarioAdapter adapter = new SelecionarDataHorarioAdapter(horariosLivresParaDiaParaServicosSelecionados);
-        recyclerView.setAdapter(adapter);
+        selecionarDataHorarioAdapter = new SelecionarDataHorarioAdapter(horariosLivresParaDiaParaServicosSelecionados);
+        selecionarDataHorarioAdapter.setTimeSelected(false);
+        recyclerView.setAdapter(selecionarDataHorarioAdapter);
 
 
         // Mostrar datepicker
@@ -96,47 +101,70 @@ public class SelecionarDataHorarioActivity extends AppCompatActivity implements 
             }
         });
 
-        buttonConfirmarAgendamento.setOnClickListener(new View.OnClickListener() {
+        buttonSeguirParaConfirmarAgendamento = findViewById(R.id.bottom_seguir_para_adicionar_editar_agendamento);
+        buttonSeguirParaConfirmarAgendamento.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!adapter.timeSelected) {
+                if (!selecionarDataHorarioAdapter.isTimeSelected()) {
                     Toast.makeText(SelecionarDataHorarioActivity.this, "Selecione um horario", Toast.LENGTH_SHORT).show();
                     return;
+                } else {
+                    addHorarioSelecionado(calendar, selecionarDataHorarioAdapter.hourSelected, selecionarDataHorarioAdapter.minutesSelected);
+                    Intent intent = getIntent();
+                    intent.setClass(SelecionarDataHorarioActivity.this, AdicionarEditarAgendamentoActivity.class);
+                    intent.putExtra(HORARIO_SELECIONADO, calendar.getTimeInMillis());
+                    startActivity(intent);
                 }
-                addHorarioSelecionado(calendar, adapter.hourSelected, adapter.minutesSelected);
-                textViewHorarioSelecionado.setText(adapter.hourSelected + ":" + adapter.minutesSelected);
-                Intent intent = getIntent();
-                intent.setClass(SelecionarDataHorarioActivity.this, AdicionarEditarAgendamentoActivity.class);
-                intent.putExtra(HORARIO_SELECIONADO, calendar.getTimeInMillis());
-                startActivity(intent);
             }
         });
-
     }
 
-    private Calendar inicioExpediente(int ano, int mes, int dia) {
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(calendar.DAY_OF_MONTH, dia);
-        calendar.set(calendar.MONTH, mes);
-        calendar.set(calendar.YEAR, ano);
+    private void setTituloParaActivity(Intent intent, String modoDeCadastro) {
+        if (intent.hasExtra(modoDeCadastro)) {
+            setTitle("Editar data");
+        } else {
+            setTitle("Data de agendamento");
+        }
+    }
 
-        calendar.set(calendar.HOUR_OF_DAY, 0);
-        calendar.set(calendar.MINUTE, 0);
-        calendar.set(calendar.SECOND, 0);
-        calendar.set(calendar.MILLISECOND, 0);
+    private Calendar setDataParaIniciarCalendario(Calendar calendar, Intent intent, String KeyParaId_agendamento, AgendaViewModel agendaViewModel) {
+
+        int dia;
+        int mes;
+        int ano;
+        if (intent.hasExtra(KeyParaId_agendamento)) {
+            try {
+                Agendamento agendamento = agendaViewModel.getAgendamento(intent.getIntExtra(KeyParaId_agendamento, 0));
+                long horarioInicioAgendamento = agendamento.getHorarioInicio();
+                Date date = new Date(horarioInicioAgendamento);
+                calendar.setTime(date);
+                dia = calendar.get(Calendar.DAY_OF_MONTH);
+                mes = calendar.get(Calendar.MONTH);
+                ano = calendar.get(Calendar.YEAR);
+                calendar = inicioExpediente(ano, mes, dia);
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        } else {
+            dia = calendar.get(Calendar.DAY_OF_MONTH);
+            mes = calendar.get(Calendar.MONTH);
+            ano = calendar.get(Calendar.YEAR);
+            calendar = inicioExpediente(ano, mes, dia);
+        }
         return calendar;
     }
 
-    private Calendar addHorarioSelecionado(Calendar calendar, int hourOfDay, int minute) {
-        calendar.set(calendar.HOUR_OF_DAY, hourOfDay);
-        calendar.set(calendar.MINUTE, minute);
-        return calendar;
-    }
+    private void editarTextoDoBotaoCalendario(Date dataSelecionada) {
+        SimpleDateFormat simpleDateFormatDate = new SimpleDateFormat("EEEE - dd/MM/yyyy");
+        SimpleDateFormat simpleDateFormatTime = new SimpleDateFormat("HH:mm");
 
-    private long converterHorasMinutosParaMilisegundos(long horas, long minutos) {
-        horas = ((horas * 60) * 60) * 1000;
-        minutos = (minutos * 60) * 1000;
-        return horas + minutos;
+        buttonSelecionarData = findViewById(R.id.bottom_selecionar_data);
+        textViewHorarioSelecionado = findViewById(R.id.text_view_horario_selecionado);
+
+        buttonSelecionarData.setText(simpleDateFormatDate.format(dataSelecionada));
+        textViewHorarioSelecionado.setText(simpleDateFormatTime.format(dataSelecionada));
     }
 
     private long getHorarioAbertura(Calendar calendar) throws ExecutionException, InterruptedException {
@@ -166,14 +194,16 @@ public class SelecionarDataHorarioActivity extends AppCompatActivity implements 
         return horarioFechamento;
     }
 
-    private List<Long> getHorariosAgendadosPadaDia(long horarioAbertura, long horarioFechamento) {
+    private List<Long> getHorariosAgendadosPadaDia(long horarioAbertura, long horarioFechamento, boolean isEditar, int id_agendamento_para_editar) {
         AgendaViewModel agendaViewModel = ViewModelProviders.of(this).get(AgendaViewModel.class);
-
         List<Agendamento> agendaParaDia = new ArrayList<>();
         List<Long> horariosAgendadosParaDia = new ArrayList<>();
         try {
-            agendaParaDia = agendaViewModel.getAgendamentosMarcadosParaData(horarioAbertura, horarioFechamento);
-
+            if (isEditar) {
+                agendaParaDia = agendaViewModel.getAgendamentosMarcadosParaDataSemAgendamentoParaEditar(horarioAbertura, horarioFechamento, id_agendamento_para_editar);
+            } else {
+                agendaParaDia = agendaViewModel.getAgendamentosMarcadosParaData(horarioAbertura, horarioFechamento);
+            }
         } catch (ExecutionException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {
@@ -193,7 +223,7 @@ public class SelecionarDataHorarioActivity extends AppCompatActivity implements 
                     e.printStackTrace();
                 }
                 horariosAgendadosParaDia.add(agendaParaDia.get(i).getHorarioInicio());
-                horariosAgendadosParaDia.add(agendaParaDia.get(i).getHorarioInicio()+ duracaoAgendamento);
+                horariosAgendadosParaDia.add(agendaParaDia.get(i).getHorarioInicio() + duracaoAgendamento);
             }
 
         }
@@ -230,7 +260,6 @@ public class SelecionarDataHorarioActivity extends AppCompatActivity implements 
     }
 
     private List<List<Long>> getHorariosLivresParaDiaParaServicosSelecionados(List<List<Long>> listaDeParDeHorariosLivresLong, ArrayList<Servico> servicosSelecionados) {
-        List<Long> horariosLivresParaDiaParaServicosSelecionados = new ArrayList<>();
         long sumDuracaoServidosSelecionados = new Long(0);
         for (int i = 0; i < servicosSelecionados.size(); i++) {
             sumDuracaoServidosSelecionados += servicosSelecionados.get(i).getTempo();
@@ -248,46 +277,36 @@ public class SelecionarDataHorarioActivity extends AppCompatActivity implements 
         return listaDeParDeHorariosLivresLong;
     }
 
-    private void editarTextoDoBotaoCalendario(Date dataSelecionada) {
-        SimpleDateFormat simpleDateFormatDate = new SimpleDateFormat("EEEE - dd/MM/yyyy");
-        SimpleDateFormat simpleDateFormatTime = new SimpleDateFormat("HH:mm");
+    private Calendar inicioExpediente(int ano, int mes, int dia) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(calendar.DAY_OF_MONTH, dia);
+        calendar.set(calendar.MONTH, mes);
+        calendar.set(calendar.YEAR, ano);
 
-        buttonSelecionarData.setText(simpleDateFormatDate.format(dataSelecionada));
-        textViewHorarioSelecionado = findViewById(R.id.text_view_horario_selecionado);
-        textViewHorarioSelecionado.setText(simpleDateFormatTime.format(dataSelecionada));
+        calendar.set(calendar.HOUR_OF_DAY, 0);
+        calendar.set(calendar.MINUTE, 0);
+        calendar.set(calendar.SECOND, 0);
+        calendar.set(calendar.MILLISECOND, 0);
+        return calendar;
     }
+
+    private Calendar addHorarioSelecionado(Calendar calendar, int hourOfDay, int minute) {
+        calendar.set(calendar.HOUR_OF_DAY, hourOfDay);
+        calendar.set(calendar.MINUTE, minute);
+        return calendar;
+    }
+
+    private long converterHorasMinutosParaMilisegundos(long horas, long minutos) {
+        horas = ((horas * 60) * 60) * 1000;
+        minutos = (minutos * 60) * 1000;
+        return horas + minutos;
+    }
+
 
     @Override
     public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
         calendar = inicioExpediente(i, i1, i2);
-        editarTextoDoBotaoCalendario(calendar.getTime());
-        // Gerar horarios livres
-        try {
-            horarioAbertura = getHorarioAbertura(calendar);
-            horarioFechamento = getHorarioFechamento(calendar);
-            horariosAgendadosParaDia = getHorariosAgendadosPadaDia(horarioAbertura, horarioFechamento);
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
-        horariosLivresParaDiaLong = getHorariosLivresParaDiaLong(horariosAgendadosParaDia, horarioAbertura, horarioFechamento);
-        listaDeParDeHorariosLivresParaDiaLong = getParDeHorariosLivresLong(horariosLivresParaDiaLong);
-
-        //Para passar para o proximo activity
-        Intent intent = getIntent();
-        servicosSelecionados = intent.getParcelableArrayListExtra(ListaOpcoesServicoAdicionarEditarAgendamentoActivity.SERVICOS_ESCOLHIDOS);
-        horariosLivresParaDiaParaServicosSelecionados = getHorariosLivresParaDiaParaServicosSelecionados(listaDeParDeHorariosLivresParaDiaLong, servicosSelecionados);
-
-        // Popular horarios livres
-
-        RecyclerView recyclerView = findViewById(R.id.recycler_view_horarios_disponiveis);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setHasFixedSize(true);
-
-        final SelecionarDataHorarioAdapter adapter = new SelecionarDataHorarioAdapter(horariosLivresParaDiaParaServicosSelecionados);
-        recyclerView.setAdapter(adapter);
+        carregarCodigosIguaisParaOnCreateEOnDateSet();
     }
 
 }

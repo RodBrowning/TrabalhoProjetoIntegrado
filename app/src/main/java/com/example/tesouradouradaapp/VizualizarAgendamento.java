@@ -24,6 +24,8 @@ import java.util.Locale;
 import java.util.concurrent.ExecutionException;
 
 public class VizualizarAgendamento extends AppCompatActivity {
+    public static final String ID_AGEDAMENTO_EDITAR = "com.example.tesouradouradaapp.ID_AGEDAMENTO_EDITAR";
+    public static final String EDITAR = "com.example.tesouradouradaapp.EDITAR";
     TextView textViewNomeCliente, textViewDataSelecionada, textViewDuracaoTotal, textViewValorTotal;
     private Agendamento agendamento;
     private AgendaViewModel agendaViewModel;
@@ -40,8 +42,9 @@ public class VizualizarAgendamento extends AppCompatActivity {
         textViewDataSelecionada = findViewById(R.id.text_view_data_selecionada);
         this.mContext = VizualizarAgendamento.this;
         this.agendaViewModel = new AgendaViewModel(getApplication());
+
         Intent intent = getIntent();
-        int id_agendamento = intent.getIntExtra(AgendaAdapter.ID_AGENDAMENTO, 0);
+        int id_agendamento = intent.getIntExtra(AgendaAdapter.ID_AGENDAMENTO_EDITAR, 0);
         try {
             agendamento = agendaViewModel.getAgendamento(id_agendamento);
         } catch (ExecutionException e) {
@@ -90,7 +93,13 @@ public class VizualizarAgendamento extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.menu_estabelecimento:
+            case R.id.menu_editar_agendamento:
+                Intent intent = getIntent();
+                int id_agendamento = intent.getIntExtra(AgendaAdapter.ID_AGENDAMENTO_EDITAR, 0);
+                Intent intentAtualizar = new Intent(VizualizarAgendamento.this, ListaOpcoesServicoAdicionarEditarAgendamentoActivity.class);
+                intentAtualizar.putExtra(ID_AGEDAMENTO_EDITAR,id_agendamento);
+                intentAtualizar.putExtra(EDITAR, true);
+                startActivity(intentAtualizar);
                 return true;
             case R.id.menu_excluir_agendamento:
                 new AlertDialog.Builder(mContext)

@@ -26,5 +26,8 @@ public interface AgendaServicoJoinDao {
     @Query("SELECT * FROM agenda_servicos_join WHERE id_servico_join = :id_servico")
     List<AgendaServicosJoin> getAgendamentosParaServico(int id_servico);
 
+    @Query("DELETE FROM agenda_servicos_join WHERE id_agendamento_join = :id_agendamento")
+    void deletarServicosDoAgendamentoParaEditar(long id_agendamento);
+
 
 }
