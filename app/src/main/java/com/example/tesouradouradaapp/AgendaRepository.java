@@ -11,6 +11,7 @@ public class AgendaRepository {
     private AgendaDao agendaDao;
     private LiveData<List<Agendamento>> agenda;
     private List<Agendamento> agendamentosParaDia;
+    private LiveData<List<Agendamento>> agendamentosParaDiaLiveData;
 
     public AgendaRepository(Context context) {
         CabelereiroDataBase cabelereiroDataBase = CabelereiroDataBase.getInstance(context);
@@ -38,6 +39,13 @@ public class AgendaRepository {
         return agenda;
     }
 
+    public Agendamento verSeExisteAgendamentoEmAndamento(long horarioDeAbertura) throws ExecutionException, InterruptedException {
+        return new VerSeExisteAgendamentoEmAndamentoAsyncTask(agendaDao).execute(horarioDeAbertura).get();
+    }
+
+    public LiveData<List<Agendamento>> getAgendamentosMarcadosParaDataLiveData(long horarioDeAbertuta, long horarioFechamento){
+        return agendaDao.getAgendamentosMarcadosParaDataLiveData(horarioDeAbertuta, horarioFechamento);
+    }
     public List<Agendamento> getAgendamentosMarcadosParaData(long horarioDeAbertuta, long horarioFechamento) throws ExecutionException, InterruptedException {
         agendamentosParaDia = new GetAgendamentosMarcadosParaDataAsyncTask(agendaDao).execute(horarioDeAbertuta, horarioFechamento).get();
         return agendamentosParaDia;
@@ -100,6 +108,19 @@ public class AgendaRepository {
         @Override
         protected Agendamento doInBackground(Integer... integers) {
             return agendaDao.getAgendamento(integers[0]);
+        }
+    }
+
+    private static class VerSeExisteAgendamentoEmAndamentoAsyncTask extends AsyncTask<Long, Void, Agendamento>{
+        private AgendaDao agendaDao;
+
+        public VerSeExisteAgendamentoEmAndamentoAsyncTask(AgendaDao agendaDao) {
+            this.agendaDao = agendaDao;
+        }
+
+        @Override
+        protected Agendamento doInBackground(Long... longs) {
+            return agendaDao.verSeExisteAgendamentoEmAndamento(longs[0]);
         }
     }
 

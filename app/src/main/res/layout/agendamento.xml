@@ -2,9 +2,9 @@
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginEnd="8dp"
+    android:layout_marginStart="8dp"
     android:layout_marginTop="8dp"
-    android:layout_marginStart="8dp">
+    android:layout_marginEnd="8dp">
 
     <RelativeLayout
         android:id="@+id/relative_layout_agenda_item"
@@ -14,31 +14,44 @@
 
         <TextView
             android:id="@+id/duracao_atendimento"
-            android:layout_alignParentEnd="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
             android:text="30 min"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"/>
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Small" />
 
         <TextView
             android:id="@+id/nome_cliente"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Geraldo"
-            android:maxLines="1"
-            android:ellipsize="end"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
+            android:layout_alignParentStart="true"
             android:layout_toStartOf="@id/duracao_atendimento"
-            android:layout_alignParentStart="true"/>
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="Geraldo"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Large" />
 
         <TextView
             android:id="@+id/data_marcada"
-            android:layout_below="@+id/nome_cliente"
-            android:layout_alignParentEnd="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_below="@+id/nome_cliente"
+            android:layout_alignParentEnd="true"
             android:text="23/06/2019 14:30"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"/>
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Small" />
+
+        <TextView
+            android:id="@+id/agendamento_em_andamento"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/nome_cliente"
+            android:layout_alignParentStart="true"
+            android:layout_toStartOf="@id/data_marcada"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:visibility="gone"
+            android:text="Agendamento em andamento..."
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Small" />
     </RelativeLayout>
 
 </android.support.v7.widget.CardView>

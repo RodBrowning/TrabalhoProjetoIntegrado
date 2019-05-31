@@ -35,6 +35,7 @@ public class VizualizarAgendamento extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setTitle(MainActivity.APP_TITLE);
         setContentView(R.layout.activity_vizualizar_agendamento);
         textViewNomeCliente = findViewById(R.id.text_view_nome_cliente);
         textViewDuracaoTotal = findViewById(R.id.text_view_duracao_total);
@@ -73,13 +74,17 @@ public class VizualizarAgendamento extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
 
         SimpleDateFormat sdf = new SimpleDateFormat("EEEE dd/MM/yyyy - HH:mm");
+        SimpleDateFormat sdfHorarioFim = new SimpleDateFormat("HH:mm");
+
         Date dataSelecionada = new Date(agendamento.getHorarioInicio());
+        int duracaoTotal = duracaoTotal(servicosSelecionados);
+        Date dataFinal = new Date(agendamento.getHorarioInicio() + duracaoTotal);
 
         textViewValorTotal.setText(valorTotalParaApresentacao(servicosSelecionados));
 
         textViewDuracaoTotal.setText(duracaoTotalParaApresentacao(servicosSelecionados));
 
-        textViewDataSelecionada.setText(sdf.format(dataSelecionada));
+        textViewDataSelecionada.setText(sdf.format(dataSelecionada) +" às "+ sdfHorarioFim.format(dataFinal));
     }
 
 
@@ -94,10 +99,18 @@ public class VizualizarAgendamento extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_editar_agendamento:
+                Date horarioPresente = new Date();
+                if (horarioPresente.getTime() > agendamento.getHorarioInicio() && horarioPresente.getTime() < agendamento.getHorarioFim()) {
+                    Toast.makeText(mContext, "Erro: Agendamento em andamento.", Toast.LENGTH_SHORT).show();
+                    return false;
+                } else if (horarioPresente.getTime() > agendamento.getHorarioFim()) {
+                    Toast.makeText(mContext, "Erro: Agendamento ja foi concluido.", Toast.LENGTH_SHORT).show();
+                    return false;
+                }
                 Intent intent = getIntent();
                 int id_agendamento = intent.getIntExtra(AgendaAdapter.ID_AGENDAMENTO_EDITAR, 0);
                 Intent intentAtualizar = new Intent(VizualizarAgendamento.this, ListaOpcoesServicoAdicionarEditarAgendamentoActivity.class);
-                intentAtualizar.putExtra(ID_AGEDAMENTO_EDITAR,id_agendamento);
+                intentAtualizar.putExtra(ID_AGEDAMENTO_EDITAR, id_agendamento);
                 intentAtualizar.putExtra(EDITAR, true);
                 startActivity(intentAtualizar);
                 return true;
@@ -124,17 +137,18 @@ public class VizualizarAgendamento extends AppCompatActivity {
 
     // Calcula duracao
 
-    private int duracaoTotal(List<Servico> servicos){
+    private int duracaoTotal(List<Servico> servicos) {
         int duracaoTotal = 0;
         for (Servico servico : servicos) {
             duracaoTotal += servico.getTempo();
         }
         return duracaoTotal;
     }
+
     private String duracaoTotalParaApresentacao(List<Servico> servicos) {
         int duracaoTotal = duracaoTotal(servicos);
-        int duracaohoras = duracaoTotal / 1000 / 60 /60;
-        int duracaoMinutos = (duracaoTotal / 1000 / 60)%60;
+        int duracaohoras = duracaoTotal / 1000 / 60 / 60;
+        int duracaoMinutos = (duracaoTotal / 1000 / 60) % 60;
 
         if (duracaohoras > 0) {
             return String.format("%d hrs %02d min", duracaohoras, duracaoMinutos);
@@ -144,7 +158,7 @@ public class VizualizarAgendamento extends AppCompatActivity {
     }
 
     // Calcula valor total
-    
+
     private String valorTotalParaApresentacao(List<Servico> servicos) {
         Float valorTotal = new Float(0);
         Locale brasil = new Locale("pt", "BR");

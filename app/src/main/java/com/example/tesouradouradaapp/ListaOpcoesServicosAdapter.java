@@ -62,7 +62,7 @@ public class ListaOpcoesServicosAdapter extends RecyclerView.Adapter<ListaOpcoes
             }
         }
         opcoesServicosHolder.checkBoxNomeServico.setText(servico.getNomeServico());
-        opcoesServicosHolder.textViewDuracaoAtendimento.setText(String.valueOf(converterMilisegundosParaMinutos(servico.getTempo())) + " min");
+        opcoesServicosHolder.textViewDuracaoAtendimento.setText(duracaoTotalParaApresentacao(servico.getTempo()));
         opcoesServicosHolder.textViewValorAtendimento.setText(numberFormat.format(servico.getValor()));
         opcoesServicosHolder.checkBoxNomeServico.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -106,10 +106,30 @@ public class ListaOpcoesServicosAdapter extends RecyclerView.Adapter<ListaOpcoes
         this.id_agendamento_atualizar = id_agendamento_atualizar;
     }
 
-    public int converterMilisegundosParaMinutos(long minutos) {
-        Long longMinutos = new Long(minutos);
-        int mins = (longMinutos.intValue() / 1000) / 60;
-        return mins;
+    private String duracaoTotalParaApresentacao(long milisegundos) {
+        long duracaoTotal = milisegundos;
+        long duracaohoras = duracaoTotal / 1000 / 60 / 60;
+        long duracaoMinutos = (duracaoTotal / 1000 / 60) % 60;
+        String duracaoString;
+
+        if (duracaohoras > 0) {
+            if (duracaohoras == 1) {
+                if (duracaoMinutos == 0) {
+                    duracaoString = String.format("%d hr", duracaohoras);
+                } else {
+                    duracaoString = String.format("%d hr %02d mins", duracaohoras, duracaoMinutos);
+                }
+            } else {
+                if (duracaoMinutos == 0) {
+                    duracaoString = String.format("%d hrs", duracaohoras);
+                } else {
+                    duracaoString = String.format("%d hrs %02d mins", duracaohoras, duracaoMinutos);
+                }
+            }
+        } else {
+            duracaoString = String.format("%d mins", duracaoMinutos);
+        }
+        return duracaoString;
     }
 
     class OpcoesServicosHolder extends RecyclerView.ViewHolder {

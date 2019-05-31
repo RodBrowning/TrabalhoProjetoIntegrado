@@ -38,6 +38,14 @@ public class AgendaViewModel extends AndroidViewModel {
         return agenda;
     }
 
+    public Agendamento verSeExisteAgendamentoEmAndamento(long horarioDeAbertura) throws ExecutionException, InterruptedException {
+        return agendaRepository.verSeExisteAgendamentoEmAndamento(horarioDeAbertura);
+    }
+
+    public LiveData<List<Agendamento>> getAgendamentosMarcadosParaDataLiveData(long horarioDeAbertuta, long horarioFechamento){
+        return agendaRepository.getAgendamentosMarcadosParaDataLiveData(horarioDeAbertuta, horarioFechamento);
+    }
+
     public List<Agendamento> getAgendamentosMarcadosParaData(long horarioDeAbertuta, long horarioFechamento) throws ExecutionException, InterruptedException {
         return agendaRepository.getAgendamentosMarcadosParaData(horarioDeAbertuta, horarioFechamento);
     }

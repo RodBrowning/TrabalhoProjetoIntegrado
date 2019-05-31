@@ -69,9 +69,14 @@ public class AdicionarEditarAgendamentoActivity extends AppCompatActivity {
         textViewValorTotal.setText(valorTotalParaApresentacao(servicosSelecionados));
 
         SimpleDateFormat sdf = new SimpleDateFormat("EEEE dd/MM/yyyy - HH:mm");
+        SimpleDateFormat sdfHorarioFim = new SimpleDateFormat("HH:mm");
+
         long dataSelecionada = intent.getLongExtra(SelecionarDataHorarioActivity.HORARIO_SELECIONADO, 0);
         Date dataSelecionadaDate = new Date(dataSelecionada);
-        textViewDataSelecionada.setText(sdf.format(dataSelecionadaDate));
+        int duracaoTotal = duracaoTotal(servicosSelecionados);
+        Date dataFinal = new Date(dataSelecionadaDate.getTime() + duracaoTotal);
+
+        textViewDataSelecionada.setText(sdf.format(dataSelecionadaDate) +" às "+ sdfHorarioFim.format(dataFinal));
 
         buttonAgendar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -147,9 +152,13 @@ public class AdicionarEditarAgendamentoActivity extends AppCompatActivity {
         int duracaoMinutos = (duracaoTotal / 1000 / 60) % 60;
 
         if (duracaohoras > 0) {
-            return String.format("%d hrs %02d min", duracaohoras, duracaoMinutos);
+            if(duracaohoras == 1){
+                return String.format("%d hr %02d mins", duracaohoras, duracaoMinutos);
+            } else {
+                return String.format("%d hrs %02d mins", duracaohoras, duracaoMinutos);
+            }
         } else {
-            return String.format("%d min", duracaoMinutos);
+            return String.format("%d mins", duracaoMinutos);
         }
 
     }

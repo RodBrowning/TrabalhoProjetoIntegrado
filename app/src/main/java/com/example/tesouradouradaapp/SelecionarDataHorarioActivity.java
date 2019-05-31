@@ -25,7 +25,7 @@ public class SelecionarDataHorarioActivity extends AppCompatActivity implements 
     public static final String HORARIO_SELECIONADO = "com.example.tesouradouradaapp.HORARIO_SELECIONADO";
     private Button buttonSelecionarData;
     private Button buttonSeguirParaConfirmarAgendamento;
-    private TextView textViewHorarioSelecionado;
+    private TextView textViewHorarioSelecionado, textViewAgendaCheia;
     private Calendar calendar;
     private long horarioAbertura = new Long(0);
     private long horarioFechamento = new Long(0);
@@ -43,7 +43,7 @@ public class SelecionarDataHorarioActivity extends AppCompatActivity implements 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_selecionar_data_horario);
-
+        textViewAgendaCheia = findViewById(R.id.text_view_agenda_cheia);
 
         intentEditar = getIntent();
 
@@ -59,6 +59,7 @@ public class SelecionarDataHorarioActivity extends AppCompatActivity implements 
         Date inicioExpediente = calendar.getTime();
         editarTextoDoBotaoCalendario(inicioExpediente);
         // Gerar horarios livres
+        Intent intent = getIntent();
         try {
             horarioAbertura = getHorarioAbertura(calendar);
             horarioFechamento = getHorarioFechamento(calendar);
@@ -72,12 +73,14 @@ public class SelecionarDataHorarioActivity extends AppCompatActivity implements 
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-
+        Date horarioPresente = new Date();
+        if (horarioAbertura < horarioPresente.getTime()) {
+            horarioAbertura = horarioPresente.getTime();
+        }
         horariosLivresParaDiaLong = getHorariosLivresParaDiaLong(horariosAgendadosParaDia, horarioAbertura, horarioFechamento);
         listaDeParDeHorariosLivresParaDiaLong = getParDeHorariosLivresLong(horariosLivresParaDiaLong);
 
         //Para passar para o proximo activity
-        Intent intent = getIntent();
         servicosSelecionados = intent.getParcelableArrayListExtra(ListaOpcoesServicoAdicionarEditarAgendamentoActivity.SERVICOS_ESCOLHIDOS);
         horariosLivresParaDiaParaServicosSelecionados = getHorariosLivresParaDiaParaServicosSelecionados(listaDeParDeHorariosLivresParaDiaLong, servicosSelecionados);
 
@@ -87,6 +90,13 @@ public class SelecionarDataHorarioActivity extends AppCompatActivity implements 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setHasFixedSize(true);
 
+        if (horariosLivresParaDiaParaServicosSelecionados.size() == 0) {
+            textViewAgendaCheia.setVisibility(View.VISIBLE);
+            recyclerView.setVisibility(View.GONE);
+        } else {
+            textViewAgendaCheia.setVisibility(View.GONE);
+            recyclerView.setVisibility(View.VISIBLE);
+        }
         selecionarDataHorarioAdapter = new SelecionarDataHorarioAdapter(horariosLivresParaDiaParaServicosSelecionados);
         selecionarDataHorarioAdapter.setTimeSelected(false);
         recyclerView.setAdapter(selecionarDataHorarioAdapter);
@@ -255,25 +265,44 @@ public class SelecionarDataHorarioActivity extends AppCompatActivity implements 
                 listaDeParDeHorariosLivresLong.add(parDeHorariosLivresLong);
             }
         }
-
         return listaDeParDeHorariosLivresLong;
     }
 
     private List<List<Long>> getHorariosLivresParaDiaParaServicosSelecionados(List<List<Long>> listaDeParDeHorariosLivresLong, ArrayList<Servico> servicosSelecionados) {
         long sumDuracaoServidosSelecionados = new Long(0);
+        long horarioPresente = new Date().getTime();
+        // Duracao total dos servicos selecionados
         for (int i = 0; i < servicosSelecionados.size(); i++) {
             sumDuracaoServidosSelecionados += servicosSelecionados.get(i).getTempo();
         }
+        // Subtrai o tempo necessario do fim do horario livre
         for (int i = 0; i < listaDeParDeHorariosLivresLong.size(); i++) {
             listaDeParDeHorariosLivresLong.get(i)
                     .set(1, listaDeParDeHorariosLivresLong.get(i).get(1) - sumDuracaoServidosSelecionados);
         }
+        // Horarios que ficaram com o tempo disponivel inferior ao tempo necessario serao descartados
         for (int i = 0; i < listaDeParDeHorariosLivresLong.size(); i++) {
             if (listaDeParDeHorariosLivresLong.get(i).get(1).longValue() < listaDeParDeHorariosLivresLong.get(i).get(0).longValue()) {
                 listaDeParDeHorariosLivresLong.remove(i);
                 i--;
             }
         }
+
+        // Elimina horarios anteriores ao presente momento
+        for (int i = 0; i < listaDeParDeHorariosLivresLong.size(); i++) {
+            if ((listaDeParDeHorariosLivresLong.get(i).get(0).longValue() < horarioPresente) && (listaDeParDeHorariosLivresLong.get(i).get(1).longValue() < horarioPresente)) {
+                listaDeParDeHorariosLivresLong.remove(i);
+                i--;
+            }
+        }
+        // Edita o inicio do horario livre se existir agendamentos em andamento
+        for (int i = 0; i < listaDeParDeHorariosLivresLong.size(); i++) {
+            if ((listaDeParDeHorariosLivresLong.get(i).get(0).longValue() < horarioPresente) && (listaDeParDeHorariosLivresLong.get(i).get(1).longValue() > horarioPresente)) {
+                listaDeParDeHorariosLivresLong.get(i).set(0, horarioPresente);
+                i--;
+            }
+        }
+
         return listaDeParDeHorariosLivresLong;
     }
 

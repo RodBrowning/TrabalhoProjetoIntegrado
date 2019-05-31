@@ -6,19 +6,59 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recycler_view_agenda"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:listitem="@layout/agendamento"/>
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:id="@+id/relative_layout_bottom_selecionar_data_selecionar_data"
+            style="?android:attr/buttonStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="0dp">
+
+            <Button
+                android:id="@+id/bottom_selecionar_data"
+                style="@style/Widget.AppCompat.Button.Borderless"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/data"
+                android:layout_gravity="center"
+                android:background="@null"
+                android:clickable="false"
+                android:drawableEnd="@drawable/ic_date"
+                android:drawablePadding="10dp"
+                android:focusable="false"
+                android:gravity="center"
+                android:text="Quinta 23/07/2019"
+                android:textAlignment="center" />
+        </RelativeLayout>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycler_view_agenda"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/relative_layout_bottom_selecionar_data_selecionar_data"
+            tools:listitem="@layout/agendamento"
+            android:visibility="visible"/>
+
+        <TextView
+            android:id="@+id/text_view_agenda_livre"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="Agenda livre para o dia selecionado"
+            android:textAlignment="center"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
+            android:visibility="gone" />
+    </RelativeLayout>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/floating_action_button_adicionar_agendamento"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_add"
         android:layout_gravity="bottom|end"
         android:layout_margin="32dp"
-        />
+        android:src="@drawable/ic_add" />
 
 </android.support.design.widget.CoordinatorLayout>

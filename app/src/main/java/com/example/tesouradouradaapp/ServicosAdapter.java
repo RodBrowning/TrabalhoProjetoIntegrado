@@ -49,7 +49,7 @@ public class ServicosAdapter extends RecyclerView.Adapter<ServicosAdapter.Servic
         Locale brasil = new Locale("pt", "BR");
         NumberFormat numberFormat = NumberFormat.getCurrencyInstance(brasil);
         servicosHolder.textViewNomeServico.setText(servico.getNomeServico());
-        servicosHolder.textViewDuracaoAtendimento.setText(String.valueOf(converterMilisegundosParaMinutos(servico.getTempo()) + "min"));
+        servicosHolder.textViewDuracaoAtendimento.setText(duracaoTotalParaApresentacao(servico.getTempo()));
         servicosHolder.textViewValorAtendimento.setText(numberFormat.format(servico.getValor()));
         servicosHolder.relativeLayout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -86,7 +86,7 @@ public class ServicosAdapter extends RecyclerView.Adapter<ServicosAdapter.Servic
                                                 // Verificar se existe servico sem agendamento e deletar
                                                 deletarAgendamentosSemServico(listaAgendadosParaServico, agendaServicosJoinViewModel, agendaViewModel);
                                                 // Atualizar horario de fim de atendimento
-                                               // atualizarHorarioDosAgendamentosComServicoExcluido(listaAgendadosParaServico, agendaViewModel, servico);
+                                                // atualizarHorarioDosAgendamentosComServicoExcluido(listaAgendadosParaServico, agendaViewModel, servico);
 
                                                 Toast.makeText(mContext, "Serviço " + servico.getNomeServico() + " excluido", Toast.LENGTH_SHORT).show();
                                             }
@@ -118,13 +118,34 @@ public class ServicosAdapter extends RecyclerView.Adapter<ServicosAdapter.Servic
         this.application = application;
     }
 
-    private int converterMilisegundosParaMinutos(long minutos) {
-        Long longMinutos = new Long(minutos);
-        int mins = (longMinutos.intValue() / 1000) / 60;
-        return mins;
+
+    private String duracaoTotalParaApresentacao(long milisegundos) {
+        long duracaoTotal = milisegundos;
+        long duracaohoras = duracaoTotal / 1000 / 60 / 60;
+        long duracaoMinutos = (duracaoTotal / 1000 / 60) % 60;
+        String duracaoString;
+
+        if (duracaohoras > 0) {
+            if (duracaohoras == 1) {
+                if (duracaoMinutos == 0) {
+                    duracaoString = String.format("%d hr", duracaohoras);
+                } else {
+                    duracaoString = String.format("%d hr %02d mins", duracaohoras, duracaoMinutos);
+                }
+            } else {
+                if (duracaoMinutos == 0) {
+                    duracaoString = String.format("%d hrs", duracaohoras);
+                } else {
+                    duracaoString = String.format("%d hrs %02d mins", duracaohoras, duracaoMinutos);
+                }
+            }
+        } else {
+            duracaoString = String.format("%d mins", duracaoMinutos);
+        }
+        return duracaoString;
     }
 
-    private List<Integer> getListaAgendadosParaServico(AgendaServicosJoinViewModel agendaServicosJoinViewModel, Servico servico){
+    private List<Integer> getListaAgendadosParaServico(AgendaServicosJoinViewModel agendaServicosJoinViewModel, Servico servico) {
         List<AgendaServicosJoin> agendadosParaServicoJoin;
         List<Integer> listaAgendadosParaServico = new ArrayList<>();
         try {
@@ -139,6 +160,7 @@ public class ServicosAdapter extends RecyclerView.Adapter<ServicosAdapter.Servic
         }
         return listaAgendadosParaServico;
     }
+
     private void deletarAgendamentosSemServico(List<Integer> listaAgendadosParaServico, AgendaServicosJoinViewModel agendaServicosJoinViewModel, AgendaViewModel agendaViewModel) {
         List<AgendaServicosJoin> listaServicosParaAgendamento;
 
@@ -156,32 +178,6 @@ public class ServicosAdapter extends RecyclerView.Adapter<ServicosAdapter.Servic
             }
         }
     }
-/*
-    private void atualizarHorarioDosAgendamentosComServicoExcluido(List<Integer> listaAgendadosParaServico, AgendaViewModel agendaViewModel, Servico servico){
-        Agendamento agendamento;
-
-        for (Integer integer : listaAgendadosParaServico) {
-            try {
-                agendamento = agendaViewModel.getAgendamento(integer);
-                if(agendamento != null){
-                    Agendamento agendamentoParaAtualizar = new Agendamento(
-                            agendamento.getCliente(),
-                            agendamento.getHorarioInicio(),
-                            agendamento.getHorarioFim() - servico.getTempo(),
-                            agendamento.getCriadoEm());
-                    agendamentoParaAtualizar.setId_agendamento(agendamento.getId_agendamento());
-                    agendaViewModel.update(agendamentoParaAtualizar);
-                }
-            } catch (ExecutionException e) {
-                e.printStackTrace();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-
-    }
-
-*/
 
 
     class ServicosHolder extends RecyclerView.ViewHolder {

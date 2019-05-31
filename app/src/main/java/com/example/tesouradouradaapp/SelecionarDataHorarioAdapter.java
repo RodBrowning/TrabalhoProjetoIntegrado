@@ -72,7 +72,7 @@ class SelecionarDataHorarioAdapter extends RecyclerView.Adapter<SelecionarDataHo
                         setTimeSelected(true);
                         DecimalFormat df = new DecimalFormat();
                         df.setMinimumIntegerDigits(2);
-                        textViewHorarioSelecionado.setText(df.format(hourSelected)+":"+df.format(minutesSelected));
+                        textViewHorarioSelecionado.setText(df.format(hourSelected) + ":" + df.format(minutesSelected));
                     }
                 }, hora, minutos, DateFormat.is24HourFormat(view.getRootView().getContext()));
 
@@ -98,13 +98,23 @@ class SelecionarDataHorarioAdapter extends RecyclerView.Adapter<SelecionarDataHo
         List<String> horariosLivresString = new ArrayList<>();
         SimpleDateFormat simpleDateFormatTime = new SimpleDateFormat("HH:mm");
         for (int i = 0; i < listaDeParDeHorariosLivresLong.size(); i++) {
+            long horarioLivreInicio = listaDeParDeHorariosLivresLong.get(i).get(0);
+            long horarioLivreFim = listaDeParDeHorariosLivresLong.get(i).get(1);
+            if (horarioLivreInicio == horarioLivreFim) {
+                StringBuilder stringBuilder = new StringBuilder();
+                stringBuilder.append("Ás ");
+                stringBuilder.append(simpleDateFormatTime.format(horarioLivreInicio));
+                horariosLivresString.add(stringBuilder.toString());
 
-            StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.append("Das ");
-            stringBuilder.append(simpleDateFormatTime.format(listaDeParDeHorariosLivresLong.get(i).get(0)));
-            stringBuilder.append(" às ");
-            stringBuilder.append(simpleDateFormatTime.format(listaDeParDeHorariosLivresLong.get(i).get(1)));
-            horariosLivresString.add(stringBuilder.toString());
+            } else {
+                StringBuilder stringBuilder = new StringBuilder();
+                stringBuilder.append("Das ");
+                stringBuilder.append(simpleDateFormatTime.format(horarioLivreInicio));
+                stringBuilder.append(" às ");
+                stringBuilder.append(simpleDateFormatTime.format(horarioLivreFim));
+                horariosLivresString.add(stringBuilder.toString());
+
+            }
 
         }
         return horariosLivresString;

@@ -27,6 +27,21 @@ public interface AgendaDao {
     @Query("SELECT * FROM agenda ORDER BY horarioInicio ASC")
     LiveData<List<Agendamento>> getAllAgendamentos();
 
+    @Query("SELECT * FROM agenda WHERE " +
+            "horarioInicio < :horarioDeAbertura " +
+            "AND " +
+            "horarioFim > :horarioDeAbertura " +
+            "LIMIT 1")
+    Agendamento verSeExisteAgendamentoEmAndamento(long horarioDeAbertura);
+
+    @Query("SELECT * FROM agenda WHERE horarioInicio >= :horarioDeAbertura " +
+            "AND " +
+            "(SELECT SUM(tempo)  FROM servicos INNER JOIN " +
+            "agenda_servicos_join ON id_servico_join = id_servico " +
+            "WHERE id_agendamento = id_agendamento_join) + horarioInicio <= :horarioFechamento " +
+            "ORDER BY horarioInicio ASC")
+    LiveData<List<Agendamento>> getAgendamentosMarcadosParaDataLiveData(long horarioDeAbertura, long horarioFechamento);
+
     @Query("SELECT * FROM agenda WHERE horarioInicio >= :horarioDeAbertuta " +
             "AND " +
             "(SELECT SUM(tempo)  FROM servicos INNER JOIN " +
@@ -34,6 +49,7 @@ public interface AgendaDao {
             "WHERE id_agendamento = id_agendamento_join) + horarioInicio <= :horarioFechamento " +
             "ORDER BY horarioInicio ASC")
     List<Agendamento> getAgendamentosMarcadosParaData(long horarioDeAbertuta, long horarioFechamento);
+
 
     @Query("SELECT * FROM agenda WHERE horarioInicio >= :horarioDeAbertuta " +
             "AND (" +
