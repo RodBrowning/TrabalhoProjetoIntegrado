@@ -84,7 +84,7 @@ public class EditarEstabelecimentoActivity extends AppCompatActivity {
                 String abertura, fechamento;
 
                 // Validação dos campos
-                int diferencaEntreAberturaFechamento = (horaDeFechamento.getValue() + minutosDeFechamento.getValue()) - (horaDeAbertura.getValue() + minutosDeAbertura.getValue());
+                int diferencaEntreAberturaFechamento = (horaDeFechamento.getValue() + (minutosDeFechamento.getValue()/10)) - (horaDeAbertura.getValue() + (minutosDeAbertura.getValue()/10));
                 if (nomeEstabelecimento.isEmpty() || nomeProprietario.isEmpty()) {
                     Toast.makeText(EditarEstabelecimentoActivity.this, "O nome do estabelecimento e proprietário são obrigatórios", Toast.LENGTH_SHORT).show();
                     return;
@@ -114,7 +114,7 @@ public class EditarEstabelecimentoActivity extends AppCompatActivity {
                         fechamento);
                 estabelecimentoParaAtualizar.setIdEstabelecimento(estabelecimentoObj.getIdEstabelecimento());
                 estabelecimentoViewModel.update(estabelecimentoParaAtualizar);
-                Intent intent = new Intent(EditarEstabelecimentoActivity.this, DadosEstabelecimentoActivity.class);
+                Intent intent = new Intent(EditarEstabelecimentoActivity.this, MainActivity.class);
                 startActivity(intent);
 
                 Toast.makeText(EditarEstabelecimentoActivity.this, "Dados cadastrais atualizados", Toast.LENGTH_SHORT).show();

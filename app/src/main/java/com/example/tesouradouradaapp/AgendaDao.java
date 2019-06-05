@@ -24,13 +24,15 @@ public interface AgendaDao {
     @Query("SELECT * FROM agenda where id_agendamento = :id_agendamento")
     Agendamento getAgendamento(int id_agendamento);
 
-    @Query("SELECT * FROM agenda ORDER BY horarioInicio ASC")
+    @Query("SELECT id_agendamento, cliente, horarioInicio, criadoEm FROM agenda ORDER BY horarioInicio ASC")
     LiveData<List<Agendamento>> getAllAgendamentos();
 
     @Query("SELECT * FROM agenda WHERE " +
             "horarioInicio < :horarioDeAbertura " +
             "AND " +
-            "horarioFim > :horarioDeAbertura " +
+            "(SELECT SUM(tempo)  FROM servicos INNER JOIN " +
+            "agenda_servicos_join ON id_servico_join = id_servico " +
+            "WHERE id_agendamento = id_agendamento_join) + horarioInicio > :horarioDeAbertura " +
             "LIMIT 1")
     Agendamento verSeExisteAgendamentoEmAndamento(long horarioDeAbertura);
 

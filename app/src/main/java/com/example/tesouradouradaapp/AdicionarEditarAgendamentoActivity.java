@@ -110,7 +110,7 @@ public class AdicionarEditarAgendamentoActivity extends AppCompatActivity {
         List<Servico> servicosSelecionados = intent.<Servico>getParcelableArrayListExtra(ListaOpcoesServicoAdicionarEditarAgendamentoActivity.SERVICOS_ESCOLHIDOS);
         long duracaoTotal = new Long(duracaoTotal(servicosSelecionados));
         Date criadoEm = new Date();
-        Agendamento agendamento = new Agendamento(nomeCliente, intent.getLongExtra(SelecionarDataHorarioActivity.HORARIO_SELECIONADO, 0), intent.getLongExtra(SelecionarDataHorarioActivity.HORARIO_SELECIONADO, 0) + duracaoTotal, criadoEm.getTime());
+        Agendamento agendamento = new Agendamento(nomeCliente, intent.getLongExtra(SelecionarDataHorarioActivity.HORARIO_SELECIONADO, 0),  criadoEm.getTime());
         AgendaViewModel agendaViewModel = ViewModelProviders.of(AdicionarEditarAgendamentoActivity.this).get(AgendaViewModel.class);
         Long agendamentoId;
         AgendaServicosJoinViewModel agendaServicosJoinViewModel = ViewModelProviders.of(AdicionarEditarAgendamentoActivity.this).get(AgendaServicosJoinViewModel.class);

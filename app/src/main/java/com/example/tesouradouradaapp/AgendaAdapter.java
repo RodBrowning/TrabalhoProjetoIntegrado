@@ -87,9 +87,6 @@ public class AgendaAdapter extends RecyclerView.Adapter<AgendaAdapter.Agendament
         this.existeAgendamentoEmAndamento = existeAgendamentoEmAndamento;
     }
 
-    public void notifyDataSetChangedServicos() {
-        notifyDataSetChanged();
-    }
 
     public void setApplication(Application application) {
         this.application = application;

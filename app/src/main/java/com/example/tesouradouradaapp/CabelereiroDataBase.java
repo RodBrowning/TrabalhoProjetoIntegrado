@@ -85,7 +85,6 @@ public abstract class CabelereiroDataBase extends RoomDatabase {
             Agendamento agendamento1 = new Agendamento(
                     "Claudio Hugo",
                     horarioInicio.getTime(),
-                    horarioInicio.getTime() + 30 * 60 * 1000,
                     new Date().getTime()
             );
             agendaDao.insertAgendamento(agendamento1);
@@ -106,7 +105,6 @@ public abstract class CabelereiroDataBase extends RoomDatabase {
             Agendamento agendamento2 = new Agendamento(
                     "Roberto",
                     horarioInicio2.getTime(),
-                    horarioInicio2.getTime() + 70 * 60 * 1000,
                     new Date().getTime()
             );
             agendaDao.insertAgendamento(agendamento2);
@@ -126,7 +124,6 @@ public abstract class CabelereiroDataBase extends RoomDatabase {
             Date horarioInicio3 = calendar3.getTime();
             Agendamento agendamento3 = new Agendamento("Fernando",
                     horarioInicio3.getTime(),
-                    horarioInicio3.getTime() + 20 * 60 * 1000,
                     new Date().getTime()
             );
             agendaDao.insertAgendamento(agendamento3);

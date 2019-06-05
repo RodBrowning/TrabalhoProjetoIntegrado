@@ -69,14 +69,12 @@ public class MainActivity extends AppCompatActivity implements DatePickerDialog.
         });
 
         estabelecimentoViewModel = ViewModelProviders.of(this).get(EstabelecimentoViewModel.class);
-        try {
-            estabelecimento = estabelecimentoViewModel.getEstab();
-            setTituloParaActivity(estabelecimento);
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        estabelecimentoViewModel.getEstabelecimento().observe(this, new Observer<Estabelecimento>() {
+            @Override
+            public void onChanged(@Nullable Estabelecimento estabelecimento) {
+                setTituloParaActivity(estabelecimento);
+            }
+        });
 
         carregarCodigosIguaisParaOnCreateEOnDateSet();
 
@@ -84,6 +82,7 @@ public class MainActivity extends AppCompatActivity implements DatePickerDialog.
     }
 
     private void carregarCodigosIguaisParaOnCreateEOnDateSet() {
+
         Date inicioExpediente = calendar.getTime();
         editarTextoDoBotaoCalendario(inicioExpediente);
 
@@ -104,7 +103,8 @@ public class MainActivity extends AppCompatActivity implements DatePickerDialog.
         }
 
 
-        RecyclerView recyclerView = findViewById(R.id.recycler_view_agenda);
+
+        final RecyclerView recyclerView = findViewById(R.id.recycler_view_agenda);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setHasFixedSize(true);
 
@@ -117,6 +117,19 @@ public class MainActivity extends AppCompatActivity implements DatePickerDialog.
         agendaViewModel.getAgendamentosMarcadosParaDataLiveData(horarioAbertura, horarioFechamento).observe(this, new Observer<List<Agendamento>>() {
             @Override
             public void onChanged(@Nullable List<Agendamento> agendamentos) {
+                if (horarioAbertura > horarioFechamento) {
+                    calendar.set(Calendar.HOUR,0);
+                    calendar.set(Calendar.MINUTE,0);
+                    calendar.set(Calendar.SECOND,0);
+                    calendar.set(Calendar.MILLISECOND,0);
+                    long proximoDia = (calendar.getTime().getTime() + 86400000);
+                    calendar.setTimeInMillis(proximoDia);
+                    calendar.set(Calendar.DAY_OF_MONTH, calendar.get(Calendar.DAY_OF_MONTH));
+                    carregarCodigosIguaisParaOnCreateEOnDateSet();
+                } else {
+                    textViewAgendaLivre.setVisibility(View.GONE);
+                    recyclerView.setVisibility(View.VISIBLE);
+                }
 
                 try {
                     Agendamento agendamentoEmAndamento;
@@ -130,35 +143,35 @@ public class MainActivity extends AppCompatActivity implements DatePickerDialog.
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
+
+                if (agendamentos.size() == 0) {
+                    textViewAgendaLivre.setText("Agenda livre para o dia selecionado");
+                    textViewAgendaLivre.setVisibility(View.VISIBLE);
+                    recyclerView.setVisibility(View.GONE);
+                    adapter.setAgenda(agendamentos);
+                } else {
+                    textViewAgendaLivre.setVisibility(View.GONE);
+                    recyclerView.setVisibility(View.VISIBLE);
+                    adapter.setAgenda(agendamentos);
+                }
             }
         });
 
-        List<Agendamento> agendamentos = new ArrayList<>();
-        try {
-            agendamentos = agendaViewModel.getAgendamentosMarcadosParaData(horarioAbertura,horarioFechamento);
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        if (agendamentos.size() == 0) {
-            textViewAgendaLivre.setVisibility(View.VISIBLE);
-            recyclerView.setVisibility(View.GONE);
-            adapter.setAgenda(agendamentos);
-        } else {
-            textViewAgendaLivre.setVisibility(View.GONE);
-            recyclerView.setVisibility(View.VISIBLE);
-            adapter.setAgenda(agendamentos);
-        }
 
         servicoViewModel = ViewModelProviders.of(this).get(ServicoViewModel.class);
         servicoViewModel.getAllServicos().observe(this, new Observer<List<Servico>>() {
             @Override
             public void onChanged(@Nullable List<Servico> servicos) {
-                adapter.notifyDataSetChangedServicos();
+                adapter.notifyDataSetChanged();
             }
         });
 
+        estabelecimentoViewModel.getEstabelecimento().observe(this, new Observer<Estabelecimento>() {
+            @Override
+            public void onChanged(@Nullable Estabelecimento estabelecimento) {
+                adapter.notifyDataSetChanged();
+            }
+        });
 
     }
 

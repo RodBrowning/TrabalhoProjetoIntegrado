@@ -31,6 +31,7 @@ public class VizualizarAgendamento extends AppCompatActivity {
     private AgendaViewModel agendaViewModel;
     private AgendaServicosJoinViewModel agendaServicosJoinViewModel;
     private Context mContext;
+    private int duracaoTotal;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,7 +78,7 @@ public class VizualizarAgendamento extends AppCompatActivity {
         SimpleDateFormat sdfHorarioFim = new SimpleDateFormat("HH:mm");
 
         Date dataSelecionada = new Date(agendamento.getHorarioInicio());
-        int duracaoTotal = duracaoTotal(servicosSelecionados);
+        duracaoTotal = duracaoTotal(servicosSelecionados);
         Date dataFinal = new Date(agendamento.getHorarioInicio() + duracaoTotal);
 
         textViewValorTotal.setText(valorTotalParaApresentacao(servicosSelecionados));
@@ -100,10 +101,10 @@ public class VizualizarAgendamento extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.menu_editar_agendamento:
                 Date horarioPresente = new Date();
-                if (horarioPresente.getTime() > agendamento.getHorarioInicio() && horarioPresente.getTime() < agendamento.getHorarioFim()) {
+                if (horarioPresente.getTime() > agendamento.getHorarioInicio() && horarioPresente.getTime() < (agendamento.getHorarioInicio() + duracaoTotal)) {
                     Toast.makeText(mContext, "Erro: Agendamento em andamento.", Toast.LENGTH_SHORT).show();
                     return false;
-                } else if (horarioPresente.getTime() > agendamento.getHorarioFim()) {
+                } else if (horarioPresente.getTime() > (agendamento.getHorarioInicio() + duracaoTotal)) {
                     Toast.makeText(mContext, "Erro: Agendamento ja foi concluido.", Toast.LENGTH_SHORT).show();
                     return false;
                 }

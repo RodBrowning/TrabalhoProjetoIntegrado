@@ -16,18 +16,15 @@ public class Agendamento {
 
     private String cliente;
     private long horarioInicio;
-    private long horarioFim;
 
     private long criadoEm;
     @Ignore
     private long duracao;
 
-    public Agendamento(String cliente, long horarioInicio, long horarioFim, long criadoEm) {
+    public Agendamento(String cliente, long horarioInicio, long criadoEm) {
         this.cliente = cliente;
         this.horarioInicio = horarioInicio;
-        this.horarioFim = horarioFim;
         this.criadoEm = criadoEm;
-        this.duracao = horarioFim - horarioInicio;
     }
 
     public void setId_agendamento(int id_agendamento) {
@@ -46,16 +43,8 @@ public class Agendamento {
         return horarioInicio;
     }
 
-    public long getHorarioFim() {
-        return horarioFim;
-    }
-
     public long getCriadoEm() {
         return criadoEm;
-    }
-
-    public long getDuracaoEmMinutos() {
-        return ((horarioFim - horarioInicio) / 1000) / 60;
     }
 
 }

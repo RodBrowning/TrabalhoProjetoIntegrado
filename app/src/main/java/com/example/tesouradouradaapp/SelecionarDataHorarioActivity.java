@@ -77,6 +77,16 @@ public class SelecionarDataHorarioActivity extends AppCompatActivity implements 
         if (horarioAbertura < horarioPresente.getTime()) {
             horarioAbertura = horarioPresente.getTime();
         }
+        if (horarioAbertura > horarioFechamento) {
+            calendar.set(Calendar.HOUR,0);
+            calendar.set(Calendar.MINUTE,0);
+            calendar.set(Calendar.SECOND,0);
+            calendar.set(Calendar.MILLISECOND,0);
+            long proximoDia = (calendar.getTime().getTime() + 86400000);
+            calendar.setTimeInMillis(proximoDia);
+            calendar.set(Calendar.DAY_OF_MONTH, calendar.get(Calendar.DAY_OF_MONTH));
+            carregarCodigosIguaisParaOnCreateEOnDateSet();
+        }
         horariosLivresParaDiaLong = getHorariosLivresParaDiaLong(horariosAgendadosParaDia, horarioAbertura, horarioFechamento);
         listaDeParDeHorariosLivresParaDiaLong = getParDeHorariosLivresLong(horariosLivresParaDiaLong);
 
