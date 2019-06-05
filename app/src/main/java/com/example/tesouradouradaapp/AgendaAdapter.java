@@ -24,6 +24,7 @@ public class AgendaAdapter extends RecyclerView.Adapter<AgendaAdapter.Agendament
     private AgendaRepository agendaRepository;
     private AgendaServicosJoinViewModel agendaServicosJoinViewModel = new AgendaServicosJoinViewModel(application);
     private Boolean existeAgendamentoEmAndamento = false;
+    private OnItemClickListener listener;
 
 
     public AgendaAdapter(Context context) {
@@ -54,23 +55,15 @@ public class AgendaAdapter extends RecyclerView.Adapter<AgendaAdapter.Agendament
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        if(existeAgendamentoEmAndamento && i == 0){
+        if (existeAgendamentoEmAndamento && i == 0) {
             agendamentoHolder.textViewAgendamentoEmAndamento.setVisibility(View.VISIBLE);
         }
-        long duracaoTotalDoAtendimento = (agendamento.getHorarioInicio()+ duracaoAgendamento) - agendamento.getHorarioInicio();
+        long duracaoTotalDoAtendimento = (agendamento.getHorarioInicio() + duracaoAgendamento) - agendamento.getHorarioInicio();
         String duracaoAgendamentoEmMinutos = duracaoTotalParaApresentacao(duracaoTotalDoAtendimento);
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
         agendamentoHolder.textViewDuracao.setText(duracaoAgendamentoEmMinutos);
         agendamentoHolder.textViewNomeCliente.setText(agendamento.getCliente());
         agendamentoHolder.textViewDataMarcada.setText(sdf.format(agendamento.getHorarioInicio()));
-        agendamentoHolder.relativeLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(mContext.getApplicationContext(), VizualizarAgendamento.class);
-                intent.putExtra(ID_AGENDAMENTO_EDITAR, agendamento.getId_agendamento());
-                mContext.startActivity(intent);
-            }
-        });
     }
 
     @Override
@@ -129,7 +122,6 @@ public class AgendaAdapter extends RecyclerView.Adapter<AgendaAdapter.Agendament
         private TextView textViewDuracao;
         private TextView textViewDataMarcada;
         private TextView textViewAgendamentoEmAndamento;
-        private RelativeLayout relativeLayout;
 
 
         public AgendamentoHolder(@NonNull View itemView) {
@@ -138,7 +130,23 @@ public class AgendaAdapter extends RecyclerView.Adapter<AgendaAdapter.Agendament
             textViewNomeCliente = itemView.findViewById(R.id.nome_cliente);
             textViewDataMarcada = itemView.findViewById(R.id.data_marcada);
             textViewAgendamentoEmAndamento = itemView.findViewById(R.id.agendamento_em_andamento);
-            relativeLayout = itemView.findViewById(R.id.relative_layout_agenda_item);
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int position = getAdapterPosition();
+                    if (listener != null && position != RecyclerView.NO_POSITION) {
+                        listener.onItemClick(agenda.get(position));
+                    }
+                }
+            });
         }
+    }
+
+    public interface OnItemClickListener {
+        void onItemClick(Agendamento agendamento);
+    }
+
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        this.listener = listener;
     }
 }

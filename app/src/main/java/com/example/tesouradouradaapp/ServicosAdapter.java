@@ -30,6 +30,7 @@ public class ServicosAdapter extends RecyclerView.Adapter<ServicosAdapter.Servic
     private ServicoViewModel servicoViewModel = new ServicoViewModel(application);
     private AgendaServicosJoinViewModel agendaServicosJoinViewModel = new AgendaServicosJoinViewModel(application);
     private AgendaViewModel agendaViewModel = new AgendaViewModel(application);
+    private OnItemClickListener listener;
 
     public ServicosAdapter(Context context) {
         this.mContext = context;
@@ -51,57 +52,7 @@ public class ServicosAdapter extends RecyclerView.Adapter<ServicosAdapter.Servic
         servicosHolder.textViewNomeServico.setText(servico.getNomeServico());
         servicosHolder.textViewDuracaoAtendimento.setText(duracaoTotalParaApresentacao(servico.getTempo()));
         servicosHolder.textViewValorAtendimento.setText(numberFormat.format(servico.getValor()));
-        servicosHolder.relativeLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                PopupMenu popupMenu = new PopupMenu(mContext, servicosHolder.relativeLayout);
-                popupMenu.inflate(R.menu.menu_list_item_servicos);
-                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                    @Override
-                    public boolean onMenuItemClick(MenuItem menuItem) {
-                        switch (menuItem.getItemId()) {
-                            case R.id.menu_editar_servico:
-                                Intent intent = new Intent(mContext, AdicionarEditarServicoActivity.class);
-                                intent.putExtra(ServicosAdapter.EXTRA_ID, servico.getId_servico());
-                                mContext.startActivity(intent);
-                                return true;
-                            case R.id.menu_excluir_servico:
-                                final StringBuilder stringBuilder = new StringBuilder();
-                                stringBuilder.append("Excluir o servico pode desagendar algum agendamento.");
-                                stringBuilder.append(System.getProperty("line.separator"));
-                                stringBuilder.append(System.getProperty("line.separator"));
-                                stringBuilder.append("Deseja continuar?");
-                                new AlertDialog.Builder(mContext)
-                                        .setTitle("Excluir")
-                                        .setMessage(stringBuilder.toString())
-                                        .setIcon(R.drawable.ic_alert_excluir)
-                                        .setPositiveButton("Sim", new DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(DialogInterface dialogInterface, int i) {
-                                                // Descobrir quem esta agendado para o servico a ser excluido
-                                                List<Integer> listaAgendadosParaServico = getListaAgendadosParaServico(agendaServicosJoinViewModel, servico);
 
-                                                servicoViewModel.delete(servico);
-
-                                                // Verificar se existe servico sem agendamento e deletar
-                                                deletarAgendamentosSemServico(listaAgendadosParaServico, agendaServicosJoinViewModel, agendaViewModel);
-                                                // Atualizar horario de fim de atendimento
-                                                // atualizarHorarioDosAgendamentosComServicoExcluido(listaAgendadosParaServico, agendaViewModel, servico);
-
-                                                Toast.makeText(mContext, "Serviço " + servico.getNomeServico() + " excluido", Toast.LENGTH_SHORT).show();
-                                            }
-                                        })
-                                        .setNegativeButton("Não", null).show();
-                                return true;
-                            default:
-                                break;
-                        }
-                        return false;
-                    }
-                });
-                popupMenu.show();
-            }
-        });
     }
 
     @Override
@@ -145,53 +96,34 @@ public class ServicosAdapter extends RecyclerView.Adapter<ServicosAdapter.Servic
         return duracaoString;
     }
 
-    private List<Integer> getListaAgendadosParaServico(AgendaServicosJoinViewModel agendaServicosJoinViewModel, Servico servico) {
-        List<AgendaServicosJoin> agendadosParaServicoJoin;
-        List<Integer> listaAgendadosParaServico = new ArrayList<>();
-        try {
-            agendadosParaServicoJoin = agendaServicosJoinViewModel.getAgendamentosParaServico(servico.getId_servico());
-            for (AgendaServicosJoin agendaServicosJoin : agendadosParaServicoJoin) {
-                listaAgendadosParaServico.add(agendaServicosJoin.getIdAgendamentoJoin());
-            }
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        return listaAgendadosParaServico;
-    }
-
-    private void deletarAgendamentosSemServico(List<Integer> listaAgendadosParaServico, AgendaServicosJoinViewModel agendaServicosJoinViewModel, AgendaViewModel agendaViewModel) {
-        List<AgendaServicosJoin> listaServicosParaAgendamento;
-
-        for (Integer integer : listaAgendadosParaServico) {
-            try {
-                listaServicosParaAgendamento = agendaServicosJoinViewModel.getServicosParaAgendamento(integer);
-                if (listaServicosParaAgendamento.size() == 0) {
-                    Agendamento agendamento = agendaViewModel.getAgendamento(integer);
-                    agendaViewModel.delete(agendamento);
-                }
-            } catch (ExecutionException e) {
-                e.printStackTrace();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
 
     class ServicosHolder extends RecyclerView.ViewHolder {
         private TextView textViewNomeServico;
         private TextView textViewDuracaoAtendimento;
         private TextView textViewValorAtendimento;
-        private RelativeLayout relativeLayout;
 
-        public ServicosHolder(@NonNull View itemView) {
+        public ServicosHolder(@NonNull final View itemView) {
             super(itemView);
             textViewNomeServico = itemView.findViewById(R.id.text_view_servico);
             textViewDuracaoAtendimento = itemView.findViewById(R.id.text_view_duracao_servico);
             textViewValorAtendimento = itemView.findViewById(R.id.text_view_valor);
-            relativeLayout = itemView.findViewById(R.id.relative_layout_servico_item);
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int position = getAdapterPosition();
+                    if(listener != null && position != RecyclerView.NO_POSITION){}
+                    listener.onItemClick(servicos.get(position), itemView);
+                }
+            });
         }
+    }
+
+
+    public interface OnItemClickListener {
+        void onItemClick(Servico servico,View itemView);
+    }
+
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        this.listener = listener;
     }
 }

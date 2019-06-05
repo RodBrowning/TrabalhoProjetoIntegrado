@@ -8,12 +8,15 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.format.DateFormat;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -36,8 +39,10 @@ public class SelecionarDataHorarioActivity extends AppCompatActivity implements 
     private ArrayList<Servico> servicosSelecionados = new ArrayList<>();
     private AgendaViewModel agendaViewModel = new AgendaViewModel(getApplication());
     private SelecionarDataHorarioAdapter selecionarDataHorarioAdapter;
+    public int hourSelected, minutesSelected;
 
     private Intent intentEditar;
+    private boolean timeSelected;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,10 +83,10 @@ public class SelecionarDataHorarioActivity extends AppCompatActivity implements 
             horarioAbertura = horarioPresente.getTime();
         }
         if (horarioAbertura > horarioFechamento) {
-            calendar.set(Calendar.HOUR,0);
-            calendar.set(Calendar.MINUTE,0);
-            calendar.set(Calendar.SECOND,0);
-            calendar.set(Calendar.MILLISECOND,0);
+            calendar.set(Calendar.HOUR, 0);
+            calendar.set(Calendar.MINUTE, 0);
+            calendar.set(Calendar.SECOND, 0);
+            calendar.set(Calendar.MILLISECOND, 0);
             long proximoDia = (calendar.getTime().getTime() + 86400000);
             calendar.setTimeInMillis(proximoDia);
             calendar.set(Calendar.DAY_OF_MONTH, calendar.get(Calendar.DAY_OF_MONTH));
@@ -108,7 +113,7 @@ public class SelecionarDataHorarioActivity extends AppCompatActivity implements 
             recyclerView.setVisibility(View.VISIBLE);
         }
         selecionarDataHorarioAdapter = new SelecionarDataHorarioAdapter(horariosLivresParaDiaParaServicosSelecionados);
-        selecionarDataHorarioAdapter.setTimeSelected(false);
+        setTimeSelected(false);
         recyclerView.setAdapter(selecionarDataHorarioAdapter);
 
 
@@ -125,11 +130,11 @@ public class SelecionarDataHorarioActivity extends AppCompatActivity implements 
         buttonSeguirParaConfirmarAgendamento.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!selecionarDataHorarioAdapter.isTimeSelected()) {
+                if (!isTimeSelected()) {
                     Toast.makeText(SelecionarDataHorarioActivity.this, "Selecione um horario", Toast.LENGTH_SHORT).show();
                     return;
                 } else {
-                    addHorarioSelecionado(calendar, selecionarDataHorarioAdapter.hourSelected, selecionarDataHorarioAdapter.minutesSelected);
+                    addHorarioSelecionado(calendar, hourSelected, minutesSelected);
                     Intent intent = getIntent();
                     intent.setClass(SelecionarDataHorarioActivity.this, AdicionarEditarAgendamentoActivity.class);
                     intent.putExtra(HORARIO_SELECIONADO, calendar.getTimeInMillis());
@@ -137,6 +142,46 @@ public class SelecionarDataHorarioActivity extends AppCompatActivity implements 
                 }
             }
         });
+        selecionarDataHorarioAdapter.setOnItemClickListener(new SelecionarDataHorarioAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(final View itemView, List<Long> parDeHorariosLivre, String horariosLivresString) {
+                Long horarioLivreInicio = new Long(parDeHorariosLivre.get(0));
+                Long horarioLivreFim = new Long(parDeHorariosLivre.get(1));
+                Date horarioLivreInicioDate = new Date(horarioLivreInicio);
+                Date horarioLivreFimDate = new Date(horarioLivreFim);
+
+                calendar.setTime(horarioLivreInicioDate);
+                int hora = calendar.get(calendar.HOUR_OF_DAY);
+                int minutos = calendar.get(calendar.MINUTE);
+
+                TimePickerFragment tpd = new TimePickerFragment(itemView.getRootView().getContext(), new TimePickerFragment.OnTimeSetListener() {
+                    @Override
+                    public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
+                        TextView textViewHorarioSelecionado = itemView.getRootView().findViewById(R.id.text_view_horario_selecionado);
+                        findViewById(R.id.text_view_horario_selecionado);
+                        hourSelected = selectedHour;
+                        minutesSelected = selectedMinute;
+                        setTimeSelected(true);
+                        DecimalFormat df = new DecimalFormat();
+                        df.setMinimumIntegerDigits(2);
+                        textViewHorarioSelecionado.setText(df.format(hourSelected) + ":" + df.format(minutesSelected));
+                    }
+                }, hora, minutos, DateFormat.is24HourFormat(getApplicationContext()));
+
+                tpd.setMin(hora, minutos);
+
+                calendar.setTime(horarioLivreFimDate);
+                hora = calendar.get(calendar.HOUR_OF_DAY);
+                minutos = calendar.get(calendar.MINUTE);
+
+                tpd.setMax(hora, minutos);
+                tpd.setTitle(horariosLivresString);
+                tpd.show();
+            }
+
+
+        });
+
     }
 
     private void setTituloParaActivity(Intent intent, String modoDeCadastro) {
@@ -341,6 +386,13 @@ public class SelecionarDataHorarioActivity extends AppCompatActivity implements 
         return horas + minutos;
     }
 
+    public void setTimeSelected(boolean timeSelected) {
+        this.timeSelected = timeSelected;
+    }
+
+    public boolean isTimeSelected() {
+        return timeSelected;
+    }
 
     @Override
     public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {

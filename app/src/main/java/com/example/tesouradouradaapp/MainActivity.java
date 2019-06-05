@@ -29,6 +29,7 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 public class MainActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
+    public static final String ID_AGENDAMENTO_EDITAR = "com.example.tesouradouradaapp.ID_AGENDAMENTO_EDITAR";
     private TextView textViewAgendaLivre;
     private Button buttonSelecionarData;
     private RelativeLayout relativeLayoutButtonSelecionarData;
@@ -145,7 +146,6 @@ public class MainActivity extends AppCompatActivity implements DatePickerDialog.
                 }
 
                 if (agendamentos.size() == 0) {
-                    textViewAgendaLivre.setText("Agenda livre para o dia selecionado");
                     textViewAgendaLivre.setVisibility(View.VISIBLE);
                     recyclerView.setVisibility(View.GONE);
                     adapter.setAgenda(agendamentos);
@@ -173,6 +173,14 @@ public class MainActivity extends AppCompatActivity implements DatePickerDialog.
             }
         });
 
+        adapter.setOnItemClickListener(new AgendaAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(Agendamento agendamento) {
+                Intent intent = new Intent(getApplicationContext(), VizualizarAgendamento.class);
+                intent.putExtra(ID_AGENDAMENTO_EDITAR, agendamento.getId_agendamento());
+                startActivity(intent);
+            }
+        });
     }
 
     private void setTituloParaActivity(Estabelecimento estabelecimento) {

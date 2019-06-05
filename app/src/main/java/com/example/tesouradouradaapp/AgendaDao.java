@@ -24,7 +24,7 @@ public interface AgendaDao {
     @Query("SELECT * FROM agenda where id_agendamento = :id_agendamento")
     Agendamento getAgendamento(int id_agendamento);
 
-    @Query("SELECT id_agendamento, cliente, horarioInicio, criadoEm FROM agenda ORDER BY horarioInicio ASC")
+    @Query("SELECT * FROM agenda ORDER BY horarioInicio ASC")
     LiveData<List<Agendamento>> getAllAgendamentos();
 
     @Query("SELECT * FROM agenda WHERE " +

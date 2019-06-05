@@ -27,8 +27,7 @@ class SelecionarDataHorarioAdapter extends RecyclerView.Adapter<SelecionarDataHo
     List<List<Long>> listaDeParDeHorariosLivresLong;
     private List<String> horariosLivresString;
     private Context mContext;
-    public int hourSelected, minutesSelected;
-    private boolean timeSelected;
+    private OnItemClickListener listener;
 
     public SelecionarDataHorarioAdapter(List<List<Long>> listaDeParDeHorariosLivresLong) {
         this.listaDeParDeHorariosLivresLong = listaDeParDeHorariosLivresLong;
@@ -48,45 +47,6 @@ class SelecionarDataHorarioAdapter extends RecyclerView.Adapter<SelecionarDataHo
     public void onBindViewHolder(@NonNull SelecionarDataHorarioHolder selecionarDataHorarioHolder, final int i) {
         final String horarioLivreString = horariosLivresString.get(i);
         selecionarDataHorarioHolder.textViewHorarioLivre.setText(horarioLivreString);
-        selecionarDataHorarioHolder.textViewHorarioLivre.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(final View view) {
-
-                Long horarioLivreInicio = new Long(listaDeParDeHorariosLivresLong.get(i).get(0));
-                Long horarioLivreFim = new Long(listaDeParDeHorariosLivresLong.get(i).get(1));
-                Date horarioLivreInicioDate = new Date(horarioLivreInicio);
-                Date horarioLivreFimDate = new Date(horarioLivreFim);
-
-                /// Continuar daqui
-                Calendar calendar = Calendar.getInstance();
-                calendar.setTime(horarioLivreInicioDate);
-                int hora = calendar.get(calendar.HOUR_OF_DAY);
-                int minutos = calendar.get(calendar.MINUTE);
-
-                TimePickerFragment tpd = new TimePickerFragment(view.getRootView().getContext(), new TimePickerFragment.OnTimeSetListener() {
-                    @Override
-                    public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
-                        TextView textViewHorarioSelecionado = view.getRootView().findViewById(R.id.text_view_horario_selecionado);
-                        hourSelected = selectedHour;
-                        minutesSelected = selectedMinute;
-                        setTimeSelected(true);
-                        DecimalFormat df = new DecimalFormat();
-                        df.setMinimumIntegerDigits(2);
-                        textViewHorarioSelecionado.setText(df.format(hourSelected) + ":" + df.format(minutesSelected));
-                    }
-                }, hora, minutos, DateFormat.is24HourFormat(view.getRootView().getContext()));
-
-                tpd.setMin(hora, minutos);
-
-                calendar.setTime(horarioLivreFimDate);
-                hora = calendar.get(calendar.HOUR_OF_DAY);
-                minutos = calendar.get(calendar.MINUTE);
-
-                tpd.setMax(hora, minutos);
-                tpd.setTitle(horarioLivreString);
-                tpd.show();
-            }
-        });
     }
 
     @Override
@@ -120,21 +80,31 @@ class SelecionarDataHorarioAdapter extends RecyclerView.Adapter<SelecionarDataHo
         return horariosLivresString;
     }
 
-    public void setTimeSelected(boolean timeSelected) {
-        this.timeSelected = timeSelected;
-    }
-
-    public boolean isTimeSelected() {
-        return timeSelected;
-    }
 
     class SelecionarDataHorarioHolder extends RecyclerView.ViewHolder {
         TextView textViewHorarioLivre;
 
-        public SelecionarDataHorarioHolder(@NonNull View itemView) {
+        public SelecionarDataHorarioHolder(@NonNull final View itemView) {
             super(itemView);
             textViewHorarioLivre = itemView.findViewById(R.id.text_view_horario_livre);
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int position = getAdapterPosition();
+                    if (listener != null && position != RecyclerView.NO_POSITION) {
+                    }
+                    listener.onItemClick(itemView, listaDeParDeHorariosLivresLong.get(position), horariosLivresString.get(position));
+                }
+            });
         }
+    }
+
+    public interface OnItemClickListener {
+        void onItemClick(View itemView, List<Long> parDeHorariosLivre, String horariosLivresString);
+    }
+
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        this.listener = listener;
     }
 
 }
