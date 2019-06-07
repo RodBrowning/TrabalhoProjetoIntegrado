@@ -68,11 +68,18 @@ public class ListaOpcoesServicoAdicionarEditarAgendamentoActivity extends AppCom
                         Intent intent = new Intent(ListaOpcoesServicoAdicionarEditarAgendamentoActivity.this, SelecionarDataHorarioActivity.class);
                         intent.putParcelableArrayListExtra(SERVICOS_ESCOLHIDOS, adapter.servicosSelecionados);
                         startActivity(intent);
+                        overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_left);
                     }
                 } else {
                     Toast.makeText(ListaOpcoesServicoAdicionarEditarAgendamentoActivity.this, "Selecione algum serviço", Toast.LENGTH_SHORT).show();
                 }
             }
         });
+    }
+
+    @Override
+    public void finish() {
+        super.finish();
+        overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
     }
 }

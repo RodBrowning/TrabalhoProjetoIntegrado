@@ -139,6 +139,7 @@ public class SelecionarDataHorarioActivity extends AppCompatActivity implements 
                     intent.setClass(SelecionarDataHorarioActivity.this, AdicionarEditarAgendamentoActivity.class);
                     intent.putExtra(HORARIO_SELECIONADO, calendar.getTimeInMillis());
                     startActivity(intent);
+                    overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_left);
                 }
             }
         });
@@ -398,6 +399,12 @@ public class SelecionarDataHorarioActivity extends AppCompatActivity implements 
     public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
         calendar = inicioExpediente(i, i1, i2);
         carregarCodigosIguaisParaOnCreateEOnDateSet();
+    }
+
+    @Override
+    public void finish() {
+        super.finish();
+        overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
     }
 
 }

@@ -66,6 +66,7 @@ public class MainActivity extends AppCompatActivity implements DatePickerDialog.
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, ListaOpcoesServicoAdicionarEditarAgendamentoActivity.class);
                 startActivity(intent);
+                overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_left);
             }
         });
 
@@ -132,28 +133,9 @@ public class MainActivity extends AppCompatActivity implements DatePickerDialog.
                     recyclerView.setVisibility(View.VISIBLE);
                 }
 
-                try {
-                    Agendamento agendamentoEmAndamento;
-                    agendamentoEmAndamento = agendaViewModel.verSeExisteAgendamentoEmAndamento(horarioAbertura);
-                    if (agendamentoEmAndamento != null) {
-                        agendamentos.add(0, agendamentoEmAndamento);
-                        adapter.setExisteAgendamentoEmAndamento(true);
-                    }
-                } catch (ExecutionException e) {
-                    e.printStackTrace();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+                verificarAgendamentoEmAndamento(agendamentos, adapter);
 
-                if (agendamentos.size() == 0) {
-                    textViewAgendaLivre.setVisibility(View.VISIBLE);
-                    recyclerView.setVisibility(View.GONE);
-                    adapter.setAgenda(agendamentos);
-                } else {
-                    textViewAgendaLivre.setVisibility(View.GONE);
-                    recyclerView.setVisibility(View.VISIBLE);
-                    adapter.setAgenda(agendamentos);
-                }
+                setVisibilidadeRecyclerView(agendamentos, recyclerView, adapter);
             }
         });
 
@@ -179,6 +161,8 @@ public class MainActivity extends AppCompatActivity implements DatePickerDialog.
                 Intent intent = new Intent(getApplicationContext(), VizualizarAgendamento.class);
                 intent.putExtra(ID_AGENDAMENTO_EDITAR, agendamento.getId_agendamento());
                 startActivity(intent);
+                overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_left);
+
             }
         });
     }
@@ -296,11 +280,39 @@ public class MainActivity extends AppCompatActivity implements DatePickerDialog.
     private void irParaDadosEstabelecimentoActivity() {
         Intent intent = new Intent(MainActivity.this, DadosEstabelecimentoActivity.class);
         startActivity(intent);
+        overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_left);
     }
 
+    private void verificarAgendamentoEmAndamento(List<Agendamento> agendamentos, AgendaAdapter adapter){
+        try {
+            Agendamento agendamentoEmAndamento;
+            agendamentoEmAndamento = agendaViewModel.verSeExisteAgendamentoEmAndamento(horarioAbertura);
+            if (agendamentoEmAndamento != null) {
+                agendamentos.add(0, agendamentoEmAndamento);
+                adapter.setExisteAgendamentoEmAndamento(true);
+            }
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void setVisibilidadeRecyclerView(List<Agendamento> agendamentos,RecyclerView recyclerView , AgendaAdapter adapter){
+        if (agendamentos.size() == 0) {
+            textViewAgendaLivre.setVisibility(View.VISIBLE);
+            recyclerView.setVisibility(View.GONE);
+            adapter.setAgenda(agendamentos);
+        } else {
+            textViewAgendaLivre.setVisibility(View.GONE);
+            recyclerView.setVisibility(View.VISIBLE);
+            adapter.setAgenda(agendamentos);
+        }
+    }
     private void irParaServicosActivity() {
         Intent intent = new Intent(MainActivity.this, ServicosActivity.class);
         startActivity(intent);
+        overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_left);
     }
 
     @Override

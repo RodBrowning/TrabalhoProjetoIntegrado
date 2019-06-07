@@ -91,6 +91,7 @@ public class AdicionarEditarAgendamentoActivity extends AppCompatActivity {
 
                 Intent intent = new Intent(AdicionarEditarAgendamentoActivity.this, MainActivity.class);
                 startActivity(intent);
+                overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
 
             }
         });
@@ -148,18 +149,28 @@ public class AdicionarEditarAgendamentoActivity extends AppCompatActivity {
 
     private String duracaoTotalParaApresentacao(List<Servico> servicos) {
         int duracaoTotal = duracaoTotal(servicos);
-        int duracaohoras = duracaoTotal / 1000 / 60 / 60;
-        int duracaoMinutos = (duracaoTotal / 1000 / 60) % 60;
+        long duracaohoras = duracaoTotal / 1000 / 60 / 60;
+        long duracaoMinutos = (duracaoTotal / 1000 / 60) % 60;
+        String duracaoString;
 
         if (duracaohoras > 0) {
-            if(duracaohoras == 1){
-                return String.format("%d hr %02d mins", duracaohoras, duracaoMinutos);
+            if (duracaohoras == 1) {
+                if (duracaoMinutos == 0) {
+                    duracaoString = String.format("%d hr", duracaohoras);
+                } else {
+                    duracaoString = String.format("%d hr %02d mins", duracaohoras, duracaoMinutos);
+                }
             } else {
-                return String.format("%d hrs %02d mins", duracaohoras, duracaoMinutos);
+                if (duracaoMinutos == 0) {
+                    duracaoString = String.format("%d hrs", duracaohoras);
+                } else {
+                    duracaoString = String.format("%d hrs %02d mins", duracaohoras, duracaoMinutos);
+                }
             }
         } else {
-            return String.format("%d mins", duracaoMinutos);
+            duracaoString = String.format("%d mins", duracaoMinutos);
         }
+        return duracaoString;
 
     }
 
@@ -178,5 +189,11 @@ public class AdicionarEditarAgendamentoActivity extends AppCompatActivity {
         Long longMinutos = new Long(minutos);
         int mins = (longMinutos.intValue() / 1000) / 60;
         return mins;
+    }
+
+    @Override
+    public void finish() {
+        super.finish();
+        overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
     }
 }

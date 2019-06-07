@@ -42,6 +42,7 @@ public class ServicosActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(ServicosActivity.this, AdicionarEditarServicoActivity.class);
                 startActivity(intent);
+                overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_left);
             }
         });
 
@@ -73,6 +74,7 @@ public class ServicosActivity extends AppCompatActivity {
                                 Intent intent = new Intent(getApplicationContext(), AdicionarEditarServicoActivity.class);
                                 intent.putExtra(ServicosAdapter.EXTRA_ID, servico.getId_servico());
                                 startActivity(intent);
+                                overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_left);
                                 return true;
                             case R.id.menu_excluir_servico:
                                 final StringBuilder stringBuilder = new StringBuilder();
@@ -149,4 +151,9 @@ public class ServicosActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void finish() {
+        super.finish();
+        overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+    }
 }

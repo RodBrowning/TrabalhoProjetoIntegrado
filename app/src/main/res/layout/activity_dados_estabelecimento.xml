@@ -1,61 +1,77 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:layout_margin="8dp"
+    app:cardBackgroundColor="@color/transparent"
     tools:context=".DadosEstabelecimentoActivity">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
+        android:background="#72FFFFFF"
         android:gravity="center"
-        >
+        android:orientation="vertical"
+        android:padding="28dp">
+
         <TextView
+            style="@style/Labels"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Nome estabelecimento"
             android:textAlignment="center"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
-            android:layout_marginTop="22dp"/>
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"/>
+
         <TextView
             android:id="@+id/text_view_nome_estabelecimento"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
             android:text="Nome estabelecimento"
             android:textAlignment="center"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
-            android:layout_marginTop="8dp"/>
+            android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+            android:textColor="@color/myColorAccent" />
+
         <TextView
+            style="@style/Labels"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="22dp"
             android:text="Nome do proprietário"
             android:textAlignment="center"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
-            android:layout_marginTop="22dp"/>
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5" />
+
         <TextView
             android:id="@+id/text_view_nome_proprietario"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
             android:text="Nome proprietario"
             android:textAlignment="center"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
-            android:layout_marginTop="8dp"/>
+            android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+            android:textColor="@color/myColorAccent" />
+
         <TextView
+            style="@style/Labels"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="22dp"
             android:text="Horario de funcionamento"
             android:textAlignment="center"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
-            android:layout_marginTop="22dp"/>
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5" />
+
         <TextView
             android:id="@+id/text_view_horario_funcionamento"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
             android:text="Horario de funcionamento"
             android:textAlignment="center"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
-            android:layout_marginTop="8dp"/>
+            android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+            android:textColor="@color/myColorAccent" />
     </LinearLayout>
 
-</android.support.constraint.ConstraintLayout>
+</android.support.v7.widget.CardView>

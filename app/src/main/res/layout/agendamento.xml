@@ -38,7 +38,8 @@
             android:layout_below="@+id/nome_cliente"
             android:layout_alignParentEnd="true"
             android:text="23/06/2019 14:30"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Small" />
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+            android:textColor="@color/colorPrimary"/>
 
         <TextView
             android:id="@+id/agendamento_em_andamento"
@@ -51,6 +52,7 @@
             android:maxLines="1"
             android:visibility="gone"
             android:text="Agendamento em andamento..."
+            android:textColor="@color/colorAccent"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Small" />
     </RelativeLayout>
 

@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Das 12:30 às 15:00"
-        android:padding="8dp"
+        android:padding="12dp"
         android:textAlignment="center"
         android:background="@color/colorPrimary"
         android:textColor="#fff"/>

@@ -72,6 +72,7 @@ public class AdicionarEditarServicoActivity extends AppCompatActivity {
 
         Intent intentParaServicos = new Intent(AdicionarEditarServicoActivity.this, ServicosActivity.class);
         startActivity(intentParaServicos);
+        overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
     }
 
     private long converterMinutosParaMilisegundos(int minutos) {
@@ -101,5 +102,11 @@ public class AdicionarEditarServicoActivity extends AppCompatActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    @Override
+    public void finish() {
+        super.finish();
+        overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
     }
 }

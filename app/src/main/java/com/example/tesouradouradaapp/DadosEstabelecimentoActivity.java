@@ -47,7 +47,7 @@ public class DadosEstabelecimentoActivity extends AppCompatActivity {
     private void irParaEditarEstabelecimentoActivity() {
         Intent intent = new Intent(DadosEstabelecimentoActivity.this, EditarEstabelecimentoActivity.class);
         startActivity(intent);
-
+        overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_left);
     }
 
     @Override
@@ -67,5 +67,10 @@ public class DadosEstabelecimentoActivity extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
         }
 
+    }
+    @Override
+    public void finish() {
+        super.finish();
+        overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
     }
 }

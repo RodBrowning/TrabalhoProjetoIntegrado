@@ -114,6 +114,7 @@ public class VizualizarAgendamento extends AppCompatActivity {
                 intentAtualizar.putExtra(ID_AGEDAMENTO_EDITAR, id_agendamento);
                 intentAtualizar.putExtra(EDITAR, true);
                 startActivity(intentAtualizar);
+                overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_left);
                 return true;
             case R.id.menu_excluir_agendamento:
                 new AlertDialog.Builder(mContext)
@@ -127,6 +128,7 @@ public class VizualizarAgendamento extends AppCompatActivity {
                                 Toast.makeText(mContext, "Agendamento com " + agendamento.getCliente() + " excluido", Toast.LENGTH_SHORT).show();
                                 Intent intent = new Intent(mContext.getApplicationContext(), MainActivity.class);
                                 mContext.startActivity(intent);
+                                overridePendingTransition(R.anim.slide_out_right,R.anim.slide_in_left);
                             }
                         })
                         .setNegativeButton("Não", null).show();
@@ -148,14 +150,28 @@ public class VizualizarAgendamento extends AppCompatActivity {
 
     private String duracaoTotalParaApresentacao(List<Servico> servicos) {
         int duracaoTotal = duracaoTotal(servicos);
-        int duracaohoras = duracaoTotal / 1000 / 60 / 60;
-        int duracaoMinutos = (duracaoTotal / 1000 / 60) % 60;
+        long duracaohoras = duracaoTotal / 1000 / 60 / 60;
+        long duracaoMinutos = (duracaoTotal / 1000 / 60) % 60;
+        String duracaoString;
 
         if (duracaohoras > 0) {
-            return String.format("%d hrs %02d min", duracaohoras, duracaoMinutos);
+            if (duracaohoras == 1) {
+                if (duracaoMinutos == 0) {
+                    duracaoString = String.format("%d hr", duracaohoras);
+                } else {
+                    duracaoString = String.format("%d hr %02d mins", duracaohoras, duracaoMinutos);
+                }
+            } else {
+                if (duracaoMinutos == 0) {
+                    duracaoString = String.format("%d hrs", duracaohoras);
+                } else {
+                    duracaoString = String.format("%d hrs %02d mins", duracaohoras, duracaoMinutos);
+                }
+            }
         } else {
-            return String.format("%d min", duracaoMinutos);
+            duracaoString = String.format("%d mins", duracaoMinutos);
         }
+        return duracaoString;
     }
 
     // Calcula valor total
@@ -168,5 +184,11 @@ public class VizualizarAgendamento extends AppCompatActivity {
             valorTotal += servico.getValor();
         }
         return numberFormat.format(valorTotal);
+    }
+
+    @Override
+    public void finish() {
+        super.finish();
+        overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
     }
 }
