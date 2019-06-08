@@ -63,8 +63,8 @@ public class ServicosActivity extends AppCompatActivity {
 
         adapter.setOnItemClickListener(new ServicosAdapter.OnItemClickListener() {
             @Override
-            public void onItemClick(final Servico servico, View itemView) {
-                PopupMenu popupMenu = new PopupMenu(getApplicationContext(), itemView);
+            public void onItemClick(final Servico servico, final View itemView) {
+                PopupMenu popupMenu = new PopupMenu(getBaseContext(), itemView);
                 popupMenu.inflate(R.menu.menu_list_item_servicos);
                 popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     @Override
@@ -82,7 +82,7 @@ public class ServicosActivity extends AppCompatActivity {
                                 stringBuilder.append(System.getProperty("line.separator"));
                                 stringBuilder.append(System.getProperty("line.separator"));
                                 stringBuilder.append("Deseja continuar?");
-                                new AlertDialog.Builder(getApplicationContext())
+                                new AlertDialog.Builder(itemView.getContext())
                                         .setTitle("Excluir")
                                         .setMessage(stringBuilder.toString())
                                         .setIcon(R.drawable.ic_alert_excluir)

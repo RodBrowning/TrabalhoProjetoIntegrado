@@ -31,6 +31,7 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:background="@color/colorCardView"
                         android:orientation="vertical">
 
                         <TextView
@@ -46,12 +47,12 @@
                             android:layout_gravity="center"
                             android:layout_marginBottom="12dp"
                             android:hint="Nome do Estabelecimento"
-                            android:inputType="text"
+                            android:inputType="textCapWords"
                             android:maxLines="1"
                             android:minWidth="200dp"
                             android:textAlignment="center"
                             android:textAppearance="@style/TextAppearance.AppCompat.Headline"
-                            android:textColor="@color/myColorAccent" />
+                            android:textColor="@color/colorPrimaryLight" />
                     </LinearLayout>
                 </android.support.v7.widget.CardView>
 
@@ -63,7 +64,8 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical">
+                        android:orientation="vertical"
+                        android:background="@color/colorCardView">
 
                         <TextView
                             style="@style/Labels"
@@ -78,12 +80,12 @@
                             android:layout_gravity="center"
                             android:layout_marginBottom="12dp"
                             android:hint="Nome do Dono"
-                            android:inputType="text"
+                            android:inputType="textCapWords"
                             android:maxLines="1"
                             android:minWidth="200dp"
                             android:textAlignment="center"
                             android:textAppearance="@style/TextAppearance.AppCompat.Headline"
-                            android:textColor="@color/myColorAccent" />
+                            android:textColor="@color/colorPrimaryLight" />
 
                     </LinearLayout>
                 </android.support.v7.widget.CardView>
@@ -98,14 +100,15 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:minWidth="240dp"
-                        android:orientation="vertical">
+                        android:orientation="vertical"
+                        android:background="@color/colorCardView">
 
                         <TextView
                             style="@style/Labels"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="Horario de Abertura"
-                            android:textAlignment="center"/>
+                            android:textAlignment="center" />
 
                         <LinearLayout
                             android:layout_width="wrap_content"
@@ -126,9 +129,9 @@
                                     android:layout_height="wrap_content"
                                     android:layout_margin="8dp"
                                     android:layout_marginTop="8dp"
-                                    android:text="Horas"
                                     android:background="@drawable/bg_tempo"
                                     android:padding="8dp"
+                                    android:text="Horas"
                                     android:textAppearance="@style/TextAppearance.AppCompat.Inverse" />
 
                                 <NumberPicker
@@ -158,9 +161,9 @@
                                     android:layout_height="wrap_content"
                                     android:layout_margin="8dp"
                                     android:layout_marginTop="8dp"
-                                    android:text="Minutos"
                                     android:background="@drawable/bg_tempo"
                                     android:padding="8dp"
+                                    android:text="Minutos"
                                     android:textAppearance="@style/TextAppearance.AppCompat.Inverse" />
 
                                 <NumberPicker
@@ -183,6 +186,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:minWidth="240dp"
+                        android:background="@color/colorCardView"
                         android:orientation="vertical">
 
                         <TextView
@@ -212,15 +216,15 @@
                                     android:layout_height="wrap_content"
                                     android:layout_margin="8dp"
                                     android:layout_marginTop="8dp"
-                                    android:text="Horas"
                                     android:background="@drawable/bg_tempo"
                                     android:padding="8dp"
+                                    android:text="Horas"
                                     android:textAppearance="@style/TextAppearance.AppCompat.Inverse" />
 
                                 <NumberPicker
                                     android:id="@+id/number_picker_horas_fechamento"
                                     android:layout_width="match_parent"
-                                    android:layout_height="80dp"  />
+                                    android:layout_height="80dp" />
                             </LinearLayout>
 
                             <TextView
@@ -243,15 +247,15 @@
                                     android:layout_height="wrap_content"
                                     android:layout_margin="8dp"
                                     android:layout_marginTop="8dp"
-                                    android:text="Minutos"
                                     android:background="@drawable/bg_tempo"
                                     android:padding="8dp"
+                                    android:text="Minutos"
                                     android:textAppearance="@style/TextAppearance.AppCompat.Inverse" />
 
                                 <NumberPicker
                                     android:id="@+id/number_picker_minutos_fechamento"
                                     android:layout_width="match_parent"
-                                    android:layout_height="80dp"  />
+                                    android:layout_height="80dp" />
                             </LinearLayout>
                         </LinearLayout>
                     </LinearLayout>
@@ -264,6 +268,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:text="Editar" />
+            android:text="Editar"
+            android:textColor="@color/colorPrimaryDark"/>
     </RelativeLayout>
 </android.support.constraint.ConstraintLayout>

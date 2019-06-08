@@ -1,105 +1,108 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorCardView"
     tools:context=".SelecionarDataHorarioActivity">
 
-    <RelativeLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp">
 
-        <android.support.v7.widget.CardView
-            android:layout_width="match_parent"
+        <RelativeLayout
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp">
+            android:background="@color/colorCardView">
 
-            <RelativeLayout
+            <TextView
+                android:id="@+id/data"
+                style="@style/Labels"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Data" />
+
+            <Button
+                android:id="@+id/bottom_selecionar_data"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/data"
+                android:layout_centerInParent="true"
+                android:drawableEnd="@drawable/ic_date"
+                android:drawablePadding="10dp"
+                android:paddingLeft="20dp"
+                android:paddingTop="15dp"
+                android:paddingRight="20dp"
+                android:paddingBottom="15dp"
+                android:text="Quinta 23/07/2019"
+                android:textColor="#fff"/>
 
-                <TextView
-                    android:id="@+id/data"
-                    style="@style/Labels"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Data" />
+            <TextView
+                android:id="@+id/proximos_horarios"
+                style="@style/Labels"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/bottom_selecionar_data"
+                android:text="Proximos horários livres" />
 
-                <Button
-                    android:id="@+id/bottom_selecionar_data"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/data"
-                    android:layout_centerInParent="true"
-                    android:drawableEnd="@drawable/ic_date"
-                    android:drawablePadding="10dp"
-                    android:text="Quinta 23/07/2019" />
+            <TextView
+                android:id="@+id/text_view_agenda_cheia"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/proximos_horarios"
+                android:layout_marginTop="32dp"
+                android:layout_marginBottom="32dp"
+                android:gravity="center"
+                android:text="Agenda cheia para o dia selecionado"
+                android:textAlignment="center"
+                android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+                android:textColor="@color/colorAccent"
+                android:visibility="gone" />
 
-                <TextView
-                    android:id="@+id/proximos_horarios"
-                    style="@style/Labels"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/bottom_selecionar_data"
-                    android:text="Proximos horários livres" />
-
-                <TextView
-                    android:id="@+id/text_view_agenda_cheia"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/proximos_horarios"
-                    android:layout_marginTop="32dp"
-                    android:layout_marginBottom="32dp"
-                    android:gravity="center"
-                    android:text="Agenda cheia para o dia selecionado"
-                    android:textAlignment="center"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-                    android:textColor="@color/colorAccent"
-                    android:visibility="gone" />
-
-                <android.support.v7.widget.RecyclerView
-                    android:id="@+id/recycler_view_horarios_disponiveis"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/text_view_agenda_cheia"
-                    android:layout_marginBottom="8dp"
-                    tools:listitem="@layout/horario_livre" />
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recycler_view_horarios_disponiveis"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/text_view_agenda_cheia"
+                android:layout_marginBottom="8dp"
+                tools:listitem="@layout/horario_livre" />
 
 
-                <TextView
-                    android:id="@+id/horario"
-                    style="@style/Labels"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/recycler_view_horarios_disponiveis"
-                    android:text="Horário selecionado" />
+            <TextView
+                android:id="@+id/horario"
+                style="@style/Labels"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/recycler_view_horarios_disponiveis"
+                android:text="Horário selecionado" />
 
-                <TextView
-                    android:id="@+id/text_view_horario_selecionado"
-                    style="@style/Labels"
-                    android:textAppearance="@style/TextAppearance.MaterialComponents.Headline2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/horario"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginTop="-8dp"
-                    android:layout_marginBottom="8dp"
-                    android:drawableEnd="@drawable/ic_access_time"
-                    android:drawablePadding="10dp"
-                    android:gravity="center"
-                    android:text="13:00"
-                    android:textColor="#000" />
-            </RelativeLayout>
-        </android.support.v7.widget.CardView>
+            <TextView
+                android:id="@+id/text_view_horario_selecionado"
+                style="@style/Labels"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/horario"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="-8dp"
+                android:layout_marginBottom="8dp"
+                android:drawableEnd="@drawable/ic_access_time"
+                android:drawablePadding="10dp"
+                android:gravity="center"
+                android:text="13:00"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Headline2"
+                android:textColor="@color/colorPrimaryDark" />
+        </RelativeLayout>
+    </android.support.v7.widget.CardView>
 
-        <Button
-            android:id="@+id/bottom_seguir_para_adicionar_editar_agendamento"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:text="Seguir" />
-    </RelativeLayout>
-</android.support.constraint.ConstraintLayout>
+    <Button
+        android:id="@+id/bottom_seguir_para_adicionar_editar_agendamento"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:text="Seguir"
+        android:textColor="@color/colorPrimaryDark"/>
+</RelativeLayout>

@@ -69,10 +69,8 @@ public class ListaOpcoesServicosAdapter extends RecyclerView.Adapter<ListaOpcoes
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if (opcoesServicosHolder.checkBoxNomeServico.isChecked()) {
                     servicosSelecionados.add(servico);
-                    Toast.makeText(mContext, servico.getNomeServico() + " adicionado", Toast.LENGTH_SHORT).show();
                 } else {
                     servicosSelecionados.remove(servico);
-                    Toast.makeText(mContext, servico.getNomeServico() + " removido", Toast.LENGTH_SHORT).show();
                 }
             }
         });

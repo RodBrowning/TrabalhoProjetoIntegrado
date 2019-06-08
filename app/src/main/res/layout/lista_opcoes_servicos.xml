@@ -10,6 +10,7 @@
         android:id="@+id/relative_layout_servico_item"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:background="@color/colorCardView"
         android:padding="8dp">
 
         <CheckBox
@@ -21,7 +22,8 @@
             android:ellipsize="end"
             android:maxLines="1"
             android:text="Corte Masculino"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Large" />
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
+            android:textColor="@color/colorPrimaryDark"/>
 
         <TextView
             android:id="@+id/text_view_duracao_servico"

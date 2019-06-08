@@ -10,7 +10,8 @@
         android:id="@+id/relative_layout_agenda_item"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="8dp">
+        android:padding="8dp"
+        android:background="@color/colorCardView">
 
         <TextView
             android:id="@+id/duracao_atendimento"
@@ -29,7 +30,8 @@
             android:ellipsize="end"
             android:maxLines="1"
             android:text="Geraldo"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Large" />
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
+            android:textColor="@color/colorPrimaryDark"/>
 
         <TextView
             android:id="@+id/data_marcada"

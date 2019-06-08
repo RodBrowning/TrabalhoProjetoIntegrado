@@ -21,7 +21,7 @@
             style="@style/Labels"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Nome estabelecimento"
+            android:text="Estabelecimento"
             android:textAlignment="center"
             android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"/>
 
@@ -32,15 +32,15 @@
             android:layout_marginTop="8dp"
             android:text="Nome estabelecimento"
             android:textAlignment="center"
-            android:textAppearance="@style/TextAppearance.AppCompat.Headline"
-            android:textColor="@color/myColorAccent" />
+            android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+            android:textColor="@color/colorPrimaryLight" />
 
         <TextView
             style="@style/Labels"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="22dp"
-            android:text="Nome do proprietário"
+            android:text="Proprietário"
             android:textAlignment="center"
             android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5" />
 
@@ -52,7 +52,7 @@
             android:text="Nome proprietario"
             android:textAlignment="center"
             android:textAppearance="@style/TextAppearance.AppCompat.Headline"
-            android:textColor="@color/myColorAccent" />
+            android:textColor="@color/colorPrimaryLight" />
 
         <TextView
             style="@style/Labels"
@@ -71,7 +71,7 @@
             android:text="Horario de funcionamento"
             android:textAlignment="center"
             android:textAppearance="@style/TextAppearance.AppCompat.Headline"
-            android:textColor="@color/myColorAccent" />
+            android:textColor="@color/colorPrimaryLight" />
     </LinearLayout>
 
 </android.support.v7.widget.CardView>

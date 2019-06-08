@@ -5,10 +5,12 @@
     <color name="colorAccent">@color/myColorAccent</color>
 
 
-    <color name="myColorPrimary">#3759C7</color>
-    <color name="myColorPrimaryDark">#001657</color>
-    <color name="myColorAccent">#DF6F6F</color>
+    <color name="myColorPrimary">#79755B</color>
+    <color name="myColorPrimaryDark">#7A6D48</color>
+    <color name="myColorAccent">#DFDD6F</color>
 
-    <color name="colorPrimaryLight">#7F9DF8</color>
+    <color name="colorPrimaryLight">#C2B969</color>
+    <color name="colorCardView">#56A8A26C</color>
+    <color name="colorPopup">#F7F5E2</color>
     <color name="transparent">#00FFFFFF</color>
 </resources>

@@ -5,8 +5,10 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.view.ContextThemeWrapper;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
@@ -85,7 +87,7 @@ public class VizualizarAgendamento extends AppCompatActivity {
 
         textViewDuracaoTotal.setText(duracaoTotalParaApresentacao(servicosSelecionados));
 
-        textViewDataSelecionada.setText(sdf.format(dataSelecionada) +" às "+ sdfHorarioFim.format(dataFinal));
+        textViewDataSelecionada.setText(sdf.format(dataSelecionada) + " às " + sdfHorarioFim.format(dataFinal));
     }
 
 
@@ -114,10 +116,10 @@ public class VizualizarAgendamento extends AppCompatActivity {
                 intentAtualizar.putExtra(ID_AGEDAMENTO_EDITAR, id_agendamento);
                 intentAtualizar.putExtra(EDITAR, true);
                 startActivity(intentAtualizar);
-                overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_left);
+                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                 return true;
             case R.id.menu_excluir_agendamento:
-                new AlertDialog.Builder(mContext)
+                AlertDialog dialog = new AlertDialog.Builder(mContext)
                         .setTitle("Excluir")
                         .setMessage("Excluir agendamento com " + agendamento.getCliente() + "?")
                         .setIcon(R.drawable.ic_alert_excluir)
@@ -128,10 +130,14 @@ public class VizualizarAgendamento extends AppCompatActivity {
                                 Toast.makeText(mContext, "Agendamento com " + agendamento.getCliente() + " excluido", Toast.LENGTH_SHORT).show();
                                 Intent intent = new Intent(mContext.getApplicationContext(), MainActivity.class);
                                 mContext.startActivity(intent);
-                                overridePendingTransition(R.anim.slide_out_right,R.anim.slide_in_left);
+                                overridePendingTransition(R.anim.slide_out_right, R.anim.slide_in_left);
                             }
                         })
                         .setNegativeButton("Não", null).show();
+                dialog.getWindow().setBackgroundDrawableResource(R.color.colorPopup);
+                dialog.getButton(DialogInterface.BUTTON_NEGATIVE).setTextColor(getResources().getColor(R.color.colorPrimaryDark));
+                dialog.getButton(DialogInterface.BUTTON_POSITIVE).setTextColor(getResources().getColor(R.color.colorPrimaryDark));
+
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
