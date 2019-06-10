@@ -75,8 +75,8 @@ public abstract class CabelereiroDataBase extends RoomDatabase {
 
             Calendar calendar = Calendar.getInstance();
             calendar.set(Calendar.YEAR, 2019);
-            calendar.set(Calendar.MONTH, 4);
-            calendar.set(Calendar.DAY_OF_MONTH, 28);
+            calendar.set(Calendar.MONTH, 5);
+            calendar.set(Calendar.DAY_OF_MONTH, 11);
             calendar.set(Calendar.HOUR_OF_DAY, 14);
             calendar.set(Calendar.MINUTE, 30);
             calendar.set(Calendar.SECOND, 00);
@@ -95,8 +95,8 @@ public abstract class CabelereiroDataBase extends RoomDatabase {
 
             Calendar calendar2 = Calendar.getInstance();
             calendar2.set(Calendar.YEAR, 2019);
-            calendar2.set(Calendar.MONTH, 4);
-            calendar2.set(Calendar.DAY_OF_MONTH, 28);
+            calendar2.set(Calendar.MONTH, 5);
+            calendar2.set(Calendar.DAY_OF_MONTH, 11);
             calendar2.set(Calendar.HOUR_OF_DAY, 15);
             calendar2.set(Calendar.MINUTE, 00);
             calendar2.set(Calendar.SECOND, 00);
@@ -115,8 +115,8 @@ public abstract class CabelereiroDataBase extends RoomDatabase {
 
             Calendar calendar3 = Calendar.getInstance();
             calendar3.set(Calendar.YEAR, 2019);
-            calendar3.set(Calendar.MONTH, 4);
-            calendar3.set(Calendar.DAY_OF_MONTH, 28);
+            calendar3.set(Calendar.MONTH, 5);
+            calendar3.set(Calendar.DAY_OF_MONTH, 11);
             calendar3.set(Calendar.HOUR_OF_DAY, 16);
             calendar3.set(Calendar.MINUTE, 30);
             calendar3.set(Calendar.SECOND, 00);

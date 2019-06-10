@@ -39,6 +39,7 @@
             android:id="@+id/recycler_view_agenda"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginBottom="8dp"
             android:layout_below="@+id/relative_layout_bottom_selecionar_data_selecionar_data"
             tools:listitem="@layout/agendamento"
             android:visibility="visible"/>
@@ -48,7 +49,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"
-            android:text="Agenda livre para o dia selecionado"
+            android:text="Agenda livre"
             android:textAlignment="center"
             android:textAppearance="@style/TextAppearance.AppCompat.Display1"
             android:textColor="#60FFFFFF"

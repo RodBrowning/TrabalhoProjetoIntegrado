@@ -15,7 +15,10 @@
         android:background="#72FFFFFF"
         android:gravity="center"
         android:orientation="vertical"
-        android:padding="28dp">
+        android:paddingRight="28dp"
+        android:paddingLeft="28dp"
+        android:paddingBottom="28dp"
+        android:paddingTop="18dp">
 
         <TextView
             style="@style/Labels"

@@ -10,25 +10,25 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <LinearLayout
+        <android.support.v4.widget.NestedScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:layout_above="@+id/bottom_seguir_para_adicionar_editar_agendamento">
+            android:layout_height="match_parent">
 
-            <ScrollView
+
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:fillViewport="true">
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/recycler_view_opcoes_servico"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:layout_marginBottom="50dp"
                     tools:listitem="@layout/lista_opcoes_servicos" />
-            </ScrollView>
-        </LinearLayout>
+
+            </LinearLayout>
+        </android.support.v4.widget.NestedScrollView>
 
         <Button
             android:id="@+id/bottom_seguir_para_selecionar_data_horario"
@@ -36,6 +36,6 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:text="Seguir"
-            android:textColor="@color/colorPrimaryDark"/>
+            android:textColor="@color/colorPrimaryDark" />
     </RelativeLayout>
 </android.support.constraint.ConstraintLayout>

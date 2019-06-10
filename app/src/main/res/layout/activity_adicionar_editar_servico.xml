@@ -71,7 +71,7 @@
                 android:minWidth="250dp"
                 android:textAlignment="center"
                 android:textAppearance="@style/TextAppearance.AppCompat.Headline"
-                android:textColor="@color/colorPrimaryLight" />
+                android:textColor="@color/colorGreen" />
         </LinearLayout>
     </android.support.v7.widget.CardView>
 

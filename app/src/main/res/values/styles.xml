@@ -15,9 +15,9 @@
         <item name="android:windowBackground">@drawable/bg</item>
         <item name="colorButtonNormal">@color/colorPrimaryLight</item>
         <item name="android:textAppearanceButton">@style/TextAppearance.AppCompat.Widget.Button</item>
-        <item name="android:itemBackground">@color/colorCardView</item>
+        <!--<item name="android:itemBackground">@color/colorCardView</item>
         <item name="android:popupMenuStyle">@style/PopupMenu</item>
-        <item name="popupMenuStyle">@style/PopupMenu</item>
+        <item name="popupMenuStyle">@style/PopupMenu</item>-->
     </style>
 
     <style name="Labels">
@@ -27,8 +27,8 @@
         <item name="android:padding">10dp</item>
     </style>
 
-    <style name="PopupMenu" parent="ThemeOverlay.AppCompat.Dark">
+    <!--<style name="PopupMenu" parent="ThemeOverlay.AppCompat.Dark">
         <item name="android:popupBackground">@color/colorCardView</item>
-    </style>
+    </style>-->
 
 </resources>

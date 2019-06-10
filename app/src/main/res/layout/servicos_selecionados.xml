@@ -43,6 +43,6 @@
             android:text="R$89,80"
             android:textAlignment="textEnd"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
-            android:textColor="@color/colorPrimary" />
+            android:textColor="@color/colorGreen" />
     </RelativeLayout>
 </android.support.constraint.ConstraintLayout>

@@ -52,9 +52,10 @@
             android:layout_toStartOf="@id/data_marcada"
             android:ellipsize="end"
             android:maxLines="1"
+            android:paddingTop="4dp"
             android:visibility="gone"
-            android:text="Agendamento em andamento..."
-            android:textColor="@color/colorAccent"
+            android:text="Atendimento em andamento..."
+            android:textColor="@color/colorPrimaryDark"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Small" />
     </RelativeLayout>
 

@@ -41,6 +41,6 @@
             android:layout_alignParentEnd="true"
             android:text="R$25,00"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
-            android:textColor="@color/colorPrimary" />
+            android:textColor="@color/colorGreen" />
     </RelativeLayout>
 </android.support.v7.widget.CardView>

@@ -10,7 +10,9 @@
     <color name="myColorAccent">#DFDD6F</color>
 
     <color name="colorPrimaryLight">#C2B969</color>
-    <color name="colorCardView">#56A8A26C</color>
+    <!--<color name="colorCardView">#56A8A26C</color>-->
     <color name="colorPopup">#F7F5E2</color>
+    <color name="colorCardView">#fff</color>
     <color name="transparent">#00FFFFFF</color>
+    <color name="colorGreen">#1E9C0D</color>
 </resources>
