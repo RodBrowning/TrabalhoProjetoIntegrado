@@ -10,7 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/MyTheme">
         <activity
-            android:name=".MainActivity"
+            android:name=".Activities.MainActivity"
             android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -19,28 +19,28 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".DadosEstabelecimentoActivity"
-            android:parentActivityName=".MainActivity" />
+            android:name=".Activities.DadosEstabelecimentoActivity"
+            android:parentActivityName=".Activities.MainActivity" />
         <activity
-            android:name=".EditarEstabelecimentoActivity"
-            android:parentActivityName=".DadosEstabelecimentoActivity" />
+            android:name=".Activities.EditarEstabelecimentoActivity"
+            android:parentActivityName=".Activities.DadosEstabelecimentoActivity" />
         <activity
-            android:name=".ServicosActivity"
-            android:parentActivityName=".MainActivity" />
+            android:name=".Activities.ServicosActivity"
+            android:parentActivityName=".Activities.MainActivity" />
         <activity
-            android:name=".AdicionarEditarServicoActivity"
-            android:parentActivityName=".ServicosActivity" />
+            android:name=".Activities.AdicionarEditarServicoActivity"
+            android:parentActivityName=".Activities.ServicosActivity" />
         <activity
-            android:name=".ListaOpcoesServicoAdicionarEditarAgendamentoActivity"
-            android:parentActivityName=".MainActivity" />
+            android:name=".Activities.ListaOpcoesServicoAdicionarEditarAgendamentoActivity"
+            android:parentActivityName=".Activities.MainActivity" />
         <activity
-            android:name=".SelecionarDataHorarioActivity"
-            android:parentActivityName=".MainActivity" />
+            android:name=".Activities.SelecionarDataHorarioActivity"
+            android:parentActivityName=".Activities.MainActivity" />
         <activity
-            android:name=".AdicionarEditarAgendamentoActivity"
-            android:parentActivityName=".MainActivity" />
-        <activity android:name=".VizualizarAgendamento"
-            android:parentActivityName=".MainActivity"/>
+            android:name=".Activities.AdicionarEditarAgendamentoActivity"
+            android:parentActivityName=".Activities.MainActivity" />
+        <activity android:name=".Activities.VizualizarAgendamentoActivity"
+            android:parentActivityName=".Activities.MainActivity"/>
     </application>
 
 </manifest>
